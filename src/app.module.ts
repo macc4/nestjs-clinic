@@ -1,3 +1,8 @@
 import { Module } from '@nestjs/common';
-@Module({})
+import { ResolutionsModule } from './modules/resolutions/resolutions.module';
+import { SharedModule } from './modules/shared/shared.module';
+
+@Module({
+  imports: [SharedModule, ResolutionsModule],
+})
 export class AppModule {}
