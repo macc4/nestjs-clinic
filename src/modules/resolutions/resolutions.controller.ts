@@ -29,6 +29,10 @@ export class ResolutionsController {
     description: 'Returns the created resolution',
     type: Resolution,
   })
+  @ApiResponse({
+    status: 400,
+    description: 'Returns Bad Request if input data is wrong',
+  })
   createResolution(
     @Body() createResolutionDto: CreateResolutionDto,
   ): Promise<Resolution> {
@@ -40,10 +44,10 @@ export class ResolutionsController {
   //
 
   @Get()
-  @ApiOperation({ summary: 'Get resolutions with optional query' })
+  @ApiOperation({ summary: 'Get resolutions with an optional query' })
   @ApiResponse({
     status: 200,
-    description: 'Returns found resolutions',
+    description: 'Returns found resolutions or an empty list',
     type: [Resolution],
   })
   getResolutions(
@@ -60,11 +64,15 @@ export class ResolutionsController {
   @ApiOperation({ summary: 'Get resolution by ID' })
   @ApiResponse({
     status: 200,
-    description: 'Returns the found resolution',
+    description: 'Returns found resolution',
     type: Resolution,
   })
+  @ApiResponse({
+    status: 404,
+    description: 'Returns Not Found if no data by that ID',
+  })
   getResolutionById(@Param('id') id: number): Promise<Resolution> {
-    return this.resolutionsService.getResolution(id);
+    return this.resolutionsService.getResolutionById(id);
   }
 
   //
@@ -75,10 +83,14 @@ export class ResolutionsController {
   @ApiOperation({ summary: 'Delete resolution by ID' })
   @ApiResponse({
     status: 204,
-    description: 'Returns nothing if successful',
+    description: 'Returns nothing',
     type: undefined,
   })
-  deleteResolution(@Param('id') id: number): Promise<void> {
-    return this.resolutionsService.deleteResolution(id);
+  @ApiResponse({
+    status: 404,
+    description: 'Returns Not Found if no data by that ID',
+  })
+  deleteResolutionById(@Param('id') id: number): Promise<void> {
+    return this.resolutionsService.deleteResolutionById(id);
   }
 }

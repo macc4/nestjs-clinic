@@ -36,8 +36,8 @@ export class ResolutionsService {
   // Get resolution by id
   //
 
-  async getResolution(id: number): Promise<Resolution> {
-    const resolution = await this.resolutionsRepository.getResolution(id);
+  async getResolutionById(id: number): Promise<Resolution> {
+    const resolution = await this.resolutionsRepository.getResolutionById(id);
 
     if (!resolution) {
       throw new NotFoundException();
@@ -50,8 +50,10 @@ export class ResolutionsService {
   // Delete resolution by id
   //
 
-  async deleteResolution(id: number): Promise<void> {
-    const resolution = await this.resolutionsRepository.deleteResolution(id);
+  async deleteResolutionById(id: number): Promise<void> {
+    const resolution = await this.resolutionsRepository.deleteResolutionById(
+      id,
+    );
 
     if (!resolution) {
       throw new NotFoundException();

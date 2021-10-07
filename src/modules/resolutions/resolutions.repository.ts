@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './resolution.entity';
@@ -12,13 +12,13 @@ export class ResolutionsRepository extends Repository<Resolution> {
   async createResolution(
     createResolutionDto: CreateResolutionDto,
   ): Promise<Resolution> {
-    const { patientId, doctorId, text, expiry } = createResolutionDto;
+    const { patientId, doctorId, text } = createResolutionDto;
 
     const resolution = this.create({
-      patientId,
-      doctorId,
+      patient_id: patientId,
+      doctor_id: doctorId,
       text,
-      expiry,
+      expiry: createResolutionDto.expiryDate,
     });
 
     await this.save(resolution);
@@ -37,12 +37,20 @@ export class ResolutionsRepository extends Repository<Resolution> {
     const query = this.createQueryBuilder('resolution');
 
     if (patientId) {
-      query.andWhere('resolution.patientId = :patientId', { patientId });
+      query.andWhere('resolution.patient_id = :patientId', { patientId });
     }
 
     if (doctorId) {
-      query.andWhere('resolution.doctorId = :doctorId', { doctorId });
+      query.andWhere('resolution.doctor_id = :doctorId', { doctorId });
     }
+
+    query.andWhere(
+      new Brackets((qb) => {
+        qb.where('resolution.expiry IS NULL').orWhere(
+          'resolution.expiry > Now()',
+        );
+      }),
+    );
 
     const resolutions = await query.getMany();
 
@@ -53,7 +61,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
   // Get resolution by id
   //
 
-  async getResolution(id: number): Promise<Resolution> {
+  async getResolutionById(id: number): Promise<Resolution> {
     const resolution = await this.findOne(id);
 
     return resolution;
@@ -63,7 +71,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
   // Delete resolution by id
   //
 
-  async deleteResolution(id: number): Promise<number> {
+  async deleteResolutionById(id: number): Promise<number> {
     const resolution = await this.delete(id);
 
     return resolution.affected;

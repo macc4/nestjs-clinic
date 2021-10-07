@@ -9,20 +9,20 @@ export class Resolution {
 
   @ApiProperty({ example: 1, description: 'ID of the corresponding patient' })
   @Column()
-  patientId: number;
+  patient_id: number;
 
   @ApiProperty({ example: 1, description: 'ID of the corresponding doctor' })
   @Column()
-  doctorId: number;
+  doctor_id: number;
 
   @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
   @Column()
   text: string;
 
   @ApiProperty({
-    example: '10-02-1992',
+    example: '1901-09-11T11:30:00.732Z',
     description: 'Expiry date of the resolution',
   })
-  @Column()
-  expiry: string;
+  @Column({ nullable: true })
+  expiry: Date;
 }
