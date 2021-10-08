@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Patient } from '../patients/patient.entity';
 
 import { UserRole } from './utils/user-role.enum';
@@ -26,6 +20,5 @@ export class User {
   @OneToOne(() => Patient, (patient) => patient.user, {
     nullable: true,
   })
-  @JoinColumn()
   patient: Patient;
 }

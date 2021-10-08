@@ -6,8 +6,12 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from '../auth/user.entity';
+import { GetUser } from '../auth/utils/get-user.decorator';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './resolution.entity';
@@ -54,6 +58,22 @@ export class ResolutionsController {
     @Query() filterDto: GetResolutionsFilterDto,
   ): Promise<Resolution[]> {
     return this.resolutionsService.getResolutions(filterDto);
+  }
+
+  //
+  // Get personal resolutions
+  //
+
+  @Get('me')
+  @UseGuards(AuthGuard())
+  @ApiOperation({ summary: 'Get personal resolutions' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns found resolutions or an empty list',
+    type: [Resolution],
+  })
+  getMyResolutions(@GetUser() user: User): Promise<Resolution[]> {
+    return this.resolutionsService.getMyResolutions(user);
   }
 
   //

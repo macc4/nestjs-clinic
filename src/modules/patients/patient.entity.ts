@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -29,5 +30,6 @@ export class Patient {
     eager: true,
     cascade: true,
   })
+  @JoinColumn()
   user: User;
 }
