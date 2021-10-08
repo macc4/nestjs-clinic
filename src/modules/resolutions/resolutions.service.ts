@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateResolutionDto } from './dto/create-resolution.dto';
-import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
+import { PatientsService } from '../patients/patients.service';
+import { CreateResolutionDto } from './dto/CreateResolution.dto';
+import { GetResolutionsFilterDto } from './dto/GetResolutionsFilter.dto';
 import { Resolution } from './resolution.entity';
 import { ResolutionsRepository } from './resolutions.repository';
 
@@ -10,6 +11,7 @@ export class ResolutionsService {
   constructor(
     @InjectRepository(ResolutionsRepository)
     private resolutionsRepository: ResolutionsRepository,
+    private patientsService: PatientsService,
   ) {}
 
   //
@@ -19,7 +21,14 @@ export class ResolutionsService {
   async createResolution(
     createResolutionDto: CreateResolutionDto,
   ): Promise<Resolution> {
-    return this.resolutionsRepository.createResolution(createResolutionDto);
+    const patient = await this.patientsService.getPatientById(
+      createResolutionDto.patientId,
+    );
+
+    return this.resolutionsRepository.createResolution(
+      createResolutionDto,
+      patient,
+    );
   }
 
   //
@@ -40,7 +49,7 @@ export class ResolutionsService {
     const resolution = await this.resolutionsRepository.getResolutionById(id);
 
     if (!resolution) {
-      throw new NotFoundException();
+      throw new NotFoundException(`No resolution found with ID "${id}"`);
     }
 
     return resolution;
@@ -56,7 +65,7 @@ export class ResolutionsService {
     );
 
     if (!resolution) {
-      throw new NotFoundException();
+      throw new NotFoundException(`No resolution found with ID "${id}"`);
     }
   }
 }

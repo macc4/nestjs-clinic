@@ -8,8 +8,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateResolutionDto } from './dto/create-resolution.dto';
-import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
+import { CreateResolutionDto } from './dto/CreateResolution.dto';
+import { GetResolutionsFilterDto } from './dto/GetResolutionsFilter.dto';
 import { Resolution } from './resolution.entity';
 import { ResolutionsService } from './resolutions.service';
 
@@ -69,7 +69,7 @@ export class ResolutionsController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Returns Not Found if no data by that ID',
+    description: 'Returns Not Found if no data found with that ID',
   })
   getResolutionById(@Param('id') id: number): Promise<Resolution> {
     return this.resolutionsService.getResolutionById(id);

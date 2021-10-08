@@ -20,7 +20,7 @@ import { configValidationSchema } from 'src/config/config.schema';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-
+        entities: [__dirname + '/../**/*.entity.js'],
         autoLoadEntities: true,
         synchronize: true,
       }),
