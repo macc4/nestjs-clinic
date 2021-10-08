@@ -69,7 +69,7 @@ export class ResolutionsController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Returns Not Found if no data by that ID',
+    description: 'Returns Not Found if no data found with that ID',
   })
   getResolutionById(@Param('id') id: number): Promise<Resolution> {
     return this.resolutionsService.getResolutionById(id);

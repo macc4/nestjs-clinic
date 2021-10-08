@@ -1,4 +1,5 @@
 import { Brackets, EntityRepository, Repository } from 'typeorm';
+import { Patient } from '../patients/patient.entity';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './resolution.entity';
@@ -11,14 +12,15 @@ export class ResolutionsRepository extends Repository<Resolution> {
 
   async createResolution(
     createResolutionDto: CreateResolutionDto,
+    patient: Patient,
   ): Promise<Resolution> {
-    const { patientId, doctorId, text } = createResolutionDto;
+    const { doctorId, text } = createResolutionDto;
 
     const resolution = this.create({
-      patient_id: patientId,
       doctor_id: doctorId,
       text,
       expiry: createResolutionDto.expiryDate,
+      patient,
     });
 
     await this.save(resolution);
@@ -37,7 +39,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
     const query = this.createQueryBuilder('resolution');
 
     if (patientId) {
-      query.andWhere('resolution.patient_id = :patientId', { patientId });
+      query.andWhere('resolution.patientId = :patientId', { patientId });
     }
 
     if (doctorId) {

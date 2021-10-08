@@ -1,0 +1,292 @@
+{
+	"info": {
+		"_postman_id": "6e2adade-111c-4697-bba2-3eb28632051f",
+		"name": "ITRex - Internship",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Nest.js Clinic App",
+			"item": [
+				{
+					"name": "Patients",
+					"item": [
+						{
+							"name": "Create Patient",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "gender",
+											"value": "test",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/patients",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"patients"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Patient by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/patients/:id",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"patients",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Queue",
+					"item": []
+				},
+				{
+					"name": "Resolutions",
+					"item": [
+						{
+							"name": "Get All Resolutions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/resolutions",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"resolutions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Resolutions with Filters",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/resolutions",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"resolutions"
+									],
+									"query": [
+										{
+											"key": "patientId",
+											"value": "2",
+											"disabled": true
+										},
+										{
+											"key": "doctorId",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Resolution",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "patientId",
+											"value": "1",
+											"description": "\n",
+											"type": "text"
+										},
+										{
+											"key": "doctorId",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "text",
+											"value": "He is healthy!",
+											"type": "text"
+										},
+										{
+											"key": "expiry",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/resolutions",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"resolutions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Resolution by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/resolutions/:id",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"resolutions",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Resolution by Id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/resolutions/:id",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"resolutions",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Authorization",
+					"item": [
+						{
+							"name": "Sign Up",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "admin@admin.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/auth/signup",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Sign In",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "admin@admin.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/auth/signin",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"auth",
+										"signin"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
