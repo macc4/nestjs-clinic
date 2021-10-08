@@ -15,4 +15,5 @@ export const configValidationSchema = Joi.object({
   REDIS_TTL: Joi.number().default(86400).required(),
 
   JWT_SECRET: Joi.string().required(),
+  JWT_EXPIRY: Joi.number().required(),
 });

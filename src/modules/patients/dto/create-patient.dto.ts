@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty } from 'class-validator';
-import { PatientGender } from '../patient-gender.enum';
+import { PatientGender } from '../utils/patient-gender.enum';
 
 export class CreatePatientDto {
   @IsNotEmpty()

@@ -1,6 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from '../auth/user.entity';
 import { Resolution } from '../resolutions/resolution.entity';
-import { PatientGender } from './patient-gender.enum';
+import { PatientGender } from './utils/patient-gender.enum';
 
 @Entity()
 export class Patient {
@@ -17,4 +24,10 @@ export class Patient {
     eager: false,
   })
   resolutions: Resolution[];
+
+  @OneToOne(() => User, (user) => user.patient, {
+    eager: true,
+    cascade: true,
+  })
+  user: User;
 }

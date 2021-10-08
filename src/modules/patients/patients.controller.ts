@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreatePatientDto } from './dto/create-patient.dto';
 import { Patient } from './patient.entity';
 import { PatientsService } from './patients.service';
 
@@ -8,27 +7,6 @@ import { PatientsService } from './patients.service';
 @Controller('patients')
 export class PatientsController {
   constructor(private patientsService: PatientsService) {}
-
-  //
-  // Create a new patient
-  //
-
-  @Post()
-  @ApiOperation({ summary: 'Create a new patient' })
-  @ApiResponse({
-    status: 201,
-    description: 'Returns the created patient',
-    type: Patient,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Returns Bad Request if input data is wrong',
-  })
-  createResolution(
-    @Body() createPatientDto: CreatePatientDto,
-  ): Promise<Patient> {
-    return this.patientsService.createPatient(createPatientDto);
-  }
 
   //
   // Get patient by id
