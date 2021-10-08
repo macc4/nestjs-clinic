@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { CreateResolutionDto } from './dto/CreateResolution.dto';
+import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientsService } from '../patients/patients.service';
 import { PatientsRepository } from '../patients/patients.repository';
 import { ResolutionsRepository } from './resolutions.repository';

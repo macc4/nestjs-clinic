@@ -8,8 +8,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateResolutionDto } from './dto/CreateResolution.dto';
-import { GetResolutionsFilterDto } from './dto/GetResolutionsFilter.dto';
+import { CreateResolutionDto } from './dto/create-resolution.dto';
+import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './resolution.entity';
 import { ResolutionsService } from './resolutions.service';
 

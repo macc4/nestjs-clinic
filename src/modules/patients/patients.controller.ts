@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreatePatientDto } from './dto/CreatePatient.dto';
+import { CreatePatientDto } from './dto/create-patient.dto';
 import { Patient } from './patient.entity';
 import { PatientsService } from './patients.service';
 
@@ -10,7 +10,7 @@ export class PatientsController {
   constructor(private patientsService: PatientsService) {}
 
   //
-  // Create a new resolution
+  // Create a new patient
   //
 
   @Post()

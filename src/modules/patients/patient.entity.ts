@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Resolution } from '../resolutions/resolution.entity';
+import { PatientGender } from './patient-gender.enum';
 
 @Entity()
 export class Patient {
@@ -10,7 +11,7 @@ export class Patient {
   name: string;
 
   @Column()
-  gender: string;
+  gender: PatientGender;
 
   @OneToMany(() => Resolution, (resolution) => resolution.patient, {
     eager: false,

@@ -1,7 +1,7 @@
 import { Brackets, EntityRepository, Repository } from 'typeorm';
 import { Patient } from '../patients/patient.entity';
-import { CreateResolutionDto } from './dto/CreateResolution.dto';
-import { GetResolutionsFilterDto } from './dto/GetResolutionsFilter.dto';
+import { CreateResolutionDto } from './dto/create-resolution.dto';
+import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './resolution.entity';
 
 @EntityRepository(Resolution)
