@@ -1,5 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Patient } from './patient.entity';
 import { PatientsService } from './patients.service';
 
@@ -13,16 +18,16 @@ export class PatientsController {
   //
 
   @Get('/:id')
+  //
   @ApiOperation({ summary: 'Get patient by ID' })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Returns found patient',
     type: Patient,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'Returns Not Found if no data found with that ID',
   })
+  //
   getPatientById(@Param('id') id: number): Promise<Patient> {
     return this.patientsService.getPatientById(id);
   }

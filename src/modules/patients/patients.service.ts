@@ -36,4 +36,18 @@ export class PatientsService {
 
     return patient;
   }
+
+  //
+  // Get patient by user ID
+  //
+
+  async getPatientByUserId(userId: string): Promise<Patient> {
+    const patient = await this.patientsRepository.getPatientByUserId(userId);
+
+    if (!patient) {
+      throw new NotFoundException(`No patient found with user ID: ${userId}`);
+    }
+
+    return patient;
+  }
 }

@@ -11,6 +11,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
+  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -32,6 +33,7 @@ export class ResolutionsController {
   //
 
   @Post()
+  //
   @ApiOperation({ summary: 'Create a new resolution' })
   @ApiResponse({
     status: 201,
@@ -42,6 +44,7 @@ export class ResolutionsController {
     status: 400,
     description: 'Returns Bad Request if input data is wrong',
   })
+  //
   createResolution(
     @Body() createResolutionDto: CreateResolutionDto,
   ): Promise<Resolution> {
@@ -53,12 +56,14 @@ export class ResolutionsController {
   //
 
   @Get()
+  //
   @ApiOperation({ summary: 'Get resolutions with an optional query' })
   @ApiResponse({
     status: 200,
     description: 'Returns found resolutions or an empty list',
     type: [Resolution],
   })
+  //
   getResolutions(
     @Query() filterDto: GetResolutionsFilterDto,
   ): Promise<Resolution[]> {
@@ -71,13 +76,14 @@ export class ResolutionsController {
 
   @Get('me')
   @UseGuards(AuthGuard())
+  //
   @ApiOperation({ summary: 'Get personal resolutions' })
   @ApiBearerAuth()
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Returns found resolutions or an empty list',
     type: [Resolution],
   })
+  //
   getMyResolutions(@GetUser() user: User): Promise<Resolution[]> {
     return this.resolutionsService.getMyResolutions(user);
   }
@@ -87,6 +93,7 @@ export class ResolutionsController {
   //
 
   @Get('/:id')
+  //
   @ApiOperation({ summary: 'Get resolution by ID' })
   @ApiResponse({
     status: 200,
@@ -97,6 +104,7 @@ export class ResolutionsController {
     status: 404,
     description: 'Returns Not Found if no data found with that ID',
   })
+  //
   getResolutionById(@Param('id') id: number): Promise<Resolution> {
     return this.resolutionsService.getResolutionById(id);
   }
@@ -106,6 +114,7 @@ export class ResolutionsController {
   //
 
   @Delete('/:id')
+  //
   @ApiOperation({ summary: 'Delete resolution by ID' })
   @ApiResponse({
     status: 204,
@@ -116,6 +125,7 @@ export class ResolutionsController {
     status: 404,
     description: 'Returns Not Found if no data by that ID',
   })
+  //
   deleteResolutionById(@Param('id') id: number): Promise<void> {
     return this.resolutionsService.deleteResolutionById(id);
   }

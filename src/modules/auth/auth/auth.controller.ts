@@ -1,5 +1,12 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -14,15 +21,15 @@ export class AuthController {
   //
 
   @Post('/signup')
+  //
   @ApiOperation({ summary: 'Sign in as patient' })
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: 'Returns the jwt token',
   })
-  @ApiResponse({
-    status: 409,
+  @ApiConflictResponse({
     description: 'Returns Conflict if user already exists',
   })
+  //
   signUp(@Body() signUpDto: SignUpDto): Promise<{ token: string }> {
     return this.authService.signUp(signUpDto);
   }
@@ -32,15 +39,17 @@ export class AuthController {
   //
 
   @Post('/signin')
+  //
   @ApiOperation({ summary: 'Sign in' })
-  @ApiResponse({
+  @ApiOkResponse({
     status: 200,
     description: 'Returns the jwt token',
   })
-  @ApiResponse({
+  @ApiUnauthorizedResponse({
     status: 401,
     description: 'Returns Not Unauthorized if input data is invalid',
   })
+  //
   signIn(@Body() signInDto: SignInDto): Promise<{ token: string }> {
     return this.authService.signIn(signInDto);
   }
