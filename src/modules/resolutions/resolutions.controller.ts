@@ -6,8 +6,18 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { User } from '../auth/users/user.entity';
+import { GetUser } from '../auth/auth/utils/get-user.decorator';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './resolution.entity';
@@ -23,6 +33,7 @@ export class ResolutionsController {
   //
 
   @Post()
+  //
   @ApiOperation({ summary: 'Create a new resolution' })
   @ApiResponse({
     status: 201,
@@ -33,6 +44,7 @@ export class ResolutionsController {
     status: 400,
     description: 'Returns Bad Request if input data is wrong',
   })
+  //
   createResolution(
     @Body() createResolutionDto: CreateResolutionDto,
   ): Promise<Resolution> {
@@ -44,12 +56,14 @@ export class ResolutionsController {
   //
 
   @Get()
+  //
   @ApiOperation({ summary: 'Get resolutions with an optional query' })
   @ApiResponse({
     status: 200,
     description: 'Returns found resolutions or an empty list',
     type: [Resolution],
   })
+  //
   getResolutions(
     @Query() filterDto: GetResolutionsFilterDto,
   ): Promise<Resolution[]> {
@@ -57,10 +71,29 @@ export class ResolutionsController {
   }
 
   //
+  // Get personal resolutions
+  //
+
+  @Get('me')
+  @UseGuards(AuthGuard())
+  //
+  @ApiOperation({ summary: 'Get personal resolutions' })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Returns found resolutions or an empty list',
+    type: [Resolution],
+  })
+  //
+  getMyResolutions(@GetUser() user: User): Promise<Resolution[]> {
+    return this.resolutionsService.getMyResolutions(user);
+  }
+
+  //
   // Get resolution by id
   //
 
   @Get('/:id')
+  //
   @ApiOperation({ summary: 'Get resolution by ID' })
   @ApiResponse({
     status: 200,
@@ -71,6 +104,7 @@ export class ResolutionsController {
     status: 404,
     description: 'Returns Not Found if no data found with that ID',
   })
+  //
   getResolutionById(@Param('id') id: number): Promise<Resolution> {
     return this.resolutionsService.getResolutionById(id);
   }
@@ -80,6 +114,7 @@ export class ResolutionsController {
   //
 
   @Delete('/:id')
+  //
   @ApiOperation({ summary: 'Delete resolution by ID' })
   @ApiResponse({
     status: 204,
@@ -90,6 +125,7 @@ export class ResolutionsController {
     status: 404,
     description: 'Returns Not Found if no data by that ID',
   })
+  //
   deleteResolutionById(@Param('id') id: number): Promise<void> {
     return this.resolutionsService.deleteResolutionById(id);
   }

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../auth/users/user.entity';
 import { PatientsService } from '../patients/patients.service';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
@@ -39,6 +40,16 @@ export class ResolutionsService {
     filterDto: GetResolutionsFilterDto,
   ): Promise<Resolution[]> {
     return this.resolutionsRepository.getResolutions(filterDto);
+  }
+
+  //
+  // Get personal resolutions
+  //
+
+  async getMyResolutions(user: User): Promise<Resolution[]> {
+    const resolution = await this.resolutionsRepository.getMyResolutions(user);
+
+    return resolution;
   }
 
   //

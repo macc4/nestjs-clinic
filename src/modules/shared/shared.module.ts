@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { configValidationSchema } from 'src/config/config.schema';
+import { configValidationSchema } from '../../config/config.schema';
 
 @Module({
   imports: [

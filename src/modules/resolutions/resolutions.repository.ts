@@ -1,4 +1,11 @@
-import { Brackets, EntityRepository, Repository } from 'typeorm';
+import {
+  Brackets,
+  EntityManager,
+  EntityRepository,
+  getManager,
+  Repository,
+} from 'typeorm';
+import { User } from '../auth/users/user.entity';
 import { Patient } from '../patients/patient.entity';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
@@ -6,6 +13,9 @@ import { Resolution } from './resolution.entity';
 
 @EntityRepository(Resolution)
 export class ResolutionsRepository extends Repository<Resolution> {
+  constructor(private readonly pool: EntityManager = getManager()) {
+    super();
+  }
   //
   // Create a new resolution
   //
@@ -57,6 +67,26 @@ export class ResolutionsRepository extends Repository<Resolution> {
     const resolutions = await query.getMany();
 
     return resolutions;
+  }
+
+  //
+  // Get personal resolutions
+  //
+
+  async getMyResolutions(user: User): Promise<Resolution[]> {
+    const query = `SELECT resolution.id, resolution.doctor_id, resolution.text, resolution.patientId
+    FROM resolution
+    INNER JOIN patient
+      ON patient.id=resolution.patientId
+    WHERE patient.userId="${user.id}"
+    AND (
+      resolution.expiry IS NULL
+      OR resolution.expiry > Now() 
+    );`;
+
+    const resolution = await this.pool.query(query);
+
+    return resolution;
   }
 
   //

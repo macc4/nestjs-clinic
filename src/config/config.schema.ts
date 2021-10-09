@@ -12,7 +12,7 @@ export const configValidationSchema = Joi.object({
 
   REDIS_HOST: Joi.string().default('redis').required(),
   REDIS_PORT: Joi.number().default(6379).required(),
-  REDIS_TTL: Joi.number().default(86400).required(),
 
   JWT_SECRET: Joi.string().required(),
+  JWT_EXPIRY: Joi.number().required(),
 });

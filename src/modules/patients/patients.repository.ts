@@ -1,19 +1,32 @@
-import { EntityRepository, Repository } from 'typeorm';
+import {
+  EntityManager,
+  EntityRepository,
+  getManager,
+  Repository,
+} from 'typeorm';
+import { User } from '../auth/users/user.entity';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { Patient } from './patient.entity';
 
 @EntityRepository(Patient)
 export class PatientsRepository extends Repository<Patient> {
+  constructor(private readonly pool: EntityManager = getManager()) {
+    super();
+  }
   //
   // Create a new patient
   //
 
-  async createPatient(createPatientDto: CreatePatientDto): Promise<Patient> {
+  async createPatient(
+    createPatientDto: CreatePatientDto,
+    user: User,
+  ): Promise<Patient> {
     const { name, gender } = createPatientDto;
 
     const patient = this.create({
       name,
       gender,
+      user,
     });
 
     await this.save(patient);
@@ -27,6 +40,20 @@ export class PatientsRepository extends Repository<Patient> {
 
   async getPatientById(id: number): Promise<Patient> {
     const patient = await this.findOne(id);
+
+    return patient;
+  }
+
+  //
+  // Get patient by user ID
+  //
+
+  async getPatientByUserId(userId: string): Promise<Patient> {
+    const query = `SELECT *
+    FROM patient
+    WHERE patient.userId="${userId}"`;
+
+    const [patient] = await this.pool.query(query);
 
     return patient;
   }
