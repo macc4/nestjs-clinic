@@ -1,26 +1,21 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UsersRepository } from './users.repository';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
-import { PatientsService } from '../patients/patients.service';
-import { UserRole } from './utils/user-role.enum';
+import { PatientsService } from '../../patients/patients.service';
+import { UserRole } from '../users/user-role.enum';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
-import { User } from './user.entity';
+import { User } from '../users/user.entity';
+import { UsersService } from '../users/users.service';
+import { IncorrectEmailOrPassException } from './errors/IncorrectEmailOrPass.error';
+import { EmailConflictException } from './errors/EmailConflictException.error';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UsersRepository)
-    private usersRepository: UsersRepository,
     private jwtService: JwtService,
+    private usersService: UsersService,
     private patientsService: PatientsService,
   ) {}
 
@@ -37,11 +32,11 @@ export class AuthService {
     let user: User;
 
     try {
-      user = await this.usersRepository.createUser(
+      user = await this.usersService.createUser({
         email,
-        hashedPassword,
-        UserRole.PATIENT,
-      );
+        password: hashedPassword,
+        role: UserRole.PATIENT,
+      });
 
       await this.patientsService.createPatient(
         {
@@ -52,7 +47,7 @@ export class AuthService {
       );
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
-        throw new ConflictException('Email already exists');
+        throw new EmailConflictException();
       } else {
         throw new InternalServerErrorException();
       }
@@ -66,14 +61,14 @@ export class AuthService {
   async signIn(signInDto: SignInDto): Promise<{ token: string }> {
     const { email, password } = signInDto;
 
-    const user = await this.usersRepository.findOne({ email });
+    const user = await this.usersService.getUserByEmail(email);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = this.signToken({ id: user.id, role: user.role });
 
       return { token };
     } else {
-      throw new UnauthorizedException('Email or password are incorrect');
+      throw new IncorrectEmailOrPassException();
     }
   }
 }

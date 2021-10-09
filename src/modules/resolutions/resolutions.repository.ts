@@ -5,7 +5,7 @@ import {
   getManager,
   Repository,
 } from 'typeorm';
-import { User } from '../auth/user.entity';
+import { User } from '../auth/users/user.entity';
 import { Patient } from '../patients/patient.entity';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';

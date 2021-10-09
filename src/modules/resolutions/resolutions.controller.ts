@@ -9,9 +9,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '../auth/user.entity';
-import { GetUser } from '../auth/utils/get-user.decorator';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { User } from '../auth/users/user.entity';
+import { GetUser } from '../auth/auth/utils/get-user.decorator';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './resolution.entity';
@@ -67,6 +72,7 @@ export class ResolutionsController {
   @Get('me')
   @UseGuards(AuthGuard())
   @ApiOperation({ summary: 'Get personal resolutions' })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'Returns found resolutions or an empty list',

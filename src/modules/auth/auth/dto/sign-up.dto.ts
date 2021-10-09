@@ -6,8 +6,8 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { PatientGender } from 'src/modules/patients/utils/patient-gender.enum';
-import { UserRole } from '../utils/user-role.enum';
+import { PatientGender } from 'src/modules/patients/patient-gender.enum';
+import { UserRole } from '../../users/user-role.enum';
 
 export class SignUpDto {
   @IsString()

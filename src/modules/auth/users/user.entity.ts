@@ -1,7 +1,7 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Patient } from '../patients/patient.entity';
+import { Patient } from '../../patients/patient.entity';
 
-import { UserRole } from './utils/user-role.enum';
+import { UserRole } from './user-role.enum';
 
 @Entity()
 export class User {

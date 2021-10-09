@@ -6,9 +6,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../auth/user.entity';
+import { User } from '../auth/users/user.entity';
 import { Resolution } from '../resolutions/resolution.entity';
-import { PatientGender } from './utils/patient-gender.enum';
+import { PatientGender } from './patient-gender.enum';
 
 @Entity()
 export class Patient {

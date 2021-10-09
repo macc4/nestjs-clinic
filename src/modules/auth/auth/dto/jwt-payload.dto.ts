@@ -1,5 +1,5 @@
 import { IsEnum, IsString } from 'class-validator';
-import { UserRole } from '../utils/user-role.enum';
+import { UserRole } from '../../users/user-role.enum';
 
 export class JwtPayloadDto {
   @IsString()

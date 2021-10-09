@@ -5,10 +5,12 @@ import { PatientsService } from '../patients/patients.service';
 import { PatientsRepository } from '../patients/patients.repository';
 import { ResolutionsRepository } from './resolutions.repository';
 import { ResolutionsService } from './resolutions.service';
+import { User } from '../auth/users/user.entity';
 
 const mockResolutionsRepository = () => ({
   createResolution: jest.fn(),
   getResolutions: jest.fn(),
+  getMyResolutions: jest.fn(),
   getResolutionById: jest.fn(),
   deleteResolutionById: jest.fn(),
 });
@@ -88,6 +90,20 @@ describe('ResolutionsService', () => {
       resolutionsRepository.getResolutions.mockResolvedValue([mockResolution]);
 
       const result = await resolutionsService.getResolutions(null);
+
+      expect(result).toEqual([mockResolution]);
+    });
+  });
+
+  describe('calls getMyResolutions', () => {
+    it('and returns the [data]', async () => {
+      expect.assertions(1);
+
+      resolutionsRepository.getMyResolutions.mockResolvedValue([
+        mockResolution,
+      ]);
+
+      const result = await resolutionsService.getMyResolutions(new User());
 
       expect(result).toEqual([mockResolution]);
     });

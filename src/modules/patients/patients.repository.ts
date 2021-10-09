@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { User } from '../auth/user.entity';
+import { User } from '../auth/users/user.entity';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { Patient } from './patient.entity';
 
