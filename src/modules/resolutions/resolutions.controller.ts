@@ -16,8 +16,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '../auth/users/user.entity';
-import { GetUser } from '../auth/auth/utils/get-user.decorator';
+import { User } from '../users/user.entity';
+import { GetUser } from '../auth/utils/get-user.decorator';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './resolution.entity';

@@ -5,7 +5,7 @@ import { PatientsService } from '../patients/patients.service';
 import { PatientsRepository } from '../patients/patients.repository';
 import { ResolutionsRepository } from './resolutions.repository';
 import { ResolutionsService } from './resolutions.service';
-import { User } from '../auth/users/user.entity';
+import { User } from '../users/user.entity';
 
 const mockResolutionsRepository = () => ({
   createResolution: jest.fn(),

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Redis } from 'ioredis';
-import { User } from '../auth/users/user.entity';
+import { User } from '../users/user.entity';
 import { PatientsService } from '../patients/patients.service';
 
 Injectable();

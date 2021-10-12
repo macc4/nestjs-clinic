@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { QueueController } from './queue.controller';
 import { QueueService } from './queue.service';
-import { AuthModule } from '../auth/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 import { PatientsModule } from '../patients/patients.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 

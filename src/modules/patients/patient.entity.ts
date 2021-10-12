@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../auth/users/user.entity';
+import { User } from '../users/user.entity';
 import { Resolution } from '../resolutions/resolution.entity';
 import { PatientGender } from './patient-gender.enum';
 

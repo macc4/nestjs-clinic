@@ -14,8 +14,8 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { StatusCodes } from 'http-status-codes';
-import { GetUser } from '../auth/auth/utils/get-user.decorator';
-import { User } from '../auth/users/user.entity';
+import { GetUser } from '../auth/utils/get-user.decorator';
+import { User } from '../users/user.entity';
 import { QueueService } from './queue.service';
 
 @Controller('queue')
