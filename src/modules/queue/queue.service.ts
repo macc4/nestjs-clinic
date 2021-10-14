@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Redis } from 'ioredis';
-import { User } from '../users/user.entity';
-import { PatientsService } from '../patients/patients.service';
+import { DoctorsService } from '../doctors/doctors.service';
+import { GetUserDto } from '../auth/dto/get-user.dto';
+import { EmptyQueueException } from './errors/EmptyQueueException.error';
 
 Injectable();
 export class QueueService {
@@ -10,24 +11,58 @@ export class QueueService {
 
   constructor(
     @InjectRedis() private readonly redisClient: Redis,
-    private readonly patientsService: PatientsService,
+    private readonly doctorsService: DoctorsService,
   ) {}
 
-  async enqueue(user: User): Promise<number> {
-    const patient = await this.patientsService.getPatientByUserId(user.id);
+  async enqueueAsPatient(
+    doctorId: number,
+    user: GetUserDto,
+  ): Promise<{ message: string }> {
+    await this.doctorsService.getDoctorById(doctorId);
 
-    return await this.redisClient.rpush(`${this.prefix}`, `${patient.id}`);
+    const numberInQueue = await this.redisClient.rpush(
+      `${this.prefix}:${doctorId}`,
+      `${user.patientId}`,
+    );
+
+    return { message: `You are ${numberInQueue} in the queue` };
   }
 
-  async peek(): Promise<string> {
-    return await this.redisClient.lindex(`${this.prefix}`, 0);
-  }
+  async peekAsPatient(doctorId: number): Promise<string> {
+    await this.doctorsService.getDoctorById(doctorId);
 
-  async dequeue() {
-    const patientId = await this.redisClient.lpop(`${this.prefix}`);
+    const patientId = await this.redisClient.lindex(
+      `${this.prefix}:${doctorId}`,
+      0,
+    );
 
     if (!patientId) {
-      throw new NotFoundException('Queue is empty');
+      throw new EmptyQueueException(doctorId);
+    }
+
+    return patientId;
+  }
+
+  async peekAsDoctor(user: GetUserDto): Promise<string> {
+    const patientId = await this.redisClient.lindex(
+      `${this.prefix}:${user.doctorId}`,
+      0,
+    );
+
+    if (!patientId) {
+      throw new EmptyQueueException(user.doctorId);
+    }
+
+    return patientId;
+  }
+
+  async dequeueAsDoctor(user: GetUserDto) {
+    const patientId = await this.redisClient.lpop(
+      `${this.prefix}:${user.doctorId}`,
+    );
+
+    if (!patientId) {
+      throw new EmptyQueueException(user.doctorId);
     }
   }
 }

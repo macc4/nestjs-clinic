@@ -21,7 +21,6 @@ export class AuthController {
   //
 
   @Post('/signup')
-  //
   @ApiOperation({ summary: 'Sign in as patient' })
   @ApiCreatedResponse({
     description: 'Returns the jwt token',
@@ -29,7 +28,6 @@ export class AuthController {
   @ApiConflictResponse({
     description: 'Returns Conflict if user already exists',
   })
-  //
   signUp(@Body() signUpDto: SignUpDto): Promise<{ token: string }> {
     return this.authService.signUp(signUpDto);
   }
@@ -39,7 +37,6 @@ export class AuthController {
   //
 
   @Post('/signin')
-  //
   @ApiOperation({ summary: 'Sign in' })
   @ApiOkResponse({
     status: 200,
@@ -49,7 +46,6 @@ export class AuthController {
     status: 401,
     description: 'Returns Not Unauthorized if input data is invalid',
   })
-  //
   signIn(@Body() signInDto: SignInDto): Promise<{ token: string }> {
     return this.authService.signIn(signInDto);
   }

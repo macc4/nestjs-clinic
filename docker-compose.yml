@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: backend
+    environment:
+      - DB_HOST=host.docker.internal
+      - REDIS_HOST=redis
+    build: ./
+    ports:
+      - '8080:8080'
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+
+  # to connect to the db use
+  # docker exec -it mysql mysql -u root -p
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    hostname: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=clinic
+    ports:
+      - '3306:3306'
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - '6379:6379'

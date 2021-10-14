@@ -1,13 +1,11 @@
 import {
   IsEmail,
   IsEnum,
-  IsOptional,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { PatientGender } from 'src/modules/patients/patient-gender.enum';
-import { UserRole } from '../../users/user-role.enum';
+import { UserGender } from 'src/modules/users/enums/user-gender.enum';
 
 export class SignUpDto {
   @IsString()
@@ -25,10 +23,9 @@ export class SignUpDto {
   @MaxLength(24)
   name: string;
 
-  @IsEnum(PatientGender)
-  gender: PatientGender;
+  @IsEnum(UserGender)
+  gender: UserGender;
 
-  @IsOptional()
-  @IsEnum(UserRole)
-  role: UserRole;
+  // @IsDateString()
+  // birthDate: string;
 }

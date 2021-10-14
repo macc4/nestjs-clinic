@@ -1,5 +1,10 @@
 # itrex-internship
 
+## Information:
+
+SQL Diagram can be found here:
+https://drawsql.app/personal-261/diagrams/clinic#
+
 ## Installation:
 
 ### 0. Insert your data in the .env file

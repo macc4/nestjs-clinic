@@ -4,9 +4,8 @@ import {
   getManager,
   Repository,
 } from 'typeorm';
-import { User } from '../users/user.entity';
 import { CreatePatientDto } from './dto/create-patient.dto';
-import { Patient } from './patient.entity';
+import { Patient } from './entities/patient.entity';
 
 @EntityRepository(Patient)
 export class PatientsRepository extends Repository<Patient> {
@@ -17,11 +16,8 @@ export class PatientsRepository extends Repository<Patient> {
   // Create a new patient
   //
 
-  async createPatient(
-    createPatientDto: CreatePatientDto,
-    user: User,
-  ): Promise<Patient> {
-    const { name, gender } = createPatientDto;
+  async createPatient(createPatientDto: CreatePatientDto): Promise<Patient> {
+    const { name, gender, user } = createPatientDto;
 
     const patient = this.create({
       name,

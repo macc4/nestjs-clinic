@@ -1,11 +1,8 @@
-import { IsEnum, IsNotEmpty } from 'class-validator';
-import { PatientGender } from '../patient-gender.enum';
+import { User } from 'src/modules/users/entities/user.entity';
+import { UserGender } from '../../users/enums/user-gender.enum';
 
 export class CreatePatientDto {
-  @IsNotEmpty()
   name: string;
-
-  @IsNotEmpty()
-  @IsEnum(PatientGender)
-  gender: PatientGender;
+  gender: UserGender;
+  user: User;
 }

@@ -12,38 +12,6 @@
 					"name": "Patients",
 					"item": [
 						{
-							"name": "Create Patient",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "name",
-											"value": "test",
-											"type": "text"
-										},
-										{
-											"key": "gender",
-											"value": "test",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{URL}}/patients",
-									"host": [
-										"{{URL}}"
-									],
-									"path": [
-										"patients"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Get Patient by Id",
 							"request": {
 								"method": "GET",
@@ -71,7 +39,123 @@
 				},
 				{
 					"name": "Queue",
-					"item": []
+					"item": [
+						{
+							"name": "Enqueue",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/queue/:doctorId",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"queue",
+										":doctorId"
+									],
+									"variable": [
+										{
+											"key": "doctorId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Peek as Patient",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/queue/:doctorId",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"queue",
+										":doctorId"
+									],
+									"variable": [
+										{
+											"key": "doctorId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Peek as Doctor",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/queue",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"queue"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dequeue",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/queue",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"queue"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
 				{
 					"name": "Resolutions",
@@ -79,6 +163,16 @@
 						{
 							"name": "Get All Resolutions",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -96,10 +190,20 @@
 						{
 							"name": "Get All Resolutions with Filters",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{URL}}/resolutions",
+									"raw": "{{URL}}/resolutions?patientId=1",
 									"host": [
 										"{{URL}}"
 									],
@@ -109,8 +213,7 @@
 									"query": [
 										{
 											"key": "patientId",
-											"value": "2",
-											"disabled": true
+											"value": "1"
 										},
 										{
 											"key": "doctorId",
@@ -123,8 +226,46 @@
 							"response": []
 						},
 						{
+							"name": "Get My Resolutions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/resolutions/me",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"resolutions",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create Resolution",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -137,18 +278,13 @@
 											"type": "text"
 										},
 										{
-											"key": "doctorId",
-											"value": "1",
-											"type": "text"
-										},
-										{
 											"key": "text",
 											"value": "He is healthy!",
 											"type": "text"
 										},
 										{
 											"key": "expiry",
-											"value": "1",
+											"value": "5",
 											"type": "text"
 										}
 									]
@@ -168,6 +304,16 @@
 						{
 							"name": "Get Resolution by Id",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -192,6 +338,16 @@
 						{
 							"name": "Delete Resolution by Id",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
@@ -206,7 +362,7 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "4"
+											"value": "1"
 										}
 									]
 								}
@@ -220,6 +376,17 @@
 					"item": [
 						{
 							"name": "Sign Up",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -234,6 +401,16 @@
 										{
 											"key": "password",
 											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "gender",
+											"value": "male",
 											"type": "text"
 										}
 									]
@@ -253,6 +430,17 @@
 						},
 						{
 							"name": "Sign In",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -262,6 +450,50 @@
 										{
 											"key": "email",
 											"value": "admin@admin.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/auth/signin",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"auth",
+										"signin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Sign In as Doctor",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "doctor1@gmail.com",
 											"type": "text"
 										},
 										{

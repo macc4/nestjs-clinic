@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { PatientsService } from '../patients/patients.service';
-import { PatientsRepository } from '../patients/patients.repository';
-import { User } from '../users/user.entity';
+import { PatientsService } from './patients.service';
+import { PatientsRepository } from './patients.repository';
+import { User } from '../users/entities/user.entity';
 import { CreatePatientDto } from './dto/create-patient.dto';
 
 const mockPatientsRepository = () => ({
