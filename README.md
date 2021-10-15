@@ -2,8 +2,21 @@
 
 ## Information:
 
+### Documentation and SQL diagram:
+
+Swagger Documentation can be accessed (after running the server) via:
+http://127.0.0.1/api-docs
+
 SQL Diagram can be found here:
 https://drawsql.app/personal-261/diagrams/clinic#
+
+### Postman:
+
+Collection with all of the requests that were used is attached and can be imported into Postman.
+For it to properly work, create a new postman environment, and add variables:
+
+- URL: http://127.0.0.1:8080
+- jwt: null
 
 ## Installation:
 
