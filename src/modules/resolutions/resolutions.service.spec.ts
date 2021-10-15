@@ -2,10 +2,14 @@ import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientsService } from '../patients/patients.service';
-import { PatientsRepository } from '../patients/patients.repository';
 import { ResolutionsRepository } from './resolutions.repository';
 import { ResolutionsService } from './resolutions.service';
-import { User } from '../users/user.entity';
+import { DoctorsService } from '../doctors/doctors.service';
+import { GetUserDto } from '../auth/dto/get-user.dto';
+import { Doctor } from '../doctors/entities/doctor.entity';
+import { Patient } from '../patients/entities/patient.entity';
+import { Resolution } from './entities/resolution.entity';
+import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 
 const mockResolutionsRepository = () => ({
   createResolution: jest.fn(),
@@ -15,28 +19,26 @@ const mockResolutionsRepository = () => ({
   deleteResolutionById: jest.fn(),
 });
 
-const mockPatientsRepository = () => ({
+const mockPatientsService = () => ({
   getPatientById: jest.fn(),
 });
 
-const mockPatient = {
-  id: 1,
-  name: 'name',
-  gender: 'male',
-};
+const mockDoctorsService = () => ({
+  getDoctorById: jest.fn(),
+});
 
-const mockResolution = {
-  id: 1,
-  doctor_id: 1,
-  text: 'text',
-  expiry: '2021-10-08T09:47:16.000Z',
-  patientId: 1,
-};
+const mockPatient = new Patient();
+const mockDoctor = new Doctor();
+const mockResolution = new Resolution();
+
+const mockCreateResolutionDto = new CreateResolutionDto();
+const mockGetUserDto = new GetUserDto();
 
 describe('ResolutionsService', () => {
   let resolutionsService: ResolutionsService;
+  let patientsService: any;
+  let doctorsService: any;
   let resolutionsRepository: any;
-  let patientsRepository: any;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -46,50 +48,70 @@ describe('ResolutionsService', () => {
           provide: ResolutionsRepository,
           useFactory: mockResolutionsRepository,
         },
-        PatientsService,
         {
-          provide: PatientsRepository,
-          useFactory: mockPatientsRepository,
+          provide: PatientsService,
+          useFactory: mockPatientsService,
+        },
+        {
+          provide: DoctorsService,
+          useFactory: mockDoctorsService,
         },
       ],
     }).compile();
 
     resolutionsService = module.get(ResolutionsService);
+    patientsService = module.get(PatientsService);
+    doctorsService = module.get(DoctorsService);
     resolutionsRepository = module.get(ResolutionsRepository);
-    patientsRepository = module.get(PatientsRepository);
   });
 
   describe('calls createResolution', () => {
     it('and returns the data', async () => {
-      expect.assertions(3);
-
-      const createResolutionDto = new CreateResolutionDto();
+      expect.assertions(4);
 
       resolutionsRepository.createResolution.mockResolvedValue(mockResolution);
-      patientsRepository.getPatientById.mockResolvedValue(mockPatient);
+      patientsService.getPatientById.mockResolvedValue(mockPatient);
+      doctorsService.getDoctorById.mockResolvedValue(mockDoctor);
 
       const result = await resolutionsService.createResolution(
-        createResolutionDto,
+        mockCreateResolutionDto,
+        mockGetUserDto,
       );
 
-      expect(patientsRepository.getPatientById).toBeCalledWith(
-        createResolutionDto.patientId,
+      expect(patientsService.getPatientById).toBeCalledWith(
+        mockCreateResolutionDto.patientId,
+      );
+      expect(doctorsService.getDoctorById).toBeCalledWith(
+        mockGetUserDto.doctorId,
       );
       expect(resolutionsRepository.createResolution).toBeCalledWith(
-        createResolutionDto,
+        mockCreateResolutionDto,
         mockPatient,
+        mockDoctor,
       );
+
       expect(result).toEqual(mockResolution);
     });
   });
 
   describe('calls getResolutions', () => {
-    it('and returns the [data]', async () => {
+    it('and returns the [data] without filters', async () => {
       expect.assertions(1);
 
       resolutionsRepository.getResolutions.mockResolvedValue([mockResolution]);
 
       const result = await resolutionsService.getResolutions(null);
+
+      expect(result).toEqual([mockResolution]);
+    });
+    it('and returns the [data] with filters', async () => {
+      expect.assertions(1);
+
+      resolutionsRepository.getResolutions.mockResolvedValue([mockResolution]);
+
+      const result = await resolutionsService.getResolutions(
+        new GetResolutionsFilterDto(),
+      );
 
       expect(result).toEqual([mockResolution]);
     });
@@ -103,7 +125,7 @@ describe('ResolutionsService', () => {
         mockResolution,
       ]);
 
-      const result = await resolutionsService.getMyResolutions(new User());
+      const result = await resolutionsService.getMyResolutions(mockGetUserDto);
 
       expect(result).toEqual([mockResolution]);
     });

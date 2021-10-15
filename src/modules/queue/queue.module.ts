@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { QueueController } from './queue.controller';
 import { QueueService } from './queue.service';
 import { AuthModule } from '../auth/auth.module';
-import { PatientsModule } from '../patients/patients.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { DoctorsModule } from '../doctors/doctors.module';
 
 @Module({
   imports: [
     AuthModule,
-    PatientsModule,
+    DoctorsModule,
     RedisModule.forRoot({
       closeClient: true,
       config: {

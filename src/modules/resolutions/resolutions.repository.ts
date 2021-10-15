@@ -5,11 +5,12 @@ import {
   getManager,
   Repository,
 } from 'typeorm';
-import { User } from '../users/user.entity';
-import { Patient } from '../patients/patient.entity';
+import { Patient } from '../patients/entities/patient.entity';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
-import { Resolution } from './resolution.entity';
+import { Resolution } from './entities/resolution.entity';
+import { Doctor } from '../doctors/entities/doctor.entity';
+import { GetUserDto } from '../auth/dto/get-user.dto';
 
 @EntityRepository(Resolution)
 export class ResolutionsRepository extends Repository<Resolution> {
@@ -23,12 +24,11 @@ export class ResolutionsRepository extends Repository<Resolution> {
   async createResolution(
     createResolutionDto: CreateResolutionDto,
     patient: Patient,
+    doctor: Doctor,
   ): Promise<Resolution> {
-    const { doctorId, text } = createResolutionDto;
-
     const resolution = this.create({
-      doctor_id: doctorId,
-      text,
+      doctor,
+      text: createResolutionDto.text,
       expiry: createResolutionDto.expiryDate,
       patient,
     });
@@ -73,7 +73,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
   // Get personal resolutions
   //
 
-  async getMyResolutions(user: User): Promise<Resolution[]> {
+  async getMyResolutions(user: GetUserDto): Promise<Resolution[]> {
     const query = `SELECT resolution.id, resolution.doctor_id, resolution.text, resolution.patientId
     FROM resolution
     INNER JOIN patient

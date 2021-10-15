@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../users/user.entity';
 import { PatientsService } from '../patients/patients.service';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
-import { Resolution } from './resolution.entity';
+import { Resolution } from './entities/resolution.entity';
 import { ResolutionsRepository } from './resolutions.repository';
+import { DoctorsService } from '../doctors/doctors.service';
+import { GetUserDto } from '../auth/dto/get-user.dto';
 
 @Injectable()
 export class ResolutionsService {
@@ -13,6 +14,7 @@ export class ResolutionsService {
     @InjectRepository(ResolutionsRepository)
     private resolutionsRepository: ResolutionsRepository,
     private patientsService: PatientsService,
+    private doctorsService: DoctorsService,
   ) {}
 
   //
@@ -21,14 +23,18 @@ export class ResolutionsService {
 
   async createResolution(
     createResolutionDto: CreateResolutionDto,
+    user: GetUserDto,
   ): Promise<Resolution> {
     const patient = await this.patientsService.getPatientById(
       createResolutionDto.patientId,
     );
 
+    const doctor = await this.doctorsService.getDoctorById(user.doctorId);
+
     return this.resolutionsRepository.createResolution(
       createResolutionDto,
       patient,
+      doctor,
     );
   }
 
@@ -46,7 +52,7 @@ export class ResolutionsService {
   // Get personal resolutions
   //
 
-  async getMyResolutions(user: User): Promise<Resolution[]> {
+  async getMyResolutions(user: GetUserDto): Promise<Resolution[]> {
     const resolution = await this.resolutionsRepository.getMyResolutions(user);
 
     return resolution;

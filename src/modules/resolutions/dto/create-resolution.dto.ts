@@ -11,10 +11,6 @@ export class CreateResolutionDto {
 
   @IsNotEmpty()
   @ApiProperty()
-  doctorId: number;
-
-  @IsNotEmpty()
-  @ApiProperty()
   text: string;
 
   @IsOptional()
