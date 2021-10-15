@@ -3,6 +3,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   Post,
   UseGuards,
@@ -14,7 +15,6 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { StatusCodes } from 'http-status-codes';
 import { GetUserDto } from '../auth/dto/get-user.dto';
 import { GetUser } from '../auth/utils/get-user.decorator';
 import { JwtGuard } from '../auth/utils/jwt.guard';
@@ -37,7 +37,8 @@ export class QueueController {
   @Roles(UserRole.PATIENT)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get into queue via personal patient ID stored in JWT',
+    summary:
+      'Get into specified doctor`s queue via personal patient ID stored in JWT',
   })
   @ApiCreatedResponse({
     description:
@@ -56,7 +57,7 @@ export class QueueController {
 
   @Get('/:id')
   @ApiOperation({
-    summary: 'Retrieve patientId of the next patient in the queue',
+    summary: 'Retrieve patientId of the next patient in the specified queue',
   })
   @ApiOkResponse({
     description: 'Returns the patientId of the current patient',
@@ -74,7 +75,7 @@ export class QueueController {
   @Roles(UserRole.DOCTOR)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Retrieve patientId of the next patient in the queue',
+    summary: 'Retrieve patientId of the next patient in doctor`s own queue',
   })
   @ApiOkResponse({
     description: 'Returns the patientId of the current patient',
@@ -88,11 +89,13 @@ export class QueueController {
   //
 
   @Delete()
-  @HttpCode(StatusCodes.NO_CONTENT)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(UserRole.DOCTOR)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Dequeue current patient from the queue' })
+  @ApiOperation({
+    summary: 'Dequeue current patient from the doctor`s own queue',
+  })
   @ApiOkResponse({
     description: 'Deletes the patientId of the current patient',
   })

@@ -11,7 +11,7 @@ export class SpecializationsService {
   ) {}
 
   //
-  // Get specialization by title
+  // Get specialization by title (not used due to seeding of the data)
   //
 
   async getSpecializationByTitle(title: string): Promise<Specialization> {

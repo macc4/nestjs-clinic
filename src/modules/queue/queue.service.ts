@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { DEFAULT_REDIS_NAMESPACE, InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Redis } from 'ioredis';
 import { DoctorsService } from '../doctors/doctors.service';
 import { GetUserDto } from '../auth/dto/get-user.dto';
@@ -10,7 +10,7 @@ export class QueueService {
   private readonly prefix = 'queue';
 
   constructor(
-    @InjectRedis() private readonly redisClient: Redis,
+    @InjectRedis(DEFAULT_REDIS_NAMESPACE) private readonly redisClient: Redis,
     private readonly doctorsService: DoctorsService,
   ) {}
 

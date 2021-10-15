@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Doctor } from 'src/modules/doctors/entities/doctor.entity';
+import { Doctor } from '../../doctors/entities/doctor.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Patient } from '../../patients/entities/patient.entity';
 

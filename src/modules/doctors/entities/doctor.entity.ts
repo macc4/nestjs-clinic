@@ -1,4 +1,4 @@
-import { Resolution } from 'src/modules/resolutions/entities/resolution.entity';
+import { Resolution } from '../../resolutions/entities/resolution.entity';
 import {
   Column,
   Entity,

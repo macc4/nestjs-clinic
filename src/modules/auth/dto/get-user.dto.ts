@@ -1,4 +1,4 @@
-import { Role } from 'src/modules/users/entities/role.entity';
+import { Role } from '../../users/entities/role.entity';
 
 export class GetUserDto {
   id: string;

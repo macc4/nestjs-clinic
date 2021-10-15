@@ -1,11 +1,9 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { UserRole } from '../users/enums/user-role.enum';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
-import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { IncorrectEmailOrPassException } from './errors/IncorrectEmailOrPass.error';
 import { EmailConflictException } from './errors/EmailConflictException.error';
@@ -17,37 +15,36 @@ export class AuthService {
     private usersService: UsersService,
   ) {}
 
-  signToken(payload: JwtPayloadDto): string {
-    return this.jwtService.sign(payload);
-  }
+  //
+  // Sign up as patient
+  //
 
-  // signing up is only for patients
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
-    let user: User;
+    const userExists = await this.usersService.getUserByEmail(signUpDto.email);
+
+    if (userExists) {
+      throw new EmailConflictException();
+    }
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(signUpDto.password, salt);
 
     const defaultRoles = [UserRole.PATIENT];
 
-    try {
-      user = await this.usersService.createUser({
-        hashedPassword,
-        roles: defaultRoles,
-        ...signUpDto,
-      });
-    } catch (error) {
-      if (error.code === 'ER_DUP_ENTRY') {
-        throw new EmailConflictException();
-      } else {
-        throw new InternalServerErrorException();
-      }
-    }
+    const user = await this.usersService.createUser({
+      hashedPassword,
+      roles: defaultRoles,
+      ...signUpDto,
+    });
 
-    const token = this.signToken({ id: user.id });
+    const token = this.jwtService.sign({ id: user.id });
 
     return { token };
   }
+
+  //
+  // Sign in
+  //
 
   async signIn(signInDto: SignInDto): Promise<{ token: string }> {
     const { email, password } = signInDto;
@@ -55,7 +52,7 @@ export class AuthService {
     const user = await this.usersService.getUserByEmail(email);
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      const token = this.signToken({ id: user.id });
+      const token = this.jwtService.sign({ id: user.id });
 
       return { token };
     } else {

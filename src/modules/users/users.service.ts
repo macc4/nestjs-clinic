@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserNotFoundByEmailException } from './errors/UserNotFoundByEmailException.error';
@@ -7,7 +7,6 @@ import { UsersRepository } from './users.repository';
 import { RolesService } from './roles.service';
 import { PatientsService } from '../patients/patients.service';
 import { UserRole } from './enums/user-role.enum';
-import { DoctorsService } from '../doctors/doctors.service';
 
 Injectable();
 export class UsersService {
@@ -15,7 +14,6 @@ export class UsersService {
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
     private patientsService: PatientsService,
-    private doctorsService: DoctorsService,
     private rolesService: RolesService,
   ) {}
 
@@ -70,7 +68,7 @@ export class UsersService {
     const user = await this.usersRepository.getUserById(id);
 
     if (!user) {
-      throw new UserNotFoundByEmailException();
+      throw new NotFoundException(`No user found with ID: ${id}`);
     }
 
     return user;
