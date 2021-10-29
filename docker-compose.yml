@@ -1,35 +1,51 @@
 version: '3.8'
 
 services:
-  backend:
-    container_name: backend
+  clinic:
+    container_name: clinic
+    build: ./apps/clinic
+    command: yarn start
     environment:
       - DB_HOST=host.docker.internal
       - REDIS_HOST=redis
-    build: ./
     ports:
       - '8080:8080'
-    restart: always
     depends_on:
-      - mysql
+      - database
       - redis
 
-  # to connect to the db use
-  # docker exec -it mysql mysql -u root -p
+  # auth:
+  #   container_name: auth
+  #   build: ./apps/auth
+  #   command: yarn start:dev
+  #   environment:
+  #     - DB_HOST=host.docker.internal
+  #   ports:
+  #     - '4061:4061'
+  #   depends_on:
+  #     - database
 
-  mysql:
-    container_name: mysql
-    image: mysql
-    hostname: mysql
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=clinic
+  database:
+    container_name: pg
+    image: postgres:14-alpine
     ports:
-      - '3306:3306'
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: clinic
 
   redis:
     container_name: redis
-    image: redis
+    image: redis:6.2.6-alpine
     ports:
       - '6379:6379'
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - 5050:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
