@@ -15,16 +15,18 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetUser } from '../common/utils/get-user.decorator';
+import {
+  GetUser,
+  RolesGuard,
+  Roles,
+  UserRole,
+  JwtGuard,
+  GetUserDto,
+} from '@macc4-clinic/common';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './entities/resolution.entity';
 import { ResolutionsService } from './resolutions.service';
-import { RolesGuard } from '../common/utils/restrict-roles.guard';
-import { Roles } from '../common/utils/restrict-roles.decorator';
-import { UserRole } from '../common/enums/user-role.enum';
-import { JwtGuard } from '../common/utils/jwt.guard';
-import { GetUserDto } from '../common/dto/get-user.dto';
 
 @Controller('resolutions')
 @UseGuards(JwtGuard, RolesGuard)

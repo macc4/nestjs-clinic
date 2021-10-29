@@ -6,7 +6,7 @@ import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './entities/resolution.entity';
 import { ResolutionsRepository } from './resolutions.repository';
 import { DoctorsService } from '../doctors/doctors.service';
-import { GetUserDto } from '../common/dto/get-user.dto';
+import { GetUserDto } from '@macc4-clinic/common';
 
 @Injectable()
 export class ResolutionsService {

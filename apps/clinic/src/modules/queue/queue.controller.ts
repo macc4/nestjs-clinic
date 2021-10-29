@@ -15,12 +15,15 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetUserDto } from '../common/dto/get-user.dto';
-import { GetUser } from '../common/utils/get-user.decorator';
-import { JwtGuard } from '../common/utils/jwt.guard';
-import { Roles } from '../common/utils/restrict-roles.decorator';
-import { RolesGuard } from '../common/utils/restrict-roles.guard';
-import { UserRole } from '../common/enums/user-role.enum';
+import {
+  GetUserDto,
+  GetUser,
+  JwtGuard,
+  Roles,
+  RolesGuard,
+  UserRole,
+} from '@macc4-clinic/common';
+
 import { QueueService } from './queue.service';
 
 @Controller('queue')

@@ -6,7 +6,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtGuard } from '../common/utils/jwt.guard';
+import { JwtGuard } from '@macc4-clinic/common';
 import { DoctorsService } from './doctors.service';
 import { Doctor } from './entities/doctor.entity';
 

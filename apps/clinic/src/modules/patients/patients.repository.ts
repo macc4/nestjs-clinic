@@ -20,7 +20,7 @@ export class PatientsRepository extends Repository<Patient> {
     const { userId } = createPatientDto;
 
     const patient = this.create({
-      userId,
+      user_id: userId,
     });
 
     await this.save(patient);

@@ -6,24 +6,40 @@ services:
     build: ./apps/clinic
     command: yarn start
     environment:
-      - DB_HOST=host.docker.internal
-      - REDIS_HOST=redis
+      PORT: ${CLINIC_SERVICE_PORT}
+      DB_HOST: host.docker.internal
+      REDIS_HOST: redis
     ports:
-      - '8080:8080'
+      - ${CLINIC_SERVICE_PORT}:${CLINIC_SERVICE_PORT}
     depends_on:
       - database
       - redis
 
-  # auth:
-  #   container_name: auth
-  #   build: ./apps/auth
-  #   command: yarn start:dev
-  #   environment:
-  #     - DB_HOST=host.docker.internal
-  #   ports:
-  #     - '4061:4061'
-  #   depends_on:
-  #     - database
+  auth:
+    container_name: auth
+    build: ./apps/auth
+    command: yarn start
+    environment:
+      PORT: ${AUTH_SERVICE_PORT}
+      DB_HOST: host.docker.internal
+      CLINIC_SERVICE_PORT: ${CLINIC_SERVICE_PORT}
+      PROFILE_SERVICE_PORT: ${PROFILE_SERVICE_PORT}
+    ports:
+      - ${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}
+    depends_on:
+      - database
+
+  profile:
+    container_name: profile
+    build: ./apps/profile
+    command: yarn start
+    environment:
+      PORT: ${PROFILE_SERVICE_PORT}
+      DB_HOST: host.docker.internal
+    ports:
+      - ${PROFILE_SERVICE_PORT}:${PROFILE_SERVICE_PORT}
+    depends_on:
+      - database
 
   database:
     container_name: pg

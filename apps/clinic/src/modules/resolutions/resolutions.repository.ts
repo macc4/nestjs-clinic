@@ -10,7 +10,7 @@ import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './entities/resolution.entity';
 import { Doctor } from '../doctors/entities/doctor.entity';
-import { GetUserDto } from '../common/dto/get-user.dto';
+import { GetUserDto } from '@macc4-clinic/common';
 
 @EntityRepository(Resolution)
 export class ResolutionsRepository extends Repository<Resolution> {
@@ -49,7 +49,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
     const query = this.createQueryBuilder('resolution');
 
     if (patientId) {
-      query.andWhere('resolution.patientId = :patientId', { patientId });
+      query.andWhere('resolution.patient_id = :patientId', { patientId });
     }
 
     if (doctorId) {
@@ -74,15 +74,17 @@ export class ResolutionsRepository extends Repository<Resolution> {
   //
 
   async getMyResolutions(user: GetUserDto): Promise<Resolution[]> {
-    const query = `SELECT resolution.id, resolution.doctor_id, resolution.text, resolution.patientId
+    const query = `
+    SELECT resolution.*
     FROM resolution
     INNER JOIN patient
-      ON patient.id=resolution.patientId
-    WHERE patient.userId="${user.id}"
+      ON patient.id=resolution.patient_id
+    WHERE patient.user_id='${user.id}'
     AND (
       resolution.expiry IS NULL
       OR resolution.expiry > Now() 
-    );`;
+    );
+    `;
 
     const resolution = await this.pool.query(query);
 

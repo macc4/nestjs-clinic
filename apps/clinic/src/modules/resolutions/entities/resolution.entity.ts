@@ -1,12 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Doctor } from '../../doctors/entities/doctor.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Patient } from '../../patients/entities/patient.entity';
 
-@Entity()
+@Entity('resolution', { schema: 'clinic' })
 export class Resolution {
   @ApiProperty({ example: 1, description: 'ID of the resolution' })
-  @PrimaryGeneratedColumn() // numbers, not uuid's
+  @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
@@ -21,11 +27,10 @@ export class Resolution {
   expiry: Date;
 
   @ManyToOne(() => Doctor, (doctor) => doctor.resolutions, { eager: true })
+  @JoinColumn({ name: 'doctor_id' })
   doctor: Doctor;
 
   @ManyToOne(() => Patient, (patient) => patient.resolutions, { eager: true })
+  @JoinColumn({ name: 'patient_id' })
   patient: Patient;
-
-  @Column()
-  patientId: number;
 }

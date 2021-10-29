@@ -9,13 +9,13 @@ import {
 } from 'typeorm';
 import { Specialization } from './specialization.entity';
 
-@Entity()
+@Entity('doctor', { schema: 'clinic' })
 export class Doctor {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  userId: string;
+  user_id: string;
 
   @OneToMany(() => Resolution, (resolution) => resolution.doctor, {
     eager: false,
@@ -23,6 +23,16 @@ export class Doctor {
   resolutions: Resolution[];
 
   @ManyToMany(() => Specialization)
-  @JoinTable()
+  @JoinTable({
+    name: 'doctor_specializations',
+    joinColumn: {
+      name: 'doctor_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'specialization_id',
+      referencedColumnName: 'id',
+    },
+  })
   specializations: Specialization[];
 }

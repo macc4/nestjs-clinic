@@ -5,7 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const logger = new Logger();
+  const logger = new Logger('ClinicService');
 
   const app = await NestFactory.create(AppModule);
 
@@ -14,12 +14,8 @@ async function bootstrap() {
   // Swagger
 
   const options = new DocumentBuilder()
-    .setTitle('Clinic API')
-    .setDescription(
-      'Clinic API build with the NestJS framework for the ITRex Internship',
-    )
+    .setTitle('Clinic-Service for the API')
     .setVersion('0.0.1')
-    .addTag('resolutions')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

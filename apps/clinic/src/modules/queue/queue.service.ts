@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DEFAULT_REDIS_NAMESPACE, InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Redis } from 'ioredis';
 import { DoctorsService } from '../doctors/doctors.service';
-import { GetUserDto } from '../common/dto/get-user.dto';
+import { GetUserDto } from '@macc4-clinic/common';
 import { EmptyQueueException } from './errors/EmptyQueueException.error';
 import { PatientsService } from '../patients/patients.service';
 

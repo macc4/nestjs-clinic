@@ -4,19 +4,15 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserRole } from '../common/enums/user-role.enum';
-import { JwtGuard } from '../common/utils/jwt.guard';
-import { Roles } from '../common/utils/restrict-roles.decorator';
-import { RolesGuard } from '../common/utils/restrict-roles.guard';
+
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { Patient } from './entities/patient.entity';
 import { PatientsService } from './patients.service';
 
 @Controller('patients')
-@UseGuards(JwtGuard)
+// @UseGuards(JwtGuard)
 @ApiBearerAuth()
 @ApiTags('patients')
 export class PatientsController {
