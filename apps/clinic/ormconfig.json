@@ -1,0 +1,14 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "root",
+  "password": "root",
+  "database": "clinic",
+  "logging": false,
+  "entities": ["src/modules/**/*entity.{js,ts}"],
+  "migrations": ["migrations/*.{js,ts}"],
+  "cli": {
+    "migrationsDir": "migrations"
+  }
+}
