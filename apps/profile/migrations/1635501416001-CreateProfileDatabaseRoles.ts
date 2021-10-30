@@ -9,14 +9,14 @@ export class CreateProfileDatabaseRoles1635501416001
     await queryRunner.query(`
     BEGIN;
 
-    DROP ROLE IF EXISTS clinic_reader;
-    DROP ROLE IF EXISTS clinic_writer;
+    DROP ROLE IF EXISTS profile_reader;
+    DROP ROLE IF EXISTS profile_writer;
 
-    CREATE ROLE clinic_reader;
-    CREATE ROLE clinic_writer;
+    CREATE ROLE profile_reader;
+    CREATE ROLE profile_writer;
 
-    DROP ROLE IF EXISTS clinic_user;
-    CREATE ROLE clinic_user password 'password' login INHERIT IN ROLE clinic_writer;
+    DROP ROLE IF EXISTS profile_user;
+    CREATE ROLE profile_user password 'password' login INHERIT IN ROLE profile_writer;
 
     COMMIT;
     `);
@@ -26,9 +26,9 @@ export class CreateProfileDatabaseRoles1635501416001
     await queryRunner.query(`
     BEGIN;
 
-    DROP ROLE IF EXISTS auth_reader;
-    DROP ROLE IF EXISTS auth_writer;
-    DROP ROLE IF EXISTS auth_user;
+    DROP ROLE IF EXISTS profile_reader;
+    DROP ROLE IF EXISTS profile_writer;
+    DROP ROLE IF EXISTS profile_user;
 
     COMMIT;
     `);

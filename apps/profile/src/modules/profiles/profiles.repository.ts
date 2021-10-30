@@ -22,7 +22,7 @@ export class ProfilesRepository extends Repository<Profile> {
     const profile = this.create({
       name,
       gender,
-      userId,
+      user_id: userId,
     });
 
     await this.save(profile);

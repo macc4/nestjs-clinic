@@ -17,7 +17,13 @@ export class DoctorsRepository extends Repository<Doctor> {
   //
 
   async getDoctorById(id: number): Promise<Doctor> {
-    const doctor = await this.findOne(id);
+    const query = `
+    SELECT doctor.*
+    FROM clinic.doctor
+    WHERE doctor.id = '${id}'
+    `;
+
+    const [doctor] = await this.pool.query(query);
 
     return doctor;
   }
@@ -27,9 +33,11 @@ export class DoctorsRepository extends Repository<Doctor> {
   //
 
   async getDoctorByUserId(userId: string): Promise<Doctor> {
-    const query = `SELECT *
-    FROM doctor
-    WHERE doctor.userId="${userId}"`;
+    const query = `
+    SELECT doctor.*
+    FROM clinic.doctor
+    WHERE doctor.user_id = '${userId}'
+    `;
 
     const [doctor] = await this.pool.query(query);
 

@@ -22,13 +22,22 @@ import { JwtStrategy } from '@macc4-clinic/common';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         logging: true,
-        synchronize: true,
-        migrationsRun: false,
+        synchronize: false,
+        migrationsRun: true,
         entities: [__dirname + './../**/entities/*.{js,ts}'],
         migrations: [__dirname + './../../../migrations/*.{js,ts}'],
       }),
     }),
   ],
-  providers: [JwtStrategy],
+  providers: [
+    {
+      provide: 'AUTH_STRATEGY',
+      useFactory: (configService: ConfigService) => {
+        const secret = configService.get('JWT_SECRET');
+        return new JwtStrategy({ secret });
+      },
+      inject: [ConfigService],
+    },
+  ],
 })
 export class SharedModule {}

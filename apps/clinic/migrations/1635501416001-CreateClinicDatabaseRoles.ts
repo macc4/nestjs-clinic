@@ -26,9 +26,9 @@ export class CreateClinicDatabaseRoles1635501416001
     await queryRunner.query(`
     BEGIN;
 
-    DROP ROLE IF EXISTS auth_reader;
-    DROP ROLE IF EXISTS auth_writer;
-    DROP ROLE IF EXISTS auth_user;
+    DROP ROLE IF EXISTS clinic_reader;
+    DROP ROLE IF EXISTS clinic_writer;
+    DROP ROLE IF EXISTS clinic_user;
 
     COMMIT;
     `);

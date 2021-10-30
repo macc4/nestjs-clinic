@@ -1,3 +1,4 @@
+import { Roles, RolesGuard, UserRole, JwtGuard } from '@macc4-clinic/common';
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -12,14 +13,13 @@ import { Patient } from './entities/patient.entity';
 import { PatientsService } from './patients.service';
 
 @Controller('patients')
-// @UseGuards(JwtGuard)
 @ApiBearerAuth()
 @ApiTags('patients')
 export class PatientsController {
   constructor(private patientsService: PatientsService) {}
 
   //
-  // Create a new Patient
+  // Create a new Patient (for http requests from auth only)
   //
 
   @Post()
@@ -32,6 +32,8 @@ export class PatientsController {
   //
 
   @Get('/:id')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.DOCTOR, UserRole.ADMIN)
   @ApiOperation({ summary: 'Get patient by ID' })
   @ApiOkResponse({
     description: 'Returns found patient',
