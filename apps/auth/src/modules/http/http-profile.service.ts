@@ -10,13 +10,25 @@ export class HttpProfileService {
     private readonly configService: ConfigService,
   ) {}
 
-  private readonly host = 'http://127.0.0.1';
-  private readonly API_URI = `${this.host}:${this.configService.get(
-    'PROFILE_SERVICE_PORT',
-  )}`;
+  private readonly defaultHost = '127.0.0.1';
+  private readonly port = this.configService.get('PROFILE_SERVICE_PORT');
+
+  getServiceURI() {
+    const dockerHost = this.configService.get('PROFILE_SERVICE_HOST');
+
+    let URI: string;
+
+    if (dockerHost) {
+      URI = `http://${dockerHost}:${this.port}/profiles`;
+    } else {
+      URI = `http://${this.defaultHost}:${this.port}/profiles`;
+    }
+
+    return URI;
+  }
 
   async createProfile(createProfileDto: CreateProfileDto): Promise<void> {
-    const URI = `${this.API_URI}/profiles`;
+    const URI = this.getServiceURI();
 
     try {
       this.httpService.post(URI, createProfileDto).subscribe();

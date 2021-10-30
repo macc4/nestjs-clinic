@@ -8,14 +8,14 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "yarn prebuild && nest build",
-    "start": "yarn prebuild && nest start",
+    "start": "nest start",
     "start:dev": "yarn prebuild && nest start --watch",
     "start:debug": "yarn prebuild && nest start --debug --watch",
     "start:prod": "node dist/main",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "upgrade:common": "yarn upgrade @macca-clinic/common --latest",
+    "upgrade:common": "yarn add @macc4-clinic/common",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create",
     "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate",
@@ -23,7 +23,7 @@
     "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert"
   },
   "dependencies": {
-    "@macc4-clinic/common": "^1.0.4",
+    "@macc4-clinic/common": "^1.0.5",
     "@nestjs/common": "^8.0.11",
     "@nestjs/config": "^1.0.2",
     "@nestjs/core": "^8.0.11",

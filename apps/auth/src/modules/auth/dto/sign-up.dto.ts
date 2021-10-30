@@ -5,7 +5,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { UserGender } from '../../users/enums/user-gender.enum';
+import { UserGender } from '@macc4-clinic/common';
 
 export class SignUpDto {
   @IsString()

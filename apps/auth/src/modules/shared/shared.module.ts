@@ -29,6 +29,15 @@ import { JwtStrategy } from '@macc4-clinic/common';
       }),
     }),
   ],
-  providers: [JwtStrategy],
+  providers: [
+    {
+      provide: 'AUTH_STRATEGY',
+      useFactory: (configService: ConfigService) => {
+        const secret = configService.get('JWT_SECRET');
+        return new JwtStrategy({ secret });
+      },
+      inject: [ConfigService],
+    },
+  ],
 })
 export class SharedModule {}

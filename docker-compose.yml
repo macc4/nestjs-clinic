@@ -7,7 +7,7 @@ services:
     command: yarn start
     environment:
       PORT: ${CLINIC_SERVICE_PORT}
-      DB_HOST: host.docker.internal
+      DB_HOST: database
       REDIS_HOST: redis
     ports:
       - ${CLINIC_SERVICE_PORT}:${CLINIC_SERVICE_PORT}
@@ -21,8 +21,10 @@ services:
     command: yarn start
     environment:
       PORT: ${AUTH_SERVICE_PORT}
-      DB_HOST: host.docker.internal
+      DB_HOST: database
+      CLINIC_SERVICE_HOST: clinic
       CLINIC_SERVICE_PORT: ${CLINIC_SERVICE_PORT}
+      PROFILE_SERVICE_HOST: profile
       PROFILE_SERVICE_PORT: ${PROFILE_SERVICE_PORT}
     ports:
       - ${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}
@@ -35,7 +37,7 @@ services:
     command: yarn start
     environment:
       PORT: ${PROFILE_SERVICE_PORT}
-      DB_HOST: host.docker.internal
+      DB_HOST: database
     ports:
       - ${PROFILE_SERVICE_PORT}:${PROFILE_SERVICE_PORT}
     depends_on:

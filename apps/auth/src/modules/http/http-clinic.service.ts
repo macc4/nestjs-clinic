@@ -9,13 +9,25 @@ export class HttpClinicService {
     private readonly configService: ConfigService,
   ) {}
 
-  private readonly host = 'http://127.0.0.1';
-  private readonly API_URI = `${this.host}:${this.configService.get(
-    'CLINIC_SERVICE_PORT',
-  )}`;
+  private readonly defaultHost = '127.0.0.1';
+  private readonly port = this.configService.get('CLINIC_SERVICE_PORT');
+
+  getServiceURI() {
+    const dockerHost = this.configService.get('CLINIC_SERVICE_HOST');
+
+    let URI: string;
+
+    if (dockerHost) {
+      URI = `http://${dockerHost}:${this.port}/patients`;
+    } else {
+      URI = `http://${this.defaultHost}:${this.port}/patients`;
+    }
+
+    return URI;
+  }
 
   async createPatient(userId: string): Promise<void> {
-    const URI = `${this.API_URI}/patients`;
+    const URI = this.getServiceURI();
 
     try {
       this.httpService.post(URI, { userId }).subscribe();

@@ -588,10 +588,10 @@
     redis-errors "1.2.0"
     tslib "2.3.1"
 
-"@macc4-clinic/common@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@macc4-clinic/common/-/common-1.0.4.tgz#383a04fb7e8d2c5855f2b7e8a36d4ea1cfeb6e3c"
-  integrity sha512-a3E9ts/birHaINAXJObnjyoXboJwhVNnil6J6co5QQ9uuIKpJp1vWJkJSrK5g6mpDCeZxwnoCnMObpCificZDA==
+"@macc4-clinic/common@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@macc4-clinic/common/-/common-1.0.5.tgz#6cd2938155594b0b5aec71cbea37fda16b29e07e"
+  integrity sha512-VZnUdmppRHchXX250TyZ3LFLptPuu/XCAcL0X6YKX+55Vm8GL7xdp8OfUkQ6chlJToX1s6e+nY9H7P1W8MNBKg==
   dependencies:
     "@nestjs/common" "^8.0.0"
     "@nestjs/config" "^1.0.3"
