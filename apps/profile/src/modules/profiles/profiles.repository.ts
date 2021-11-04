@@ -36,11 +36,27 @@ export class ProfilesRepository extends Repository<Profile> {
 
   async getProfileByUserId(userId: string): Promise<Profile> {
     const query = `SELECT *
-    FROM profile
-    WHERE profile.userId="${userId}"`;
+    FROM profile.profile
+    WHERE profile.user_id = '${userId}'`;
 
     const [profile] = await this.pool.query(query);
 
     return profile;
+  }
+
+  //
+  // Get profile by user ID
+  //
+
+  async getBatchProfiles(userIds: string[]): Promise<Profile[]> {
+    console.log(userIds);
+    const query = `SELECT *
+    FROM profile.profile
+    WHERE profile.user_id = ANY($1::uuid[]);
+    `;
+
+    const profiles = await this.pool.query(query, [userIds]);
+
+    return profiles;
   }
 }

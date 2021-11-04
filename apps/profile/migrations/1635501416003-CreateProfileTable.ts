@@ -10,7 +10,7 @@ export class CreateProfileTable1635501416003 implements MigrationInterface {
       id SERIAL NOT NULL, 
       name character varying NOT NULL, 
       gender character varying NOT NULL, 
-      user_id character varying NOT NULL, 
+      user_id uuid NOT NULL, 
       CONSTRAINT UQ_profile_user_id UNIQUE (user_id), 
       CONSTRAINT PK_profile_id PRIMARY KEY (id)
     );

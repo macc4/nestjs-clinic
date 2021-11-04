@@ -1,6 +1,20 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { GetUser, GetUserDto, JwtGuard } from '@macc4-clinic/common';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseArrayPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateProfileDto } from './dto/create-profile.dto';
+import { GetBatchProfilesDto } from './dto/get-batch-profiles.dto';
 import { Profile } from './entities/profile.entity';
 import { ProfilesService } from './profiles.service';
 
@@ -19,19 +33,31 @@ export class ProfilesController {
   }
 
   //
-  // Get Profile by User id
+  // Get batch Profiles by User id's
   //
 
-  // @Get('/me')
-  // @ApiOperation({ summary: 'Get Profile by user id' })
-  // @ApiOkResponse({
-  //   description: 'Returns found Profile',
-  //   type: Profile,
-  // })
-  // @ApiNotFoundResponse({
-  //   description: 'Returns Not Found if no data found with that user id',
-  // })
-  // getPatientById(@Param('id') id: string): Promise<Profile> {
-  //   return this.profilesService.getProfileById(+id);
-  // }
+  @Get('batch')
+  getBatchProfiles(@Body() userData: GetBatchProfilesDto): Promise<Profile[]> {
+    const { userIds } = userData;
+
+    return this.profilesService.getBatchProfiles(userIds);
+  }
+
+  //
+  // Get personal Profile
+  //
+
+  @Get('me')
+  @UseGuards(JwtGuard)
+  @ApiOperation({ summary: 'Get personal profile' })
+  @ApiOkResponse({
+    description: 'Returns found Profile',
+    type: Profile,
+  })
+  @ApiNotFoundResponse({
+    description: 'Returns Not Found if no data found with that user id',
+  })
+  getPersonalProfile(@GetUser('id') user: GetUserDto): Promise<Profile> {
+    return this.profilesService.getPersonalProfile(user);
+  }
 }
