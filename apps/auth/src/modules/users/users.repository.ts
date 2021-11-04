@@ -27,7 +27,21 @@ export class UsersRepository extends Repository<User> {
     return user;
   }
 
+  async setPassword(userId: string, hashedPassword: string): Promise<void> {
+    const query = `
+    UPDATE auth.user
+    SET password = '${hashedPassword}'
+    WHERE id = '${userId}';
+    `;
+
+    await this.pool.query(query);
+  }
+
   async getUserByEmail(email: string): Promise<User> {
     return await this.findOne({ relations: ['roles'], where: { email } });
+  }
+
+  async getUserById(id: string): Promise<User> {
+    return await this.findOne({ relations: ['roles'], where: { id } });
   }
 }
