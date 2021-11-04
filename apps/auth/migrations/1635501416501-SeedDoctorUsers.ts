@@ -40,19 +40,34 @@ export class SeedDoctorUsers1635501416501 implements MigrationInterface {
     BEGIN; 
 
     DELETE FROM
-      auth.role
+      auth.user_roles
     WHERE
-      id = 1;
+      user_id = 'c1414d7c-cd5d-4d1a-9c29-7311bb21c884';
 
     DELETE FROM
-      auth.role
+      auth.user_roles
     WHERE
-      id = 2;
+      user_id = 'abd9a3f6-acd5-450a-9961-3ffba92f20e6';
 
     DELETE FROM
-      auth.role
+      auth.user_roles
     WHERE
-      id = 3;
+      user_id = '21ed452e-b3da-47d6-bd0c-8abea993cf0b';
+
+    DELETE FROM
+      auth.user
+    WHERE
+      id = 'c1414d7c-cd5d-4d1a-9c29-7311bb21c884';
+
+    DELETE FROM
+      auth.user
+    WHERE
+      id = 'abd9a3f6-acd5-450a-9961-3ffba92f20e6';
+
+    DELETE FROM
+      auth.user
+    WHERE
+      id = '21ed452e-b3da-47d6-bd0c-8abea993cf0b';
 
     COMMIT;
     `);
