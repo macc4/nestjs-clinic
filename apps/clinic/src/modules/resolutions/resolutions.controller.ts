@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -27,6 +28,7 @@ import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './entities/resolution.entity';
 import { ResolutionsService } from './resolutions.service';
+import { PatchResolutionDto } from './dto/patch-resolution.dto';
 
 @Controller('resolutions')
 @UseGuards(JwtGuard, RolesGuard)
@@ -52,10 +54,10 @@ export class ResolutionsController {
     description: 'Returns Bad Request if input data is wrong',
   })
   createResolution(
-    @Body() createResolutionDto: CreateResolutionDto,
     @GetUser() user: GetUserDto,
+    @Body() createResolutionDto: CreateResolutionDto,
   ): Promise<Resolution> {
-    return this.resolutionsService.createResolution(createResolutionDto, user);
+    return this.resolutionsService.createResolution(user, createResolutionDto);
   }
 
   //
@@ -110,6 +112,25 @@ export class ResolutionsController {
   })
   getResolutionById(@Param('id') id: string): Promise<Resolution> {
     return this.resolutionsService.getResolutionById(+id);
+  }
+
+  @Patch('/:id')
+  @Roles(UserRole.DOCTOR, UserRole.ADMIN)
+  @ApiOperation({ summary: 'Patch resolution by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns patched resolution',
+    type: Resolution,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Returns Not Found if no data found with that ID',
+  })
+  patchResolutionById(
+    @Param('id') id: string,
+    @Body() patchResolutionDto: PatchResolutionDto,
+  ): Promise<Resolution> {
+    return this.resolutionsService.patchResolutionById(+id, patchResolutionDto);
   }
 
   //

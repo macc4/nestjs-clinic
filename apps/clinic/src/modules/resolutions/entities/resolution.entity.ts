@@ -19,13 +19,6 @@ export class Resolution {
   @Column()
   text: string;
 
-  @ApiProperty({
-    example: '1901-09-11T11:30:00.732Z',
-    description: 'Expiry date of the resolution',
-  })
-  @Column({ nullable: true })
-  expiry: Date;
-
   @ManyToOne(() => Doctor, (doctor) => doctor.resolutions, { eager: true })
   @JoinColumn({ name: 'doctor_id' })
   doctor: Doctor;

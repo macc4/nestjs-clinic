@@ -8,7 +8,6 @@ export class CreateResolutionsTable1635501416007 implements MigrationInterface {
     CREATE TABLE clinic.resolution (
       id SERIAL NOT NULL, 
       text character varying NOT NULL, 
-      expiry TIMESTAMP, 
       doctor_id integer, 
       patient_id integer, 
       CONSTRAINT PK_resolution_id PRIMARY KEY (id)

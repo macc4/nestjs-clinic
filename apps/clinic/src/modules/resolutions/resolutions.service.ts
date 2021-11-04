@@ -7,6 +7,7 @@ import { Resolution } from './entities/resolution.entity';
 import { ResolutionsRepository } from './resolutions.repository';
 import { DoctorsService } from '../doctors/doctors.service';
 import { GetUserDto } from '@macc4-clinic/common';
+import { PatchResolutionDto } from './dto/patch-resolution.dto';
 
 @Injectable()
 export class ResolutionsService {
@@ -22,8 +23,8 @@ export class ResolutionsService {
   //
 
   async createResolution(
-    createResolutionDto: CreateResolutionDto,
     user: GetUserDto,
+    createResolutionDto: CreateResolutionDto,
   ): Promise<Resolution> {
     const patient = await this.patientsService.getPatientById(
       createResolutionDto.patientId,
@@ -64,6 +65,26 @@ export class ResolutionsService {
 
   async getResolutionById(id: number): Promise<Resolution> {
     const resolution = await this.resolutionsRepository.getResolutionById(id);
+
+    if (!resolution) {
+      throw new NotFoundException(`No resolution found with ID: ${id}`);
+    }
+
+    return resolution;
+  }
+
+  //
+  // Patch resolution by id
+  //
+
+  async patchResolutionById(
+    id: number,
+    patchResolutionDto: PatchResolutionDto,
+  ): Promise<Resolution> {
+    const resolution = await this.resolutionsRepository.patchResolutionById(
+      id,
+      patchResolutionDto,
+    );
 
     if (!resolution) {
       throw new NotFoundException(`No resolution found with ID: ${id}`);
