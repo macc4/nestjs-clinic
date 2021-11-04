@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   ParseArrayPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -11,10 +12,12 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { GetBatchProfilesDto } from './dto/get-batch-profiles.dto';
+import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
 import { ProfilesService } from './profiles.service';
 
@@ -59,5 +62,28 @@ export class ProfilesController {
   })
   getPersonalProfile(@GetUser('id') user: GetUserDto): Promise<Profile> {
     return this.profilesService.getPersonalProfile(user);
+  }
+
+  //
+  // Patch personal Profile
+  //
+
+  @Patch('me')
+  @UseGuards(JwtGuard)
+  @ApiOperation({ summary: 'Patch resolution by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns patched resolution',
+    type: Profile,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Returns Not Found if no data found with that ID',
+  })
+  patchPersonalProfile(
+    @GetUser() user: GetUserDto,
+    @Body() patchProfileDto: PatchProfileDto,
+  ): Promise<Profile> {
+    return this.profilesService.patchPersonalProfile(user, patchProfileDto);
   }
 }

@@ -2,6 +2,7 @@ import { GetUserDto } from '@macc4-clinic/common';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProfileDto } from './dto/create-profile.dto';
+import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
 import { ProfilesRepository } from './profiles.repository';
 
@@ -54,6 +55,22 @@ export class ProfilesService {
 
   async getPersonalProfile(user: GetUserDto): Promise<Profile> {
     const profile = await this.profilesRepository.getProfileByUserId(user.id);
+
+    return profile;
+  }
+
+  //
+  // Patch personal Profile
+  //
+
+  async patchPersonalProfile(
+    user: GetUserDto,
+    patchProfileDto: PatchProfileDto,
+  ): Promise<Profile> {
+    const profile = await this.profilesRepository.patchPersonalProfile(
+      user,
+      patchProfileDto,
+    );
 
     return profile;
   }
