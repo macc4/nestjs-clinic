@@ -29,7 +29,7 @@ export class UsersRepository extends Repository<User> {
 
   async setPassword(userId: string, hashedPassword: string): Promise<void> {
     const query = `
-    UPDATE auth.user
+    UPDATE auth.users
     SET password = '${hashedPassword}'
     WHERE id = '${userId}';
     `;

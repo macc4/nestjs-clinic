@@ -67,11 +67,11 @@ export class ResolutionsRepository extends Repository<Resolution> {
 
   async getMyResolutions(user: GetUserDto): Promise<Resolution[]> {
     const query = `
-    SELECT resolution.*
-    FROM clinic.resolution
-    INNER JOIN clinic.patient
-      ON patient.id=resolution.patient_id
-    WHERE patient.user_id='${user.id}';
+    SELECT resolutions.*
+    FROM clinic.resolutions
+    INNER JOIN clinic.patients
+      ON patients.id = resolutions.patient_id
+    WHERE patients.user_id='${user.id}';
     `;
 
     const resolution = await this.pool.query(query);

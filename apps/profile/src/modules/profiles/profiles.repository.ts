@@ -53,8 +53,8 @@ export class ProfilesRepository extends Repository<Profile> {
   async getBatchProfiles(userIds: string[]): Promise<Profile[]> {
     console.log(userIds);
     const query = `SELECT *
-    FROM profile.profile
-    WHERE profile.user_id = ANY($1::uuid[]);
+    FROM profile.profiles
+    WHERE profiles.user_id = ANY($1::uuid[]);
     `;
 
     const profiles = await this.pool.query(query, [userIds]);

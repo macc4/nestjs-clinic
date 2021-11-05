@@ -22,7 +22,7 @@ export class ProfilesService {
   }
 
   //
-  // Get Profile by user ID
+  // Get Profile by User ID
   //
 
   async getProfileByUserId(userId: string): Promise<Profile> {
@@ -36,7 +36,7 @@ export class ProfilesService {
   }
 
   //
-  // Get Profile by user ID
+  // Get batch Profiles
   //
 
   async getBatchProfiles(userIds: string[]): Promise<Profile[]> {

@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { UserGender } from '@macc4-clinic/common';
 
-@Entity('profile', { schema: 'profile' })
+@Entity('profiles', { schema: 'profile' })
 export class Profile {
   @PrimaryGeneratedColumn()
   id: number;

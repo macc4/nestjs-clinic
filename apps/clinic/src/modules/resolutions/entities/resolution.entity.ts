@@ -5,11 +5,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Patient } from '../../patients/entities/patient.entity';
+import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
 
-@Entity('resolution', { schema: 'clinic' })
+@Entity('resolutions', { schema: 'clinic' })
 export class Resolution {
   @ApiProperty({ example: 1, description: 'ID of the resolution' })
   @PrimaryGeneratedColumn()
@@ -18,6 +20,12 @@ export class Resolution {
   @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
   @Column()
   text: string;
+
+  @OneToOne(() => Appointment, (appointment) => appointment.resolution, {
+    eager: false,
+  })
+  @JoinColumn({ name: 'appointment_id' })
+  appointment: Appointment;
 
   @ManyToOne(() => Doctor, (doctor) => doctor.resolutions, { eager: true })
   @JoinColumn({ name: 'doctor_id' })

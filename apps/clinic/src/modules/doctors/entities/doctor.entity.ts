@@ -2,25 +2,22 @@ import { Resolution } from '../../resolutions/entities/resolution.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Specialization } from './specialization.entity';
+import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
 
-@Entity('doctor', { schema: 'clinic' })
+@Entity('doctors', { schema: 'clinic' })
 export class Doctor {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   user_id: string;
-
-  @OneToMany(() => Resolution, (resolution) => resolution.doctor, {
-    eager: false,
-  })
-  resolutions: Resolution[];
 
   @ManyToMany(() => Specialization)
   @JoinTable({
@@ -35,4 +32,14 @@ export class Doctor {
     },
   })
   specializations: Specialization[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.doctor, {
+    eager: false,
+  })
+  appointments: Appointment[];
+
+  @OneToMany(() => Resolution, (resolution) => resolution.doctor, {
+    eager: false,
+  })
+  resolutions: Resolution[];
 }
