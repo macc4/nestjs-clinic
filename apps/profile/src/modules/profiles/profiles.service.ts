@@ -10,7 +10,7 @@ Injectable();
 export class ProfilesService {
   constructor(
     @InjectRepository(ProfilesRepository)
-    private profilesRepository: ProfilesRepository,
+    private readonly profilesRepository: ProfilesRepository,
   ) {}
 
   //

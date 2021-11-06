@@ -25,7 +25,7 @@ import { ProfilesService } from './profiles.service';
 @Controller('profiles')
 @ApiTags('profiles')
 export class ProfilesController {
-  constructor(private profilesService: ProfilesService) {}
+  constructor(private readonly profilesService: ProfilesService) {}
 
   //
   // Create a new Profile
@@ -45,8 +45,8 @@ export class ProfilesController {
   // Get batch Profiles by User id's
   //
 
-  @Get('batch')
-  @ApiOperation({ summary: 'Get a batch list of Profiles' })
+  @Post('batch')
+  @ApiOperation({ summary: 'GET a batch list of Profiles' })
   @ApiOkResponse({
     description: 'Returns a list of profiles or an empty array',
     type: [Profile],

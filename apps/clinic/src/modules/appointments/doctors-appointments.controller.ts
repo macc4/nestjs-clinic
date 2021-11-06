@@ -21,7 +21,7 @@ export class DoctorsAppointmentsController {
   ) {}
 
   //
-  // Get all Appointments for specific doctor Id
+  // Get all Appointments for specific doctor Id (not used in the logic flow)
   //
 
   @Get()

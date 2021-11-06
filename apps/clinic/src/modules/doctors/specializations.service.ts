@@ -7,7 +7,7 @@ Injectable();
 export class SpecializationsService {
   constructor(
     @InjectRepository(SpecializationsRepository)
-    private specializationsRepository: SpecializationsRepository,
+    private readonly specializationsRepository: SpecializationsRepository,
   ) {}
 
   //

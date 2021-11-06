@@ -1,7 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { lastValueFrom, map } from 'rxjs';
 import { GetBatchProfilesDto } from './dto/get-batch-profiles.dto';
+import { Profile } from './entities/profile.entity';
 
 @Injectable()
 export class HttpProfileService {
@@ -13,7 +15,7 @@ export class HttpProfileService {
   private readonly defaultHost = '127.0.0.1';
   private readonly port = this.configService.get('PROFILE_SERVICE_PORT');
 
-  getServiceURI() {
+  private getServiceURI() {
     const dockerHost = this.configService.get('PROFILE_SERVICE_HOST');
 
     let URI: string;
@@ -27,11 +29,17 @@ export class HttpProfileService {
     return URI;
   }
 
-  async getBatchProfiles(userData: GetBatchProfilesDto): Promise<void> {
+  async getBatchProfiles(userData: GetBatchProfilesDto) {
     const URI = `${this.getServiceURI()}/batch`;
 
     try {
-      this.httpService.post(URI, userData).subscribe();
+      const response = await lastValueFrom(
+        this.httpService
+          .post(URI, userData)
+          .pipe(map((response) => response.data)),
+      );
+
+      return response;
     } catch (error) {
       console.log(error);
     }

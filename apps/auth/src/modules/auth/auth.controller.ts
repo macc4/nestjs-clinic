@@ -24,7 +24,7 @@ import { SignUpDto } from './dto/sign-up.dto';
 @ApiTags('authorization')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   //
   // Sign up as patient

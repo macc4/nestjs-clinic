@@ -38,8 +38,8 @@ export class ProfilesRepository extends Repository<Profile> {
 
   async getProfileByUserId(userId: string): Promise<Profile> {
     const query = `SELECT *
-    FROM profile.profile
-    WHERE profile.user_id = '${userId}'`;
+    FROM profile.profiles
+    WHERE profiles.user_id = '${userId}'`;
 
     const [profile] = await this.pool.query(query);
 

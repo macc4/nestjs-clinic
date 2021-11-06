@@ -10,8 +10,8 @@ import { SpecializationsService } from './specializations.service';
 export class DoctorsService {
   constructor(
     @InjectRepository(DoctorsRepository)
-    private doctorsRepository: DoctorsRepository,
-    private specializationsService: SpecializationsService,
+    private readonly doctorsRepository: DoctorsRepository,
+    private readonly specializationsService: SpecializationsService,
   ) {}
 
   //

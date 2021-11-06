@@ -1,5 +1,4 @@
 import {
-  Brackets,
   EntityManager,
   EntityRepository,
   getManager,
@@ -10,7 +9,6 @@ import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './entities/resolution.entity';
 import { Doctor } from '../doctors/entities/doctor.entity';
-import { GetUserDto } from '@macc4-clinic/common';
 import { PatchResolutionDto } from './dto/patch-resolution.dto';
 import { Appointment } from '../appointments/entities/appointment.entity';
 

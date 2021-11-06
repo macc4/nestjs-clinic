@@ -29,7 +29,7 @@ import { QueueService } from './queue.service';
 @Controller('queue')
 @ApiTags('queue')
 export class QueueController {
-  constructor(private queueService: QueueService) {}
+  constructor(private readonly queueService: QueueService) {}
 
   //
   // Get into specified doctor's queue

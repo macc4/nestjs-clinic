@@ -17,7 +17,7 @@ import { PatientsService } from './patients.service';
 @ApiBearerAuth()
 @ApiTags('patients')
 export class PatientsController {
-  constructor(private patientsService: PatientsService) {}
+  constructor(private readonly patientsService: PatientsService) {}
 
   //
   // Create a new Patient (for http requests from auth only)

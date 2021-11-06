@@ -4,9 +4,6 @@ import {
   getManager,
   Repository,
 } from 'typeorm';
-import { Doctor } from '../doctors/entities/doctor.entity';
-import { Patient } from '../patients/entities/patient.entity';
-import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { GetDoctorsAppointmentsQueryDto } from './dto/get-doctors-appointments-query.dto';
 import { Appointment } from './entities/appointment.entity';
 

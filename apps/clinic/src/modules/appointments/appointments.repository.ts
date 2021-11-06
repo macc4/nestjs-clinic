@@ -7,6 +7,7 @@ import {
 import { Doctor } from '../doctors/entities/doctor.entity';
 import { Patient } from '../patients/entities/patient.entity';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
+import { GetMyAppointmentsResponseDto } from './dto/get-my-appointments-response.dto';
 import { Appointment } from './entities/appointment.entity';
 
 @EntityRepository(Appointment)
@@ -39,9 +40,9 @@ export class AppointmentsRepository extends Repository<Appointment> {
   // Get personal Appointments
   //
 
-  async getMyAppointments(id: string): Promise<Appointment[]> {
+  async getMyAppointments(id: string): Promise<GetMyAppointmentsResponseDto[]> {
     const query = `
-    SELECT appointments.*
+    SELECT appointments.id, appointments.reason, appointments.note, appointments.visit_date, patients.user_id AS patient_user_id, doctors.user_id as doctor_user_id
     FROM clinic.appointments
     INNER JOIN clinic.patients
       ON patients.id = appointments.patient_id
@@ -75,7 +76,7 @@ export class AppointmentsRepository extends Repository<Appointment> {
     date: string,
   ): Promise<Appointment> {
     const query = `
-    SELECT appointments.*
+    SELECT *
     FROM clinic.appointments
     INNER JOIN clinic.patients
       ON patients.id = appointments.patient_id

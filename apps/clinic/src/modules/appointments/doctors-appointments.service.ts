@@ -24,7 +24,7 @@ export class DoctorsAppointmentsService {
     id: number,
     filters: GetDoctorsAppointmentsQueryDto,
   ): Promise<Appointment[]> {
-    const doctor = await this.doctorsService.getDoctorById(id);
+    await this.doctorsService.getDoctorById(id);
 
     return this.doctorsAppointmentsRepository.getAppointmentsByDoctorId(
       id,
@@ -45,7 +45,7 @@ export class DoctorsAppointmentsService {
         'You must choose a specific day for the query',
       );
     }
-    const doctor = await this.doctorsService.getDoctorById(id);
+    await this.doctorsService.getDoctorById(id);
 
     const freeSlots = [];
 

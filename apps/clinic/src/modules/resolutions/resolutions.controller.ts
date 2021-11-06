@@ -39,7 +39,7 @@ import { PatchResolutionDto } from './dto/patch-resolution.dto';
 @ApiTags('resolutions')
 @ApiBearerAuth()
 export class ResolutionsController {
-  constructor(private resolutionsService: ResolutionsService) {}
+  constructor(private readonly resolutionsService: ResolutionsService) {}
 
   //
   // Create a new Resolution

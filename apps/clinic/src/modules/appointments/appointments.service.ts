@@ -6,10 +6,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UUIDVersion } from 'class-validator';
 import { DoctorsService } from '../doctors/doctors.service';
+import { HttpProfileService } from '../http/http-profile.service';
 import { PatientsService } from '../patients/patients.service';
 import { AppointmentsRepository } from './appointments.repository';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
+import { GetMyAppointmentsResponseDto } from './dto/get-my-appointments-response.dto';
 import { Appointment } from './entities/appointment.entity';
 import { WORKING_HOURS } from './utils/constants';
 
@@ -17,9 +20,10 @@ import { WORKING_HOURS } from './utils/constants';
 export class AppointmentsService {
   constructor(
     @InjectRepository(AppointmentsRepository)
-    private appointmentsRepository: AppointmentsRepository,
-    private patientsService: PatientsService,
-    private doctorsService: DoctorsService,
+    private readonly appointmentsRepository: AppointmentsRepository,
+    private readonly patientsService: PatientsService,
+    private readonly doctorsService: DoctorsService,
+    private readonly httpProfileService: HttpProfileService,
   ) {}
 
   //
@@ -82,10 +86,48 @@ export class AppointmentsService {
   // Get personal Appointments
   //
 
-  async getMyAppointments(user: GetUserDto): Promise<Appointment[]> {
+  async getMyAppointments(
+    user: GetUserDto,
+  ): Promise<GetMyAppointmentsResponseDto[]> {
     const appointments = await this.appointmentsRepository.getMyAppointments(
       user.id,
     );
+
+    const patientUserIds: UUIDVersion[] = [
+      ...new Set(
+        appointments.map((appointment) => appointment.patient_user_id),
+      ),
+    ];
+
+    const doctorUserIds: UUIDVersion[] = [
+      ...new Set(appointments.map((appointment) => appointment.doctor_user_id)),
+    ];
+
+    const userIds: UUIDVersion[] = patientUserIds.concat(doctorUserIds);
+
+    const profiles = await this.httpProfileService.getBatchProfiles({
+      userIds,
+    });
+
+    const appointmentsAndProfiles: GetMyAppointmentsResponseDto[] = [];
+
+    appointments.forEach((appointment) => {
+      const doctor = profiles.find(
+        (profile) => profile.user_id === appointment.doctor_user_id,
+      );
+
+      appointment.doctor_name = doctor.name;
+
+      const patient = profiles.find(
+        (profile) => profile.user_id === appointment.patient_user_id,
+      );
+
+      appointment.patient_name = patient.name;
+
+      appointmentsAndProfiles.push(appointment);
+    });
+
+    console.log(appointmentsAndProfiles);
 
     return appointments;
   }

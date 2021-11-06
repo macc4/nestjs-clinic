@@ -19,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
+import { GetMyAppointmentsResponseDto } from './dto/get-my-appointments-response.dto';
 import { Appointment } from './entities/appointment.entity';
 
 @Controller('appointments')
@@ -71,7 +72,9 @@ export class AppointmentsController {
       'Returns personal Appointments or an empty list of no data found',
     type: [Appointment],
   })
-  getMyAppointments(@GetUser() user: GetUserDto): Promise<Appointment[]> {
+  getMyAppointments(
+    @GetUser() user: GetUserDto,
+  ): Promise<GetMyAppointmentsResponseDto[]> {
     return this.appointmentsService.getMyAppointments(user);
   }
 
