@@ -2,15 +2,15 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateResolutionDto {
-  @IsNotEmpty()
   @ApiProperty()
+  @IsNotEmpty()
   appointmentId: number;
 
-  @IsNotEmpty()
   @ApiProperty()
+  @IsNotEmpty()
   patientId: number;
 
-  @IsNotEmpty()
   @ApiProperty()
+  @IsNotEmpty()
   text: string;
 }

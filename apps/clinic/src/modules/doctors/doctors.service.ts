@@ -15,7 +15,7 @@ export class DoctorsService {
   ) {}
 
   //
-  // Get doctors (with optional filters)
+  // Get Doctors (with optional filters)
   //
 
   async getDoctors(filters?: GetDoctorsQueryDto): Promise<Doctor[]> {
@@ -29,7 +29,7 @@ export class DoctorsService {
   }
 
   //
-  // Get doctor by ID
+  // Get Doctor by id
   //
 
   async getDoctorById(id: number): Promise<Doctor> {
@@ -43,7 +43,7 @@ export class DoctorsService {
   }
 
   //
-  // Get doctor by user ID
+  // Get Doctor by User id
   //
 
   async getDoctorByUserId(userId: string): Promise<Doctor> {
@@ -57,10 +57,10 @@ export class DoctorsService {
   }
 
   //
-  // Get doctor by ID
+  // Get the personal Doctor profile
   //
 
-  async getPersonalDoctorProfile(user: GetUserDto): Promise<Doctor> {
+  async getMyDoctorProfile(user: GetUserDto): Promise<Doctor> {
     console.log(user.id);
     const doctor = await this.getDoctorByUserId(user.id);
 

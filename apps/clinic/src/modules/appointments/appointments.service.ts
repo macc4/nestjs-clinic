@@ -1,6 +1,7 @@
 import { GetUserDto } from '@macc4-clinic/common';
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -35,6 +36,7 @@ export class AppointmentsService {
       createAppointmentDto.doctorId,
     );
 
+    // might be better suited in the dto
     createAppointmentDto.visitDate = new Date(createAppointmentDto.visitDate);
 
     // check if it is a day off
@@ -66,7 +68,7 @@ export class AppointmentsService {
     } catch (error) {}
 
     if (occupied) {
-      throw new BadRequestException('You must choose a free timeslot');
+      throw new ConflictException('You must choose a free timeslot');
     }
 
     return this.appointmentsRepository.createAppointment(

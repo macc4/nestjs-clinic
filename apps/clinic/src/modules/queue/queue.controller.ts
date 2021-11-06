@@ -35,7 +35,7 @@ export class QueueController {
   // Get into specified doctor's queue
   //
 
-  @Post('/:id')
+  @Post(':id')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(UserRole.PATIENT)
   @ApiBearerAuth()
@@ -58,7 +58,7 @@ export class QueueController {
   // Get current patient in the specified doctor's queue
   //
 
-  @Get('/:id')
+  @Get(':id')
   @ApiOperation({
     summary: 'Retrieve patientId of the next patient in the specified queue',
   })

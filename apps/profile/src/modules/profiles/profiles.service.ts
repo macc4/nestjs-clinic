@@ -42,10 +42,6 @@ export class ProfilesService {
   async getBatchProfiles(userIds: string[]): Promise<Profile[]> {
     const profiles = await this.profilesRepository.getBatchProfiles(userIds);
 
-    if (!profiles) {
-      throw new NotFoundException(`No Profile found with user ID: ${userIds}`);
-    }
-
     return profiles;
   }
 

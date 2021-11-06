@@ -13,20 +13,29 @@ import { Resolution } from 'src/modules/resolutions/entities/resolution.entity';
 
 @Entity('appointments', { schema: 'clinic' })
 export class Appointment {
-  @ApiProperty({ example: 1, description: 'ID of the appointment' })
   @PrimaryGeneratedColumn()
+  @ApiProperty({ example: 1, description: 'ID of the appointment' })
   id: number;
 
-  @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
   @Column()
+  @ApiProperty({
+    example: 'My head hurts',
+    description: 'Reason for the appointment',
+  })
   reason: string;
 
-  @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
   @Column({ nullable: true })
+  @ApiProperty({
+    example: 'I also have stomach pains',
+    description: 'A note field for semi-related info',
+  })
   note: string;
 
-  @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
   @Column({ type: 'timestamptz' })
+  @ApiProperty({
+    example: '2021-12-05 15:00',
+    description: 'Preferred visit date',
+  })
   visit_date: Date;
 
   @OneToOne(() => Resolution, (resolution) => resolution.appointment, {

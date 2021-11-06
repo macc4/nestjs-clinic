@@ -31,7 +31,7 @@ export class AuthController {
   //
 
   @Post('/signup')
-  @ApiOperation({ summary: 'Sign in as patient' })
+  @ApiOperation({ summary: 'Sign up as patient' })
   @ApiCreatedResponse({
     description: 'Returns the jwt token',
   })
@@ -49,12 +49,10 @@ export class AuthController {
   @Post('/signin')
   @ApiOperation({ summary: 'Sign in' })
   @ApiOkResponse({
-    status: 200,
     description: 'Returns the jwt token',
   })
   @ApiUnauthorizedResponse({
-    status: 401,
-    description: 'Returns Not Unauthorized if input data is invalid',
+    description: 'Returns Unauthorized if input data is invalid',
   })
   signIn(@Body() signInDto: SignInDto): Promise<{ token: string }> {
     return this.authService.signIn(signInDto);

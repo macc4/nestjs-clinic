@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
 export class PatchResolutionDto {
-  @IsNotEmpty()
   @ApiProperty()
+  @IsNotEmpty()
   text: string;
 }

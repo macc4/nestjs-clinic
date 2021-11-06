@@ -16,6 +16,8 @@ export class DoctorsAppointmentsRepository extends Repository<Appointment> {
     super();
   }
 
+  // this method can be reused, I might merge repositories into one
+
   async getAppointmentsByDoctorId(
     id: number,
     filters: GetDoctorsAppointmentsQueryDto,

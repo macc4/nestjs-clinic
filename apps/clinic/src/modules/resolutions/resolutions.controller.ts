@@ -10,7 +10,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiResponse,
@@ -38,19 +42,17 @@ export class ResolutionsController {
   constructor(private resolutionsService: ResolutionsService) {}
 
   //
-  // Create a new resolution
+  // Create a new Resolution
   //
 
   @Post()
   @Roles(UserRole.DOCTOR)
-  @ApiOperation({ summary: 'Create a new resolution' })
-  @ApiResponse({
-    status: 201,
-    description: 'Returns the created resolution',
+  @ApiOperation({ summary: 'Create a new Resolution' })
+  @ApiCreatedResponse({
+    description: 'Returns the created Resolution',
     type: Resolution,
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Returns Bad Request if input data is wrong',
   })
   createResolution(
@@ -61,15 +63,14 @@ export class ResolutionsController {
   }
 
   //
-  // Get all resolutions with an optional query
+  // Get all Resolutions (with optional filters)
   //
 
   @Get()
   @Roles(UserRole.DOCTOR, UserRole.ADMIN)
-  @ApiOperation({ summary: 'Get resolutions with an optional query' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns found resolutions or an empty list',
+  @ApiOperation({ summary: 'Get Resolutions with an optional query' })
+  @ApiOkResponse({
+    description: 'Returns found Resolutions or an empty list',
     type: [Resolution],
   })
   getResolutions(
@@ -79,15 +80,15 @@ export class ResolutionsController {
   }
 
   //
-  // Get personal resolutions
+  // Get personal Resolutions
   //
 
   @Get('me')
   @Roles(UserRole.PATIENT)
-  @ApiOperation({ summary: 'Get personal resolutions' })
+  @ApiOperation({ summary: 'Get personal Resolutions' })
   @ApiBearerAuth()
   @ApiOkResponse({
-    description: 'Returns found resolutions or an empty list',
+    description: 'Returns found Resolutions or an empty list',
     type: [Resolution],
   })
   getMyResolutions(@GetUser() user: GetUserDto): Promise<Resolution[]> {
@@ -95,35 +96,35 @@ export class ResolutionsController {
   }
 
   //
-  // Get resolution by id
+  // Get Resolution by id
   //
 
-  @Get('/:id')
+  @Get(':id')
   @Roles(UserRole.DOCTOR, UserRole.ADMIN)
-  @ApiOperation({ summary: 'Get resolution by ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns found resolution',
+  @ApiOperation({ summary: 'Get Resolution by ID' })
+  @ApiOkResponse({
+    description: 'Returns found Resolution',
     type: Resolution,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'Returns Not Found if no data found with that ID',
   })
   getResolutionById(@Param('id') id: string): Promise<Resolution> {
     return this.resolutionsService.getResolutionById(+id);
   }
 
-  @Patch('/:id')
+  //
+  // Update Resolution by id
+  //
+
+  @Patch(':id')
   @Roles(UserRole.DOCTOR, UserRole.ADMIN)
   @ApiOperation({ summary: 'Patch resolution by ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns patched resolution',
+  @ApiOkResponse({
+    description: 'Returns patched Resolution',
     type: Resolution,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'Returns Not Found if no data found with that ID',
   })
   patchResolutionById(
@@ -134,20 +135,18 @@ export class ResolutionsController {
   }
 
   //
-  // Delete resolution by id
+  // Delete Resolution by id
   //
 
-  @Delete('/:id')
+  @Delete(':id')
   @Roles(UserRole.DOCTOR, UserRole.ADMIN)
-  @ApiOperation({ summary: 'Delete resolution by ID' })
-  @ApiResponse({
-    status: 204,
-    description: 'Returns nothing',
+  @ApiOperation({ summary: 'Delete Resolution by ID' })
+  @ApiNoContentResponse({
+    description: 'Returns nothing if the Resolution was deleted',
     type: undefined,
   })
-  @ApiResponse({
-    status: 404,
-    description: 'Returns Not Found if no data by that ID',
+  @ApiNotFoundResponse({
+    description: 'Returns Not Found if no data found by that ID',
   })
   deleteResolutionById(@Param('id') id: string): Promise<void> {
     return this.resolutionsService.deleteResolutionById(+id);

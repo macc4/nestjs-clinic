@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -31,6 +32,11 @@ export class ProfilesController {
   //
 
   @Post()
+  @ApiOperation({ summary: 'Create a Profile (for internal use only)' })
+  @ApiCreatedResponse({
+    description: 'Returns the created Profile',
+    type: Profile,
+  })
   createPatient(@Body() createProfileDto: CreateProfileDto): Promise<Profile> {
     return this.profilesService.createProfile(createProfileDto);
   }
@@ -40,6 +46,11 @@ export class ProfilesController {
   //
 
   @Get('batch')
+  @ApiOperation({ summary: 'Get a batch list of Profiles' })
+  @ApiOkResponse({
+    description: 'Returns a list of profiles or an empty array',
+    type: [Profile],
+  })
   getBatchProfiles(@Body() userData: GetBatchProfilesDto): Promise<Profile[]> {
     const { userIds } = userData;
 
@@ -52,13 +63,10 @@ export class ProfilesController {
 
   @Get('me')
   @UseGuards(JwtGuard)
-  @ApiOperation({ summary: 'Get personal profile' })
+  @ApiOperation({ summary: 'Get a personal Profile' })
   @ApiOkResponse({
-    description: 'Returns found Profile',
+    description: 'Returns the found Profile',
     type: Profile,
-  })
-  @ApiNotFoundResponse({
-    description: 'Returns Not Found if no data found with that user id',
   })
   getPersonalProfile(@GetUser('id') user: GetUserDto): Promise<Profile> {
     return this.profilesService.getPersonalProfile(user);
@@ -70,10 +78,9 @@ export class ProfilesController {
 
   @Patch('me')
   @UseGuards(JwtGuard)
-  @ApiOperation({ summary: 'Patch personal profile' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns patched profile',
+  @ApiOperation({ summary: 'Patch a personal profile' })
+  @ApiOkResponse({
+    description: 'Returns the patched Profile',
     type: Profile,
   })
   patchPersonalProfile(

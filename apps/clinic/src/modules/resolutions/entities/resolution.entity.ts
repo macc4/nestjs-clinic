@@ -13,12 +13,12 @@ import { Appointment } from 'src/modules/appointments/entities/appointment.entit
 
 @Entity('resolutions', { schema: 'clinic' })
 export class Resolution {
-  @ApiProperty({ example: 1, description: 'ID of the resolution' })
   @PrimaryGeneratedColumn()
+  @ApiProperty({ example: 1, description: 'ID of the resolution' })
   id: number;
 
-  @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
   @Column()
+  @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
   text: string;
 
   @OneToOne(() => Appointment, (appointment) => appointment.resolution, {

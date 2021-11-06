@@ -6,7 +6,14 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetUser, GetUserDto, JwtGuard } from '@macc4-clinic/common';
+import {
+  GetUser,
+  GetUserDto,
+  JwtGuard,
+  Roles,
+  RolesGuard,
+  UserRole,
+} from '@macc4-clinic/common';
 import { DoctorsService } from './doctors.service';
 import { Doctor } from './entities/doctor.entity';
 import { Specialization } from './entities/specialization.entity';
@@ -24,17 +31,16 @@ export class DoctorsController {
   ) {}
 
   //
-  // Get doctors (with optional filters)
+  // Get Doctors (with optional filters)
   //
 
   @Get()
-  @ApiOperation({ summary: 'Get all doctors' })
-  @ApiOkResponse({
-    description: 'Returns found doctors',
-    type: Doctor,
+  @ApiOperation({
+    summary: 'Get all Doctors with an optional specialization query',
   })
-  @ApiNotFoundResponse({
-    description: 'Returns Not Found if no data found',
+  @ApiOkResponse({
+    description: 'Returns found Doctors or an empty list',
+    type: [Doctor],
   })
   getDoctors(@Query() filters: GetDoctorsQueryDto): Promise<Doctor[]> {
     return this.doctorsService.getDoctors(filters);
@@ -45,40 +51,39 @@ export class DoctorsController {
   //
 
   @Get('specializations')
-  @ApiOperation({ summary: 'Get all specializations' })
+  @ApiOperation({ summary: 'Get all Specializations' })
   @ApiOkResponse({
-    description: 'Returns found specializations',
-    type: Specialization,
-  })
-  @ApiNotFoundResponse({
-    description: 'Returns Not Found if no data found',
+    description: 'Returns found Specializations or an empty list',
+    type: [Specialization],
   })
   getSpecializations(): Promise<Specialization[]> {
     return this.specializationsService.getSpecializations();
   }
 
   //
-  // Get personal doctors profile
+  // Get the personal Doctor profile
   //
 
   @Get('me')
-  @ApiOperation({ summary: 'Get personal doctors profile' })
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.DOCTOR)
+  @ApiOperation({ summary: 'Get the personal Doctors profile' })
   @ApiOkResponse({
-    description: 'Returns data',
+    description: 'Returns the Doctor data',
     type: Doctor,
   })
-  getPersonalDoctorProfile(@GetUser() user: GetUserDto): Promise<Doctor> {
-    return this.doctorsService.getPersonalDoctorProfile(user);
+  getMyDoctorProfile(@GetUser() user: GetUserDto): Promise<Doctor> {
+    return this.doctorsService.getMyDoctorProfile(user);
   }
 
   //
-  // Get doctor by id
+  // Get Doctor by id
   //
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get doctor by ID' })
+  @ApiOperation({ summary: 'Get Doctor by ID' })
   @ApiOkResponse({
-    description: 'Returns found doctor',
+    description: 'Returns the Doctor data',
     type: Doctor,
   })
   @ApiNotFoundResponse({

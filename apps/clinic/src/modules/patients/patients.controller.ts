@@ -2,6 +2,7 @@ import { Roles, RolesGuard, UserRole, JwtGuard } from '@macc4-clinic/common';
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -23,6 +24,11 @@ export class PatientsController {
   //
 
   @Post()
+  @ApiOperation({ summary: 'Create a Patient (used internally only)' })
+  @ApiCreatedResponse({
+    description: 'Returns the created Patient data',
+    type: Patient,
+  })
   createPatient(@Body() createPatientDto: CreatePatientDto): Promise<Patient> {
     return this.patientsService.createPatient(createPatientDto);
   }
@@ -31,12 +37,12 @@ export class PatientsController {
   // Get Patient by id
   //
 
-  @Get('/:id')
+  @Get(':id')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(UserRole.DOCTOR, UserRole.ADMIN)
-  @ApiOperation({ summary: 'Get patient by ID' })
+  @ApiOperation({ summary: 'Get Patient by ID' })
   @ApiOkResponse({
-    description: 'Returns found patient',
+    description: 'Returns the Patient data',
     type: Patient,
   })
   @ApiNotFoundResponse({
