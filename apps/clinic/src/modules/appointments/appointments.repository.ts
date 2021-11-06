@@ -65,4 +65,28 @@ export class AppointmentsRepository extends Repository<Appointment> {
 
     return appointment;
   }
+
+  //
+  // Get Appointment by visitDate
+  //
+
+  async getAppointmentByDoctorIdAndVisitDate(
+    id: number,
+    date: string,
+  ): Promise<Appointment> {
+    const query = `
+    SELECT appointments.*
+    FROM clinic.appointments
+    INNER JOIN clinic.patients
+      ON patients.id = appointments.patient_id
+    INNER JOIN clinic.doctors
+      ON doctors.id = appointments.doctor_id
+    WHERE appointments.visit_date = '${date}'
+    AND doctors.id = ${id}
+    `;
+
+    const [appointment] = await this.pool.query(query);
+
+    return appointment;
+  }
 }

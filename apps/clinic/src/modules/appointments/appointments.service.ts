@@ -1,11 +1,16 @@
 import { GetUserDto } from '@macc4-clinic/common';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorsService } from '../doctors/doctors.service';
 import { PatientsService } from '../patients/patients.service';
 import { AppointmentsRepository } from './appointments.repository';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { Appointment } from './entities/appointment.entity';
+import { WORKING_HOURS } from './utils/constants';
 
 @Injectable()
 export class AppointmentsService {
@@ -32,9 +37,37 @@ export class AppointmentsService {
 
     createAppointmentDto.visitDate = new Date(createAppointmentDto.visitDate);
 
+    // check if it is a day off
+
+    // TODO
+
+    // check if the appointment visitDate is within working hours
+
+    const visitDateHour = new Date(createAppointmentDto.visitDate).getHours();
+
+    if (
+      visitDateHour < WORKING_HOURS.start ||
+      visitDateHour > WORKING_HOURS.end
+    ) {
+      throw new BadRequestException(
+        `Appointment time should be within working hours (${WORKING_HOURS.start} - ${WORKING_HOURS.end})`,
+      );
+    }
+
     // check if the visitDate is occupied or not
 
-    // check if it is a day off
+    let occupied: Appointment;
+
+    try {
+      occupied = await this.getAppointmentByDoctorIdAndVisitDate(
+        createAppointmentDto.doctorId,
+        createAppointmentDto.visitDate,
+      );
+    } catch (error) {}
+
+    if (occupied) {
+      throw new BadRequestException('You must choose a free timeslot');
+    }
 
     return this.appointmentsRepository.createAppointment(
       patient,
@@ -66,6 +99,31 @@ export class AppointmentsService {
 
     if (!appointment) {
       throw new NotFoundException(`No appointment found with ID: ${id}`);
+    }
+
+    return appointment;
+  }
+
+  //
+  // Get Appointment by id
+  //
+
+  async getAppointmentByDoctorIdAndVisitDate(
+    id: number,
+    visitDate: Date,
+  ): Promise<Appointment> {
+    const date = visitDate.toISOString();
+
+    const appointment =
+      await this.appointmentsRepository.getAppointmentByDoctorIdAndVisitDate(
+        id,
+        date,
+      );
+
+    if (!appointment) {
+      throw new NotFoundException(
+        `No appointment found for date: ${date} and doctor (id ${id})`,
+      );
     }
 
     return appointment;
