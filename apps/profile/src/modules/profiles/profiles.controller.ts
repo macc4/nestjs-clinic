@@ -70,15 +70,11 @@ export class ProfilesController {
 
   @Patch('me')
   @UseGuards(JwtGuard)
-  @ApiOperation({ summary: 'Patch resolution by ID' })
+  @ApiOperation({ summary: 'Patch personal profile' })
   @ApiResponse({
     status: 200,
-    description: 'Returns patched resolution',
+    description: 'Returns patched profile',
     type: Profile,
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Returns Not Found if no data found with that ID',
   })
   patchPersonalProfile(
     @GetUser() user: GetUserDto,

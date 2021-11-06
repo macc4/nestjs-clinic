@@ -8,14 +8,16 @@ import { ResolutionsRepository } from './resolutions.repository';
 import { DoctorsService } from '../doctors/doctors.service';
 import { GetUserDto } from '@macc4-clinic/common';
 import { PatchResolutionDto } from './dto/patch-resolution.dto';
+import { AppointmentsService } from '../appointments/appointments.service';
 
 @Injectable()
 export class ResolutionsService {
   constructor(
     @InjectRepository(ResolutionsRepository)
-    private resolutionsRepository: ResolutionsRepository,
-    private patientsService: PatientsService,
-    private doctorsService: DoctorsService,
+    private readonly resolutionsRepository: ResolutionsRepository,
+    private readonly patientsService: PatientsService,
+    private readonly doctorsService: DoctorsService,
+    private readonly appointmentsService: AppointmentsService,
   ) {}
 
   //
@@ -32,10 +34,15 @@ export class ResolutionsService {
 
     const doctor = await this.doctorsService.getDoctorByUserId(user.id);
 
+    const appointment = await this.appointmentsService.getAppointmentById(
+      createResolutionDto.appointmentId,
+    );
+
     return this.resolutionsRepository.createResolution(
       createResolutionDto,
       patient,
       doctor,
+      appointment,
     );
   }
 
@@ -54,7 +61,9 @@ export class ResolutionsService {
   //
 
   async getMyResolutions(user: GetUserDto): Promise<Resolution[]> {
-    const resolution = await this.resolutionsRepository.getMyResolutions(user);
+    const resolution = await this.resolutionsRepository.getMyResolutions(
+      user.id,
+    );
 
     return resolution;
   }

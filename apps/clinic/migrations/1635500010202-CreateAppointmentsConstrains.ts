@@ -10,13 +10,6 @@ export class CreateAppointmentsConstrains1635500010202
     ALTER TABLE 
       clinic.appointments 
     ADD 
-      CONSTRAINT FK_appointments_resolution_id FOREIGN KEY (resolution_id) REFERENCES clinic.resolutions(id) ON DELETE NO ACTION ON UPDATE NO ACTION
-    `);
-
-    await queryRunner.query(`
-    ALTER TABLE 
-      clinic.appointments 
-    ADD 
       CONSTRAINT FK_appointments_doctor_id FOREIGN KEY (doctor_id) REFERENCES clinic.doctors(id) ON DELETE NO ACTION ON UPDATE NO ACTION
     `);
 
@@ -35,10 +28,6 @@ export class CreateAppointmentsConstrains1635500010202
 
     await queryRunner.query(`
     ALTER TABLE clinic.appointments DROP CONSTRAINT FK_appointments_doctor_id
-    `);
-
-    await queryRunner.query(`
-    ALTER TABLE clinic.appointments DROP CONSTRAINT FK_appointments_resolution_id
     `);
   }
 }

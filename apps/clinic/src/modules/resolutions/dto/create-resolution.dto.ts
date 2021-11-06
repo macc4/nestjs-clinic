@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, Min } from 'class-validator';
-
-const defaultExpiry = +process.env.EXPIRY;
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateResolutionDto {
+  @IsNotEmpty()
+  @ApiProperty()
+  appointmentId: number;
+
   @IsNotEmpty()
   @ApiProperty()
   patientId: number;

@@ -22,17 +22,16 @@ export class Appointment {
   reason: string;
 
   @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
-  @Column()
+  @Column({ nullable: true })
   note: string;
 
   @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
-  @Column()
-  visit_date: string;
+  @Column({ type: 'timestamptz' })
+  visit_date: Date;
 
   @OneToOne(() => Resolution, (resolution) => resolution.appointment, {
     eager: true,
   })
-  @JoinColumn({ name: 'resolution_id' })
   resolution: Resolution;
 
   @ManyToOne(() => Doctor, (doctor) => doctor.appointments, { eager: true })

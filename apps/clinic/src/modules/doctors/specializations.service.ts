@@ -11,6 +11,16 @@ export class SpecializationsService {
   ) {}
 
   //
+  // Get all Specializations
+  //
+  async getSpecializations(): Promise<Specialization[]> {
+    const specializations =
+      await this.specializationsRepository.getSpecializations();
+
+    return specializations;
+  }
+
+  //
   // Get specialization by title (not used due to seeding of the data)
   //
 

@@ -12,6 +12,7 @@ import { Resolution } from './entities/resolution.entity';
 import { Doctor } from '../doctors/entities/doctor.entity';
 import { GetUserDto } from '@macc4-clinic/common';
 import { PatchResolutionDto } from './dto/patch-resolution.dto';
+import { Appointment } from '../appointments/entities/appointment.entity';
 
 @EntityRepository(Resolution)
 export class ResolutionsRepository extends Repository<Resolution> {
@@ -26,11 +27,13 @@ export class ResolutionsRepository extends Repository<Resolution> {
     createResolutionDto: CreateResolutionDto,
     patient: Patient,
     doctor: Doctor,
+    appointment: Appointment,
   ): Promise<Resolution> {
     const resolution = this.create({
-      doctor,
-      text: createResolutionDto.text,
       patient,
+      doctor,
+      appointment,
+      text: createResolutionDto.text,
     });
 
     await this.save(resolution);
@@ -65,13 +68,13 @@ export class ResolutionsRepository extends Repository<Resolution> {
   // Get personal resolutions
   //
 
-  async getMyResolutions(user: GetUserDto): Promise<Resolution[]> {
+  async getMyResolutions(id: string): Promise<Resolution[]> {
     const query = `
     SELECT resolutions.*
     FROM clinic.resolutions
     INNER JOIN clinic.patients
       ON patients.id = resolutions.patient_id
-    WHERE patients.user_id='${user.id}';
+    WHERE patients.user_id='${id}';
     `;
 
     const resolution = await this.pool.query(query);

@@ -19,6 +19,10 @@ export class SeedDoctors1635500010501 implements MigrationInterface {
     VALUES 
       ('3', 'c1414d7c-cd5d-4d1a-9c29-7311bb21c884');
 
+    INSERT INTO clinic.doctors (id, user_id) 
+    VALUES 
+      ('4', '65c7bf31-c24d-42c8-bd4f-1ceee57496b2');
+
     INSERT INTO clinic.doctor_specializations (doctor_id, specialization_id) 
     VALUES 
       ('1', '1');
@@ -30,6 +34,10 @@ export class SeedDoctors1635500010501 implements MigrationInterface {
     INSERT INTO clinic.doctor_specializations (doctor_id, specialization_id) 
     VALUES 
       ('3', '3');
+
+    INSERT INTO clinic.doctor_specializations (doctor_id, specialization_id) 
+    VALUES 
+      ('4', '2');
         
     COMMIT;
     `);
@@ -38,6 +46,11 @@ export class SeedDoctors1635500010501 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
     BEGIN; 
+
+    DELETE FROM
+      clinic.doctor_specializations
+    WHERE
+      doctor_id = 4;
 
     DELETE FROM
       clinic.doctor_specializations
@@ -53,6 +66,11 @@ export class SeedDoctors1635500010501 implements MigrationInterface {
       clinic.doctor_specializations
     WHERE
       doctor_id = 1;
+
+    DELETE FROM
+      clinic.doctors
+    WHERE
+      user_id = '65c7bf31-c24d-42c8-bd4f-1ceee57496b2';
 
     DELETE FROM
       clinic.doctors

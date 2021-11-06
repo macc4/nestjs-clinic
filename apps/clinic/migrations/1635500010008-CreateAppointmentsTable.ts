@@ -10,13 +10,11 @@ export class CreateAppointmentsTable1635500010008
     CREATE TABLE clinic.appointments (
       id SERIAL NOT NULL, 
       reason character varying NOT NULL, 
-      note character varying NOT NULL, 
-      visit_date character varying NOT NULL, 
-      resolution_id integer, 
+      note character varying, 
+      visit_date timestamp with time zone NOT NULL, 
       doctor_id integer, 
       patient_id integer, 
-      CONSTRAINT PK_appointment_id PRIMARY KEY (id),
-      CONSTRAINT REL_appointments_resolution_id UNIQUE (resolution_id)
+      CONSTRAINT PK_appointment_id PRIMARY KEY (id)
     );
     `);
   }
