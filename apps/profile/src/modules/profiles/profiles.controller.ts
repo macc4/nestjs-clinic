@@ -6,6 +6,7 @@ import {
   ParseArrayPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -45,16 +46,14 @@ export class ProfilesController {
   // Get batch Profiles by User id's
   //
 
-  @Post('batch')
-  @ApiOperation({ summary: 'GET a batch list of Profiles' })
+  @Get('batch')
+  @ApiOperation({ summary: 'Get a batch list of Profiles' })
   @ApiOkResponse({
     description: 'Returns a list of profiles or an empty array',
     type: [Profile],
   })
-  getBatchProfiles(@Body() userData: GetBatchProfilesDto): Promise<Profile[]> {
-    const { userIds } = userData;
-
-    return this.profilesService.getBatchProfiles(userIds);
+  getBatchProfiles(@Query('userIds') userIds: string): Promise<Profile[]> {
+    return this.profilesService.getBatchProfiles(JSON.parse(userIds));
   }
 
   //

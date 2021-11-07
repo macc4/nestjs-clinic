@@ -20,7 +20,7 @@ import { Specialization } from './entities/specialization.entity';
 import { SpecializationsService } from './specializations.service';
 import { GetDoctorsQueryDto } from './dto/get-doctors-query.dto';
 
-@Controller('doctors')
+@Controller()
 @UseGuards(JwtGuard)
 @ApiBearerAuth()
 @ApiTags('doctors')

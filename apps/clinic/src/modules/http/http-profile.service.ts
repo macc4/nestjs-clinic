@@ -29,17 +29,15 @@ export class HttpProfileService {
     return URI;
   }
 
-  async getBatchProfiles(userData: GetBatchProfilesDto) {
-    const URI = `${this.getServiceURI()}/batch`;
+  async getBatchProfiles(data: GetBatchProfilesDto) {
+    const URI = `${this.getServiceURI()}/batch?userIds=${JSON.stringify(
+      data.userIds,
+    )}`;
 
     try {
-      const response = await lastValueFrom(
-        this.httpService
-          .post(URI, userData)
-          .pipe(map((response) => response.data)),
-      );
+      const response = await lastValueFrom(this.httpService.get(URI));
 
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }

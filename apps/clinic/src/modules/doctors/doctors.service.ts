@@ -61,7 +61,6 @@ export class DoctorsService {
   //
 
   async getMyDoctorProfile(user: GetUserDto): Promise<Doctor> {
-    console.log(user.id);
     const doctor = await this.getDoctorByUserId(user.id);
 
     return doctor;

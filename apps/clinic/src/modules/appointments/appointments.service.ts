@@ -127,8 +127,6 @@ export class AppointmentsService {
       appointmentsAndProfiles.push(appointment);
     });
 
-    console.log(appointmentsAndProfiles);
-
     return appointments;
   }
 

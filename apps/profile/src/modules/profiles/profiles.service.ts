@@ -40,6 +40,7 @@ export class ProfilesService {
   //
 
   async getBatchProfiles(userIds: string[]): Promise<Profile[]> {
+    console.log(userIds);
     const profiles = await this.profilesRepository.getBatchProfiles(userIds);
 
     return profiles;
