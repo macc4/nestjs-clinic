@@ -1,5 +1,4 @@
 import {
-  Brackets,
   EntityManager,
   EntityRepository,
   getManager,
@@ -10,7 +9,8 @@ import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './entities/resolution.entity';
 import { Doctor } from '../doctors/entities/doctor.entity';
-import { GetUserDto } from '@macc4-clinic/common';
+import { PatchResolutionDto } from './dto/patch-resolution.dto';
+import { Appointment } from '../appointments/entities/appointment.entity';
 
 @EntityRepository(Resolution)
 export class ResolutionsRepository extends Repository<Resolution> {
@@ -25,12 +25,13 @@ export class ResolutionsRepository extends Repository<Resolution> {
     createResolutionDto: CreateResolutionDto,
     patient: Patient,
     doctor: Doctor,
+    appointment: Appointment,
   ): Promise<Resolution> {
     const resolution = this.create({
-      doctor,
-      text: createResolutionDto.text,
-      expiry: createResolutionDto.expiryDate,
       patient,
+      doctor,
+      appointment,
+      text: createResolutionDto.text,
     });
 
     await this.save(resolution);
@@ -56,14 +57,6 @@ export class ResolutionsRepository extends Repository<Resolution> {
       query.andWhere('resolution.doctor_id = :doctorId', { doctorId });
     }
 
-    query.andWhere(
-      new Brackets((qb) => {
-        qb.where('resolution.expiry IS NULL').orWhere(
-          'resolution.expiry > Now()',
-        );
-      }),
-    );
-
     const resolutions = await query.getMany();
 
     return resolutions;
@@ -73,17 +66,13 @@ export class ResolutionsRepository extends Repository<Resolution> {
   // Get personal resolutions
   //
 
-  async getMyResolutions(user: GetUserDto): Promise<Resolution[]> {
+  async getMyResolutions(id: string): Promise<Resolution[]> {
     const query = `
-    SELECT resolution.*
-    FROM clinic.resolution
-    INNER JOIN clinic.patient
-      ON patient.id=resolution.patient_id
-    WHERE patient.user_id='${user.id}'
-    AND (
-      resolution.expiry IS NULL
-      OR resolution.expiry > Now() 
-    );
+    SELECT resolutions.*
+    FROM clinic.resolutions
+    INNER JOIN clinic.patients
+      ON patients.id = resolutions.patient_id
+    WHERE patients.user_id='${id}';
     `;
 
     const resolution = await this.pool.query(query);
@@ -99,6 +88,23 @@ export class ResolutionsRepository extends Repository<Resolution> {
     const resolution = await this.findOne(id);
 
     return resolution;
+  }
+
+  //
+  // Get resolution by id
+  //
+
+  async patchResolutionById(
+    id: number,
+    patchResolutionDto: PatchResolutionDto,
+  ): Promise<Resolution> {
+    const { text } = patchResolutionDto;
+
+    const resolution = await this.findOne(id);
+
+    resolution.text = text;
+
+    return this.save(resolution);
   }
 
   //

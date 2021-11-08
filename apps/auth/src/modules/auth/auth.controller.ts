@@ -1,5 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { GetUser, GetUserDto, JwtGuard } from '@macc4-clinic/common';
 import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -8,20 +17,21 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
+import { ChangePasswordDto } from './dto/changePassword.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 
 @ApiTags('authorization')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   //
   // Sign up as patient
   //
 
   @Post('/signup')
-  @ApiOperation({ summary: 'Sign in as patient' })
+  @ApiOperation({ summary: 'Sign up as patient' })
   @ApiCreatedResponse({
     description: 'Returns the jwt token',
   })
@@ -39,14 +49,28 @@ export class AuthController {
   @Post('/signin')
   @ApiOperation({ summary: 'Sign in' })
   @ApiOkResponse({
-    status: 200,
     description: 'Returns the jwt token',
   })
   @ApiUnauthorizedResponse({
-    status: 401,
-    description: 'Returns Not Unauthorized if input data is invalid',
+    description: 'Returns Unauthorized if input data is invalid',
   })
   signIn(@Body() signInDto: SignInDto): Promise<{ token: string }> {
     return this.authService.signIn(signInDto);
+  }
+
+  //
+  // Change password
+  //
+
+  @Post('/password/change')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtGuard)
+  @ApiOperation({ summary: 'Change password' })
+  @ApiBearerAuth()
+  async changePassword(
+    @GetUser() user: GetUserDto,
+    @Body() dto: ChangePasswordDto,
+  ): Promise<void> {
+    await this.authService.changePassword(user, dto);
   }
 }

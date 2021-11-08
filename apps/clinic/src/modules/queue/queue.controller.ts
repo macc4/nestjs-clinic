@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -29,13 +30,13 @@ import { QueueService } from './queue.service';
 @Controller('queue')
 @ApiTags('queue')
 export class QueueController {
-  constructor(private queueService: QueueService) {}
+  constructor(private readonly queueService: QueueService) {}
 
   //
   // Get into specified doctor's queue
   //
 
-  @Post('/:id')
+  @Post(':id')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(UserRole.PATIENT)
   @ApiBearerAuth()
@@ -48,25 +49,25 @@ export class QueueController {
       'Adds personal patient ID in the redis queue and returns the current position',
   })
   enqueueAsPatient(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @GetUser() user: GetUserDto,
   ): Promise<{ message: string }> {
-    return this.queueService.enqueueAsPatient(+id, user);
+    return this.queueService.enqueueAsPatient(id, user);
   }
 
   //
   // Get current patient in the specified doctor's queue
   //
 
-  @Get('/:id')
+  @Get(':id')
   @ApiOperation({
     summary: 'Retrieve patientId of the next patient in the specified queue',
   })
   @ApiOkResponse({
     description: 'Returns the patientId of the current patient',
   })
-  peekAsPatient(@Param('id') id: string): Promise<string> {
-    return this.queueService.peekAsPatient(+id);
+  peekAsPatient(@Param('id', ParseIntPipe) id: number): Promise<string> {
+    return this.queueService.peekAsPatient(id);
   }
 
   //

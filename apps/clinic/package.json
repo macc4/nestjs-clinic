@@ -13,7 +13,7 @@
     "start:debug": "yarn prebuild && nest start --debug --watch",
     "start:prod": "node dist/main",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --verbose",
     "test:cov": "jest --coverage",
     "upgrade:common": "yarn add @macc4-clinic/common",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
@@ -25,6 +25,7 @@
   "dependencies": {
     "@liaoliaots/nestjs-redis": "^4.1.2",
     "@macc4-clinic/common": "^1.0.5",
+    "@nestjs/axios": "^0.0.3",
     "@nestjs/common": "^8.0.11",
     "@nestjs/config": "^1.0.2",
     "@nestjs/core": "^8.0.11",
@@ -44,7 +45,7 @@
     "redis": "^3.1.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0",
+    "rxjs": "^7.4.0",
     "swagger-ui-express": "^4.1.6",
     "typeorm": "^0.2.38"
   },

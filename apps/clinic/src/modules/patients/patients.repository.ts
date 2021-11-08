@@ -45,8 +45,8 @@ export class PatientsRepository extends Repository<Patient> {
   async getPatientByUserId(userId: string): Promise<Patient> {
     const query = `
     SELECT *
-    FROM clinic.patient
-    WHERE patient.user_id=  '${userId}'
+    FROM clinic.patients
+    WHERE patients.user_id=  '${userId}'
     `;
 
     const [patient] = await this.pool.query(query);

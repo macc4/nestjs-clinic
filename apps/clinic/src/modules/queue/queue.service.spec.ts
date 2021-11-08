@@ -97,9 +97,9 @@ describe('QueueService', () => {
       const doctorId = 1;
       lindex.mockResolvedValue(null);
 
-      expect(async () => {
-        await queueService.peekAsPatient(doctorId);
-      }).rejects.toThrow(EmptyQueueException);
+      expect(queueService.peekAsPatient(doctorId)).rejects.toThrow(
+        EmptyQueueException,
+      );
     });
   });
 
@@ -122,15 +122,15 @@ describe('QueueService', () => {
     });
 
     it('and throws an error if the queue is empty', async () => {
-      // expect.assertions(2);
+      expect.assertions(2);
 
       lindex.mockResolvedValue(null);
 
       doctorsService.getDoctorByUserId.mockResolvedValue(mockDoctor);
 
-      expect(async () => {
-        await queueService.peekAsDoctor(mockGetUserDto);
-      }).rejects.toThrow(EmptyQueueException);
+      await expect(
+        await queueService.peekAsDoctor(mockGetUserDto),
+      ).rejects.toThrow(EmptyQueueException);
       expect(doctorsService.getDoctorByUserId).toBeCalledWith(
         mockGetUserDto.id,
       );
@@ -139,7 +139,7 @@ describe('QueueService', () => {
 
   describe('calls dequeueAsDoctor', () => {
     it('and returns nothing if patient was dequeued', async () => {
-      // expect.assertions(2);
+      expect.assertions(2);
 
       lpop.mockResolvedValue('1');
 
@@ -154,15 +154,15 @@ describe('QueueService', () => {
     });
 
     it('and throws an error if the queue is empty', async () => {
-      // expect.assertions(2);
+      expect.assertions(2);
 
       lpop.mockResolvedValue(null);
 
       doctorsService.getDoctorByUserId.mockResolvedValue(mockDoctor);
 
-      expect(async () => {
-        await queueService.dequeueAsDoctor(mockGetUserDto);
-      }).rejects.toThrow(EmptyQueueException);
+      await expect(
+        queueService.dequeueAsDoctor(mockGetUserDto),
+      ).rejects.toThrow(EmptyQueueException);
       expect(doctorsService.getDoctorByUserId).toBeCalledWith(
         mockGetUserDto.id,
       );

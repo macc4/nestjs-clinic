@@ -13,7 +13,7 @@ export class HttpProfileService {
   private readonly defaultHost = '127.0.0.1';
   private readonly port = this.configService.get('PROFILE_SERVICE_PORT');
 
-  getServiceURI() {
+  private getServiceURI() {
     const dockerHost = this.configService.get('PROFILE_SERVICE_HOST');
 
     let URI: string;

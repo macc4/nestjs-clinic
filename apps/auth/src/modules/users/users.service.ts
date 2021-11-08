@@ -47,6 +47,14 @@ export class UsersService {
   }
 
   //
+  // Set new User Password (move to the auth-service/auth-repository?)
+  //
+
+  async setPassword(userId: string, hashedPassword: string): Promise<void> {
+    await this.usersRepository.setPassword(userId, hashedPassword);
+  }
+
+  //
   // Get user by email
   //
 
@@ -55,6 +63,16 @@ export class UsersService {
 
     if (!user) {
       throw new UserNotFoundByEmailException();
+    }
+
+    return user;
+  }
+
+  async getUserById(id: string): Promise<User> {
+    const user = await this.usersRepository.getUserById(id);
+
+    if (!user) {
+      throw new NotFoundException(`User not found`);
     }
 
     return user;

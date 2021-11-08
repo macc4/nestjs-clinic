@@ -9,6 +9,8 @@ services:
       PORT: ${CLINIC_SERVICE_PORT}
       DB_HOST: database
       REDIS_HOST: redis
+      PROFILE_SERVICE_HOST: profile
+      PROFILE_SERVICE_PORT: ${PROFILE_SERVICE_PORT}
     ports:
       - ${CLINIC_SERVICE_PORT}:${CLINIC_SERVICE_PORT}
     depends_on:

@@ -8,7 +8,7 @@ Injectable();
 export class PatientsService {
   constructor(
     @InjectRepository(PatientsRepository)
-    private patientsRepository: PatientsRepository,
+    private readonly patientsRepository: PatientsRepository,
   ) {}
 
   //

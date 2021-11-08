@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppointmentsModule } from '../appointments/appointments.module';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { PatientsModule } from '../patients/patients.module';
 import { ResolutionsController } from './resolutions.controller';
@@ -11,6 +12,7 @@ import { ResolutionsService } from './resolutions.service';
     TypeOrmModule.forFeature([ResolutionsRepository]),
     PatientsModule,
     DoctorsModule,
+    AppointmentsModule,
   ],
   controllers: [ResolutionsController],
   providers: [ResolutionsService],

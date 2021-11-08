@@ -1,6 +1,8 @@
+import { GetUserDto } from '@macc4-clinic/common';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProfileDto } from './dto/create-profile.dto';
+import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
 import { ProfilesRepository } from './profiles.repository';
 
@@ -8,7 +10,7 @@ Injectable();
 export class ProfilesService {
   constructor(
     @InjectRepository(ProfilesRepository)
-    private profilesRepository: ProfilesRepository,
+    private readonly profilesRepository: ProfilesRepository,
   ) {}
 
   //
@@ -20,16 +22,53 @@ export class ProfilesService {
   }
 
   //
-  // Get Profile by user ID
+  // Get Profile by User ID
   //
 
   async getProfileByUserId(userId: string): Promise<Profile> {
-    const Profile = await this.profilesRepository.getProfileByUserId(userId);
+    const profile = await this.profilesRepository.getProfileByUserId(userId);
 
-    if (!Profile) {
+    if (!profile) {
       throw new NotFoundException(`No Profile found with user ID: ${userId}`);
     }
 
-    return Profile;
+    return profile;
+  }
+
+  //
+  // Get batch Profiles
+  //
+
+  async getBatchProfiles(userIds: string[]): Promise<Profile[]> {
+    console.log(userIds);
+    const profiles = await this.profilesRepository.getBatchProfiles(userIds);
+
+    return profiles;
+  }
+
+  //
+  // Get personal Profile
+  //
+
+  async getPersonalProfile(user: GetUserDto): Promise<Profile> {
+    const profile = await this.profilesRepository.getProfileByUserId(user.id);
+
+    return profile;
+  }
+
+  //
+  // Patch personal Profile
+  //
+
+  async patchPersonalProfile(
+    user: GetUserDto,
+    patchProfileDto: PatchProfileDto,
+  ): Promise<Profile> {
+    const profile = await this.profilesRepository.patchPersonalProfile(
+      user,
+      patchProfileDto,
+    );
+
+    return profile;
   }
 }

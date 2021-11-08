@@ -14,8 +14,9 @@ async function bootstrap() {
   // Swagger
 
   const options = new DocumentBuilder()
-    .setTitle('Clinic-Service for the API')
-    .setVersion('0.0.1')
+    .setTitle('Clinic-Service')
+    .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
