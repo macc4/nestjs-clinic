@@ -14,22 +14,22 @@ export class SignUpDto {
   @IsEmail()
   @MinLength(4)
   @MaxLength(32)
-  email: string;
+  readonly email: string;
 
   @ApiProperty()
   @IsString()
   @MaxLength(32)
-  password: string;
+  readonly password: string;
 
   @ApiProperty()
   @IsString()
   @MinLength(2)
   @MaxLength(24)
-  name: string;
+  readonly name: string;
 
   @ApiProperty()
   @IsEnum(UserGender)
-  gender: UserGender;
+  readonly gender: UserGender;
 
   // @ApiProperty()
   // @IsDateString()

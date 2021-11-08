@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -109,8 +110,10 @@ export class ResolutionsController {
   @ApiNotFoundResponse({
     description: 'Returns Not Found if no data found with that ID',
   })
-  getResolutionById(@Param('id') id: string): Promise<Resolution> {
-    return this.resolutionsService.getResolutionById(+id);
+  getResolutionById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Resolution> {
+    return this.resolutionsService.getResolutionById(id);
   }
 
   //
@@ -128,10 +131,10 @@ export class ResolutionsController {
     description: 'Returns Not Found if no data found with that ID',
   })
   patchResolutionById(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() patchResolutionDto: PatchResolutionDto,
   ): Promise<Resolution> {
-    return this.resolutionsService.patchResolutionById(+id, patchResolutionDto);
+    return this.resolutionsService.patchResolutionById(id, patchResolutionDto);
   }
 
   //
@@ -148,7 +151,7 @@ export class ResolutionsController {
   @ApiNotFoundResponse({
     description: 'Returns Not Found if no data found by that ID',
   })
-  deleteResolutionById(@Param('id') id: string): Promise<void> {
-    return this.resolutionsService.deleteResolutionById(+id);
+  deleteResolutionById(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.resolutionsService.deleteResolutionById(id);
   }
 }

@@ -13,7 +13,7 @@
     "start:debug": "yarn prebuild && nest start --debug --watch",
     "start:prod": "node dist/main",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --verbose",
     "test:cov": "jest --coverage",
     "upgrade:common": "yarn add @macc4-clinic/common",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",

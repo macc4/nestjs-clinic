@@ -8,6 +8,7 @@ import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
 import { HttpClinicService } from '../http/http-clinic.service';
 import { HttpProfileService } from '../http/http-profile.service';
+import { NotFoundException } from '@nestjs/common';
 
 const mockUser = new User();
 
@@ -31,6 +32,7 @@ describe('UsersService', () => {
             createUser: jest.fn(),
             getUserByEmail: jest.fn(),
             getUserById: jest.fn(),
+            setPassword: jest.fn(),
           },
         },
         {
@@ -61,8 +63,9 @@ describe('UsersService', () => {
 
       usersRepository.createUser.mockResolvedValue(mockUser);
 
-      const result = await usersService.createUser(mockCreateUserDto);
-
+      expect(await usersService.createUser(mockCreateUserDto)).toEqual(
+        mockUser,
+      );
       expect(rolesService.getRoleByTitle).toBeCalledWith(
         mockCreateUserDto.roles[0],
       );
@@ -72,8 +75,21 @@ describe('UsersService', () => {
         name: mockCreateUserDto.name,
         gender: mockCreateUserDto.gender,
       });
+    });
+  });
 
-      expect(result).toEqual(mockUser);
+  describe('calls setPassword', () => {
+    it('and returns nothing if successful', async () => {
+      expect.assertions(1);
+
+      usersRepository.setPassword.mockResolvedValue(undefined);
+
+      expect(
+        await usersService.setPassword(
+          '65c7bf31-c24d-42c8-bd4f-1ceee57496b2',
+          'hashedpassword',
+        ),
+      ).toEqual(undefined);
     });
   });
 
@@ -93,9 +109,31 @@ describe('UsersService', () => {
 
       usersRepository.getUserByEmail.mockResolvedValue(null);
 
-      expect(usersService.getUserByEmail('test@email.com')).rejects.toThrow(
-        UserNotFoundByEmailException,
-      );
+      await expect(
+        usersService.getUserByEmail('test@email.com'),
+      ).rejects.toThrow(UserNotFoundByEmailException);
+    });
+  });
+
+  describe('calls getUserById', () => {
+    it('and returns the data', async () => {
+      expect.assertions(1);
+
+      usersRepository.getUserById.mockResolvedValue(mockUser);
+
+      expect(
+        await usersService.getUserById('65c7bf31-c24d-42c8-bd4f-1ceee57496b2'),
+      ).toEqual(mockUser);
+    });
+
+    it('and handles an error if no data found', async () => {
+      expect.assertions(1);
+
+      usersRepository.getUserById.mockResolvedValue(null);
+
+      await expect(
+        usersService.getUserById('65c7bf31-c24d-42c8-bd4f-1ceee57496b2'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

@@ -7,10 +7,10 @@ export class SignInDto {
   @IsEmail()
   @MinLength(4)
   @MaxLength(32)
-  email: string;
+  readonly email: string;
 
   @ApiProperty()
   @IsString()
   @MaxLength(32)
-  password: string;
+  readonly password: string;
 }

@@ -5,10 +5,10 @@ export class ChangePasswordDto {
   @ApiProperty()
   @IsString()
   @MaxLength(32)
-  oldPassword: string;
+  readonly oldPassword: string;
 
   @ApiProperty()
   @IsString()
   @MaxLength(32)
-  newPassword: string;
+  readonly newPassword: string;
 }

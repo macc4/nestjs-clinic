@@ -6,7 +6,15 @@ import {
   RolesGuard,
   UserRole,
 } from '@macc4-clinic/common';
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -91,7 +99,9 @@ export class AppointmentsController {
   @ApiNotFoundResponse({
     description: 'Returns Not Found if no data found',
   })
-  getAppointmentById(@Param('id') id: number): Promise<Appointment> {
+  getAppointmentById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Appointment> {
     return this.appointmentsService.getAppointmentById(id);
   }
 }

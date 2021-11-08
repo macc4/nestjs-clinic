@@ -38,21 +38,18 @@ export class DoctorsAppointmentsService {
 
   async getFreeAppointmentsByDoctorId(
     id: number,
-    filters: GetDoctorsAppointmentsQueryDto,
+    date: string,
   ): Promise<number[]> {
-    if (!filters.date) {
-      throw new BadRequestException(
-        'You must choose a specific day for the query',
-      );
-    }
     await this.doctorsService.getDoctorById(id);
 
     const freeSlots = [];
 
     const appointments =
-      this.doctorsAppointmentsRepository.getAppointmentsByDoctorId(id, filters);
+      await this.doctorsAppointmentsRepository.getAppointmentsByDoctorId(id, {
+        date,
+      });
 
-    const occupiedSlots = (await appointments).map((appointment) =>
+    const occupiedSlots = appointments.map((appointment) =>
       appointment.visit_date.getHours(),
     );
 
@@ -61,7 +58,7 @@ export class DoctorsAppointmentsService {
       hour <= WORKING_HOURS.end;
       hour += WORKING_HOURS.step
     ) {
-      if (occupiedSlots.indexOf(hour) === -1) {
+      if (!occupiedSlots.includes(hour)) {
         freeSlots.push(hour);
       }
     }

@@ -5,13 +5,8 @@ import { ProfilesRepository } from './profiles.repository';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { Profile } from './entities/profile.entity';
 
-const mockProfilesRepository = () => ({
-  createProfile: jest.fn(),
-  getProfileById: jest.fn(),
-  getProfileByUserId: jest.fn(),
-});
-
 const mockProfile = new Profile();
+const mockCreateProfileDto = new CreateProfileDto();
 
 describe('profilesService', () => {
   let profilesService: ProfilesService;
@@ -23,7 +18,11 @@ describe('profilesService', () => {
         ProfilesService,
         {
           provide: ProfilesRepository,
-          useFactory: mockProfilesRepository,
+          useValue: {
+            createProfile: jest.fn(),
+            getProfileById: jest.fn(),
+            getProfileByUserId: jest.fn(),
+          },
         },
       ],
     }).compile();
@@ -38,11 +37,9 @@ describe('profilesService', () => {
 
       profilesRepository.createProfile.mockResolvedValue(mockProfile);
 
-      const result = await profilesService.createProfile(
-        new CreateProfileDto(),
+      expect(await profilesService.createProfile(mockCreateProfileDto)).toEqual(
+        mockProfile,
       );
-
-      expect(result).toEqual(mockProfile);
     });
   });
 

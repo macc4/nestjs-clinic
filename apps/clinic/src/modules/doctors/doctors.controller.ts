@@ -1,4 +1,11 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiNotFoundResponse,
@@ -89,7 +96,7 @@ export class DoctorsController {
   @ApiNotFoundResponse({
     description: 'Returns Not Found if no data found with that ID',
   })
-  getDoctorById(@Param('id') id: number): Promise<Doctor> {
+  getDoctorById(@Param('id', ParseIntPipe) id: number): Promise<Doctor> {
     return this.doctorsService.getDoctorById(id);
   }
 }

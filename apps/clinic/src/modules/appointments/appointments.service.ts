@@ -122,6 +122,8 @@ export class AppointmentsService {
         (profile) => profile.user_id === appointment.patient_user_id,
       );
 
+      console.log(appointments);
+
       appointment.patient_name = patient.name;
 
       appointmentsAndProfiles.push(appointment);

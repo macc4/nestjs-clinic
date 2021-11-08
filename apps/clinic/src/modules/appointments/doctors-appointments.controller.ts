@@ -1,5 +1,12 @@
 import { JwtGuard } from '@macc4-clinic/common';
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiNotFoundResponse,
@@ -10,6 +17,7 @@ import {
 import { DoctorsAppointmentsService } from './doctors-appointments.service';
 import { GetDoctorsAppointmentsQueryDto } from './dto/get-doctors-appointments-query.dto';
 import { Appointment } from './entities/appointment.entity';
+import { FreeAppointmentsDateValidationPipe } from './utils/free-appointments-date-validation.pipe';
 
 @Controller()
 @ApiTags('appointments')
@@ -32,7 +40,7 @@ export class DoctorsAppointmentsController {
     type: [Appointment],
   })
   getAppointmentsByDoctorId(
-    @Param('doctorId') doctorId: number,
+    @Param('doctorId', ParseIntPipe) doctorId: number,
     @Query() filters: GetDoctorsAppointmentsQueryDto,
   ): Promise<Appointment[]> {
     return this.doctorsAppointmentsService.getAppointmentsByDoctorId(
@@ -53,12 +61,12 @@ export class DoctorsAppointmentsController {
     type: [Appointment],
   })
   getFreeAppointmentsByDoctorId(
-    @Param('doctorId') doctorId: number,
-    @Query() filters: GetDoctorsAppointmentsQueryDto,
+    @Param('doctorId', ParseIntPipe) doctorId: number,
+    @Query('date', FreeAppointmentsDateValidationPipe) date: string,
   ): Promise<number[]> {
     return this.doctorsAppointmentsService.getFreeAppointmentsByDoctorId(
       doctorId,
-      filters,
+      date,
     );
   }
 }
