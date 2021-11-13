@@ -12,17 +12,17 @@ export class GetMyAppointmentsResponseDto {
   note: string;
 
   @ApiProperty()
-  visit_date: string;
+  visitDate: string;
 
   @ApiProperty()
-  patient_user_id: UUIDVersion;
+  patientUserId: UUIDVersion;
 
   @ApiProperty()
-  doctor_user_id: UUIDVersion;
+  doctorUserId: UUIDVersion;
 
   @ApiProperty()
-  patient_name?: string;
+  patientName?: string;
 
   @ApiProperty()
-  doctor_name?: string;
+  doctorName?: string;
 }

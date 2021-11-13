@@ -3,16 +3,14 @@ import { Test } from '@nestjs/testing';
 import { DoctorsService } from './doctors.service';
 import { DoctorsRepository } from './doctors.repository';
 import { SpecializationsService } from './specializations.service';
+import { Doctor } from './entities/doctor.entity';
 
 const mockDoctorsRepository = () => ({
   getDoctorById: jest.fn(),
   getDoctorByUserId: jest.fn(),
 });
 
-const mockDoctor = {
-  id: 1,
-  user_id: 'abd9a3f6-acd5-450a-9961-3ffba92f20e6',
-};
+const mockDoctor = new Doctor();
 
 describe('DoctorsService', () => {
   let doctorsService: DoctorsService;

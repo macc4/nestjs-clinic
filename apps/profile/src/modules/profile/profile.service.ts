@@ -4,13 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
-import { ProfilesRepository } from './profiles.repository';
+import { ProfileRepository } from './profile.repository';
 
 Injectable();
-export class ProfilesService {
+export class ProfileService {
   constructor(
-    @InjectRepository(ProfilesRepository)
-    private readonly profilesRepository: ProfilesRepository,
+    @InjectRepository(ProfileRepository)
+    private readonly profileRepository: ProfileRepository,
   ) {}
 
   //
@@ -18,7 +18,7 @@ export class ProfilesService {
   //
 
   async createProfile(createProfileDto: CreateProfileDto): Promise<Profile> {
-    return this.profilesRepository.createProfile(createProfileDto);
+    return this.profileRepository.createProfile(createProfileDto);
   }
 
   //
@@ -26,7 +26,7 @@ export class ProfilesService {
   //
 
   async getProfileByUserId(userId: string): Promise<Profile> {
-    const profile = await this.profilesRepository.getProfileByUserId(userId);
+    const profile = await this.profileRepository.getProfileByUserId(userId);
 
     if (!profile) {
       throw new NotFoundException(`No Profile found with user ID: ${userId}`);
@@ -40,8 +40,7 @@ export class ProfilesService {
   //
 
   async getBatchProfiles(userIds: string[]): Promise<Profile[]> {
-    console.log(userIds);
-    const profiles = await this.profilesRepository.getBatchProfiles(userIds);
+    const profiles = await this.profileRepository.getBatchProfiles(userIds);
 
     return profiles;
   }
@@ -51,7 +50,7 @@ export class ProfilesService {
   //
 
   async getPersonalProfile(user: GetUserDto): Promise<Profile> {
-    const profile = await this.profilesRepository.getProfileByUserId(user.id);
+    const profile = await this.profileRepository.getProfileByUserId(user.id);
 
     return profile;
   }
@@ -64,7 +63,7 @@ export class ProfilesService {
     user: GetUserDto,
     patchProfileDto: PatchProfileDto,
   ): Promise<Profile> {
-    const profile = await this.profilesRepository.patchPersonalProfile(
+    const profile = await this.profileRepository.patchPersonalProfile(
       user,
       patchProfileDto,
     );

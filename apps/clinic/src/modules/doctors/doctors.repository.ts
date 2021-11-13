@@ -1,3 +1,4 @@
+import { snakeToCamel } from '@macc4-clinic/common';
 import {
   EntityManager,
   EntityRepository,
@@ -36,9 +37,11 @@ export class DoctorsRepository extends Repository<Doctor> {
       `;
     }
 
-    const doctor = await this.pool.query(query);
+    const doctors = (await this.pool.query(query)).map((doctor) =>
+      snakeToCamel(doctor),
+    );
 
-    return doctor;
+    return doctors;
   }
 
   //
@@ -60,7 +63,7 @@ export class DoctorsRepository extends Repository<Doctor> {
 
     const [doctor] = await this.pool.query(query);
 
-    return doctor;
+    return snakeToCamel(doctor);
   }
 
   //
@@ -82,6 +85,6 @@ export class DoctorsRepository extends Repository<Doctor> {
 
     const [doctor] = await this.pool.query(query);
 
-    return doctor;
+    return snakeToCamel(doctor);
   }
 }

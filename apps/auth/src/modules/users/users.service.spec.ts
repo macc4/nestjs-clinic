@@ -6,8 +6,8 @@ import { UserNotFoundByEmailException } from './errors/UserNotFoundByEmailExcept
 import { RolesService } from './roles.service';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
-import { HttpClinicService } from '../http/http-clinic.service';
-import { HttpProfileService } from '../http/http-profile.service';
+import { ClinicService } from '../grpc/grpc-clinic.service';
+import { ProfileService } from '../grpc/grpc-profile.service';
 import { NotFoundException } from '@nestjs/common';
 
 const mockUser = new User();
@@ -17,8 +17,8 @@ mockCreateUserDto.roles = [UserRole.PATIENT];
 
 describe('UsersService', () => {
   let usersService: UsersService;
-  let httpClinicService: any;
-  let httpProfileService: any;
+  let clinicService: any;
+  let profileService: any;
   let rolesService: any;
   let usersRepository: any;
 
@@ -40,11 +40,11 @@ describe('UsersService', () => {
           useValue: { getRoleByTitle: jest.fn() },
         },
         {
-          provide: HttpClinicService,
+          provide: ClinicService,
           useValue: { createPatient: jest.fn() },
         },
         {
-          provide: HttpProfileService,
+          provide: ProfileService,
           useValue: { createProfile: jest.fn() },
         },
       ],
@@ -53,8 +53,8 @@ describe('UsersService', () => {
     usersService = module.get(UsersService);
     usersRepository = module.get(UsersRepository);
     rolesService = module.get(RolesService);
-    httpClinicService = module.get(HttpClinicService);
-    httpProfileService = module.get(HttpProfileService);
+    clinicService = module.get(ClinicService);
+    profileService = module.get(ProfileService);
   });
 
   describe('calls createUser', () => {
@@ -69,8 +69,8 @@ describe('UsersService', () => {
       expect(rolesService.getRoleByTitle).toBeCalledWith(
         mockCreateUserDto.roles[0],
       );
-      expect(httpClinicService.createPatient).toBeCalledWith(mockUser.id);
-      expect(httpProfileService.createProfile).toBeCalledWith({
+      expect(clinicService.createPatient).toBeCalledWith(mockUser.id);
+      expect(profileService.createProfile).toBeCalledWith({
         userId: mockUser.id,
         name: mockCreateUserDto.name,
         gender: mockCreateUserDto.gender,

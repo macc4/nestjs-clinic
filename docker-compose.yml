@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+  auth:
+    container_name: auth
+    build: ./apps/auth
+    command: yarn start
+    environment:
+      PORT: ${AUTH_SERVICE_PORT}
+      DB_HOST: database
+      CLINIC_SERVICE_GRPC_HOST: clinic
+      CLINIC_SERVICE_GRPC_PORT: ${CLINIC_SERVICE_GRPC_PORT}
+      PROFILE_SERVICE_GRPC_HOST: profile
+      PROFILE_SERVICE_GRPC_PORT: ${PROFILE_SERVICE_GRPC_PORT}
+    ports:
+      - ${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}
+    depends_on:
+      - database
+
   clinic:
     container_name: clinic
     build: ./apps/clinic
@@ -9,29 +25,15 @@ services:
       PORT: ${CLINIC_SERVICE_PORT}
       DB_HOST: database
       REDIS_HOST: redis
-      PROFILE_SERVICE_HOST: profile
-      PROFILE_SERVICE_PORT: ${PROFILE_SERVICE_PORT}
+      CLINIC_SERVICE_GRPC_HOST: clinic
+      CLINIC_SERVICE_GRPC_PORT: ${CLINIC_SERVICE_GRPC_PORT}
+      PROFILE_SERVICE_GRPC_HOST: profile
+      PROFILE_SERVICE_GRPC_PORT: ${PROFILE_SERVICE_GRPC_PORT}
     ports:
       - ${CLINIC_SERVICE_PORT}:${CLINIC_SERVICE_PORT}
     depends_on:
       - database
       - redis
-
-  auth:
-    container_name: auth
-    build: ./apps/auth
-    command: yarn start
-    environment:
-      PORT: ${AUTH_SERVICE_PORT}
-      DB_HOST: database
-      CLINIC_SERVICE_HOST: clinic
-      CLINIC_SERVICE_PORT: ${CLINIC_SERVICE_PORT}
-      PROFILE_SERVICE_HOST: profile
-      PROFILE_SERVICE_PORT: ${PROFILE_SERVICE_PORT}
-    ports:
-      - ${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}
-    depends_on:
-      - database
 
   profile:
     container_name: profile
@@ -40,6 +42,10 @@ services:
     environment:
       PORT: ${PROFILE_SERVICE_PORT}
       DB_HOST: database
+      CLINIC_SERVICE_GRPC_HOST: clinic
+      CLINIC_SERVICE_GRPC_PORT: ${CLINIC_SERVICE_GRPC_PORT}
+      PROFILE_SERVICE_GRPC_HOST: profile
+      PROFILE_SERVICE_GRPC_PORT: ${PROFILE_SERVICE_GRPC_PORT}
     ports:
       - ${PROFILE_SERVICE_PORT}:${PROFILE_SERVICE_PORT}
     depends_on:

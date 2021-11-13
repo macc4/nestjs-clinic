@@ -11,6 +11,7 @@ import { Resolution } from './entities/resolution.entity';
 import { Doctor } from '../doctors/entities/doctor.entity';
 import { PatchResolutionDto } from './dto/patch-resolution.dto';
 import { Appointment } from '../appointments/entities/appointment.entity';
+import { snakeToCamel } from '@macc4-clinic/common';
 
 @EntityRepository(Resolution)
 export class ResolutionsRepository extends Repository<Resolution> {
@@ -36,7 +37,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
 
     await this.save(resolution);
 
-    return resolution;
+    return snakeToCamel(resolution);
   }
 
   //
@@ -57,7 +58,9 @@ export class ResolutionsRepository extends Repository<Resolution> {
       query.andWhere('resolution.doctor_id = :doctorId', { doctorId });
     }
 
-    const resolutions = await query.getMany();
+    const resolutions = (await query.getMany()).map((resolution) =>
+      snakeToCamel(resolution),
+    );
 
     return resolutions;
   }
@@ -75,9 +78,11 @@ export class ResolutionsRepository extends Repository<Resolution> {
     WHERE patients.user_id='${id}';
     `;
 
-    const resolution = await this.pool.query(query);
+    const resolutions = (await this.pool.query(query)).map((resolution) =>
+      snakeToCamel(resolution),
+    );
 
-    return resolution;
+    return resolutions;
   }
 
   //
@@ -87,7 +92,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
   async getResolutionById(id: number): Promise<Resolution> {
     const resolution = await this.findOne(id);
 
-    return resolution;
+    return snakeToCamel(resolution);
   }
 
   //
@@ -104,7 +109,9 @@ export class ResolutionsRepository extends Repository<Resolution> {
 
     resolution.text = text;
 
-    return this.save(resolution);
+    this.save(resolution);
+
+    return snakeToCamel(resolution);
   }
 
   //

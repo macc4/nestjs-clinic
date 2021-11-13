@@ -1,3 +1,4 @@
+import { snakeToCamel } from '@macc4-clinic/common';
 import {
   EntityManager,
   EntityRepository,
@@ -20,12 +21,12 @@ export class PatientsRepository extends Repository<Patient> {
     const { userId } = createPatientDto;
 
     const patient = this.create({
-      user_id: userId,
+      userId: userId,
     });
 
     await this.save(patient);
 
-    return patient;
+    return snakeToCamel(patient);
   }
 
   //
@@ -35,7 +36,7 @@ export class PatientsRepository extends Repository<Patient> {
   async getPatientById(id: number): Promise<Patient> {
     const patient = await this.findOne(id);
 
-    return patient;
+    return snakeToCamel(patient);
   }
 
   //
@@ -51,6 +52,6 @@ export class PatientsRepository extends Repository<Patient> {
 
     const [patient] = await this.pool.query(query);
 
-    return patient;
+    return snakeToCamel(patient);
   }
 }

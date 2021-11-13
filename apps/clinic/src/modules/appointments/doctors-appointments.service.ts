@@ -50,7 +50,7 @@ export class DoctorsAppointmentsService {
       });
 
     const occupiedSlots = appointments.map((appointment) =>
-      appointment.visit_date.getHours(),
+      appointment.visitDate.getHours(),
     );
 
     for (

@@ -6,9 +6,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UUIDVersion } from 'class-validator';
 import { DoctorsService } from '../doctors/doctors.service';
-import { HttpProfileService } from '../http/http-profile.service';
+import { ProfileService } from '../grpc/grpc-profile.service';
 import { PatientsService } from '../patients/patients.service';
 import { AppointmentsRepository } from './appointments.repository';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -23,7 +22,7 @@ export class AppointmentsService {
     private readonly appointmentsRepository: AppointmentsRepository,
     private readonly patientsService: PatientsService,
     private readonly doctorsService: DoctorsService,
-    private readonly httpProfileService: HttpProfileService,
+    private readonly profileService: ProfileService,
   ) {}
 
   //
@@ -93,38 +92,38 @@ export class AppointmentsService {
       user.id,
     );
 
-    const patientUserIds: UUIDVersion[] = [
+    console.log(appointments);
+
+    const patientUserIds: string[] = [
       ...new Set(
-        appointments.map((appointment) => appointment.patient_user_id),
+        appointments.map((appointment) => appointment.patientUserId.toString()),
       ),
     ];
 
-    const doctorUserIds: UUIDVersion[] = [
-      ...new Set(appointments.map((appointment) => appointment.doctor_user_id)),
+    const doctorUserIds: string[] = [
+      ...new Set(
+        appointments.map((appointment) => appointment.doctorUserId.toString()),
+      ),
     ];
 
-    const userIds: UUIDVersion[] = patientUserIds.concat(doctorUserIds);
+    const userIds: string[] = patientUserIds.concat(doctorUserIds);
 
-    const profiles = await this.httpProfileService.getBatchProfiles({
-      userIds,
-    });
+    const profiles = await this.profileService.getBatchProfiles(userIds);
 
     const appointmentsAndProfiles: GetMyAppointmentsResponseDto[] = [];
 
     appointments.forEach((appointment) => {
       const doctor = profiles.find(
-        (profile) => profile.user_id === appointment.doctor_user_id,
+        (profile) => profile.userId === appointment.doctorUserId,
       );
 
-      appointment.doctor_name = doctor.name;
+      appointment.doctorName = doctor.name;
 
       const patient = profiles.find(
-        (profile) => profile.user_id === appointment.patient_user_id,
+        (profile) => profile.userId === appointment.patientUserId,
       );
 
-      console.log(appointments);
-
-      appointment.patient_name = patient.name;
+      appointment.patientName = patient.name;
 
       appointmentsAndProfiles.push(appointment);
     });

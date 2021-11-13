@@ -1,3 +1,4 @@
+import { snakeToCamel } from '@macc4-clinic/common';
 import {
   EntityManager,
   EntityRepository,
@@ -26,14 +27,14 @@ export class AppointmentsRepository extends Repository<Appointment> {
     const appointment = this.create({
       reason,
       note,
-      visit_date: visitDate,
+      visitDate,
       patient,
       doctor,
     });
 
     await this.save(appointment);
 
-    return appointment;
+    return snakeToCamel(appointment);
   }
 
   //
@@ -52,7 +53,9 @@ export class AppointmentsRepository extends Repository<Appointment> {
     OR doctors.user_id = '${id}';
     `;
 
-    const appointments = await this.pool.query(query);
+    const appointments = (await this.pool.query(query)).map((appointment) =>
+      snakeToCamel(appointment),
+    );
 
     return appointments;
   }
@@ -64,7 +67,7 @@ export class AppointmentsRepository extends Repository<Appointment> {
   async getAppointmentById(id: number): Promise<Appointment> {
     const appointment = await this.findOne(id);
 
-    return appointment;
+    return snakeToCamel(appointment);
   }
 
   //
@@ -86,8 +89,10 @@ export class AppointmentsRepository extends Repository<Appointment> {
     AND doctors.id = ${id}
     `;
 
-    const [appointment] = await this.pool.query(query);
+    const [appointments] = (await this.pool.query(query)).map((appointment) =>
+      snakeToCamel(appointments),
+    );
 
-    return appointment;
+    return appointments;
   }
 }

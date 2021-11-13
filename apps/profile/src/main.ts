@@ -1,8 +1,10 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { join } from 'path';
 
 async function bootstrap() {
   const logger = new Logger('ProfileService');
@@ -26,7 +28,24 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
+  const urlGRPC = `${configService.get(
+    'PROFILE_SERVICE_GRPC_HOST',
+  )}:${configService.get('PROFILE_SERVICE_GRPC_PORT')}`;
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'profile',
+      protoPath: join(__dirname, '../grpc/profile.proto'),
+      url: urlGRPC,
+      loader: { keepCase: true },
+    },
+  });
+
+  app.startAllMicroservices();
+
   const port = configService.get('PORT');
+
   await app.listen(port);
   logger.log(`Application is running on: ${await app.getUrl()}`);
 }

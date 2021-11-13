@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ProfilesModule } from './modules/profiles/profiles.module';
+import { ProfileModule } from './modules/profile/profile.module';
 import { SharedModule } from './modules/shared/shared.module';
 
 @Module({
-  imports: [ProfilesModule, SharedModule],
+  imports: [SharedModule, ProfileModule],
 })
 export class AppModule {}
