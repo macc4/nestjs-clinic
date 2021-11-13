@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package clinic;
+
+service PatientsGRPCService{
+  rpc CreatePatient(CreatePatientDto) returns (Patient) {}
+}
+
+message CreatePatientDto {
+  string userId = 1;
+}
+
+message Patient {
+  int32 id = 1;
+  string user_id = 2;
+}

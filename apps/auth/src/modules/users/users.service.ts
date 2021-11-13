@@ -6,8 +6,8 @@ import { User } from './entities/user.entity';
 import { UsersRepository } from './users.repository';
 import { RolesService } from './roles.service';
 import { UserRole } from '@macc4-clinic/common';
-import { HttpClinicService } from '../http/http-clinic.service';
-import { HttpProfileService } from '../http/http-profile.service';
+import { ClinicService } from '../grpc/grpc-clinic.service';
+import { ProfileService } from '../grpc/grpc-profile.service';
 
 Injectable();
 export class UsersService {
@@ -15,8 +15,8 @@ export class UsersService {
     @InjectRepository(UsersRepository)
     private readonly usersRepository: UsersRepository,
     private readonly rolesService: RolesService,
-    private readonly httpClinicService: HttpClinicService,
-    private readonly httpProfileService: HttpProfileService,
+    private readonly clinicService: ClinicService,
+    private readonly profileService: ProfileService,
   ) {}
 
   //
@@ -38,10 +38,10 @@ export class UsersService {
     );
 
     if (roles.includes(UserRole.PATIENT)) {
-      this.httpClinicService.createPatient(user.id);
+      this.clinicService.createPatient({ userId: user.id });
     }
 
-    this.httpProfileService.createProfile({ userId: user.id, name, gender });
+    this.profileService.createProfile({ userId: user.id, name, gender });
 
     return user;
   }

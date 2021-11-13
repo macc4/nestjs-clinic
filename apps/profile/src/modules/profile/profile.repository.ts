@@ -10,7 +10,7 @@ import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
 
 @EntityRepository(Profile)
-export class ProfilesRepository extends Repository<Profile> {
+export class ProfileRepository extends Repository<Profile> {
   constructor(private readonly pool: EntityManager = getManager()) {
     super();
   }

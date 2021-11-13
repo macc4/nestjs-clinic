@@ -1,23 +1,23 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { ProfilesService } from './profiles.service';
-import { ProfilesRepository } from './profiles.repository';
+import { ProfileService } from './profile.service';
+import { ProfileRepository } from './profile.repository';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { Profile } from './entities/profile.entity';
 
 const mockProfile = new Profile();
 const mockCreateProfileDto = new CreateProfileDto();
 
-describe('profilesService', () => {
-  let profilesService: ProfilesService;
-  let profilesRepository: any;
+describe('profileService', () => {
+  let profileService: ProfileService;
+  let profileRepository: any;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        ProfilesService,
+        ProfileService,
         {
-          provide: ProfilesRepository,
+          provide: ProfileRepository,
           useValue: {
             createProfile: jest.fn(),
             getProfileById: jest.fn(),
@@ -27,17 +27,17 @@ describe('profilesService', () => {
       ],
     }).compile();
 
-    profilesService = module.get(ProfilesService);
-    profilesRepository = module.get(ProfilesRepository);
+    profileService = module.get(ProfileService);
+    profileRepository = module.get(ProfileRepository);
   });
 
   describe('calls createProfile', () => {
     it('and returns the data', async () => {
       expect.assertions(1);
 
-      profilesRepository.createProfile.mockResolvedValue(mockProfile);
+      profileRepository.createProfile.mockResolvedValue(mockProfile);
 
-      expect(await profilesService.createProfile(mockCreateProfileDto)).toEqual(
+      expect(await profileService.createProfile(mockCreateProfileDto)).toEqual(
         mockProfile,
       );
     });
@@ -47,9 +47,9 @@ describe('profilesService', () => {
     it('and returns the data', async () => {
       expect.assertions(1);
 
-      profilesRepository.getProfileByUserId.mockResolvedValue(mockProfile);
+      profileRepository.getProfileByUserId.mockResolvedValue(mockProfile);
 
-      const result = await profilesService.getProfileByUserId(
+      const result = await profileService.getProfileByUserId(
         '3a3aaf37-8efa-4f62-a62f-07adf8d5c421',
       );
 
@@ -59,10 +59,10 @@ describe('profilesService', () => {
     it('and handles an error if no data found', async () => {
       expect.assertions(1);
 
-      profilesRepository.getProfileByUserId.mockResolvedValue(null);
+      profileRepository.getProfileByUserId.mockResolvedValue(null);
 
       expect(
-        profilesService.getProfileByUserId(
+        profileService.getProfileByUserId(
           '3a3aaf37-8efa-4f62-a62f-07adf8d5c421',
         ),
       ).rejects.toThrow(NotFoundException);

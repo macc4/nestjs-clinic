@@ -28,20 +28,6 @@ export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
   //
-  // Create a new Patient (for http requests from auth only)
-  //
-
-  @Post()
-  @ApiOperation({ summary: 'Create a Patient (used internally only)' })
-  @ApiCreatedResponse({
-    description: 'Returns the created Patient data',
-    type: Patient,
-  })
-  createPatient(@Body() createPatientDto: CreatePatientDto): Promise<Patient> {
-    return this.patientsService.createPatient(createPatientDto);
-  }
-
-  //
   // Get Patient by id
   //
 

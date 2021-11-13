@@ -2,7 +2,6 @@ import * as Joi from 'joi';
 
 export const configValidationSchema = Joi.object({
   PORT: Joi.number().default(8080).required(),
-  EXPIRY: Joi.number().default(-1).required(),
 
   DB_HOST: Joi.string().default('localhost').required(),
   DB_PORT: Joi.number().default(5432).required(),

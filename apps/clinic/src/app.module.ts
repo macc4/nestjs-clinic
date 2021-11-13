@@ -8,13 +8,13 @@ import { AppointmentsModule } from './modules/appointments/appointments.module';
 import { RouterModule } from '@nestjs/core';
 import { routes } from './nested-routes';
 import { DoctorsAppointmentsModule } from './modules/appointments/doctors-appointments.module';
-import { HttpWrapperModule } from './modules/http/http.module';
+import { GRPCModule } from './modules/grpc/grpc.module';
 
 @Module({
   imports: [
-    SharedModule,
     RouterModule.register(routes),
-    HttpWrapperModule,
+    SharedModule,
+    GRPCModule,
     PatientsModule,
     DoctorsModule,
     AppointmentsModule,
