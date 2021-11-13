@@ -26,10 +26,10 @@ export class Profile {
   })
   gender: UserGender;
 
-  @Column({ unique: true })
+  @Column({ name: 'user_id', unique: true })
   @ApiProperty({
     example: '21ed452e-b3da-47d6-bd0c-8abea993cf0b',
     description: 'UUID of the corresponding user',
   })
-  user_id: string;
+  userId: string;
 }

@@ -9,7 +9,7 @@ export interface PatientsGRPCService {
   ): Observable<Patient>;
 }
 
-interface Patient {
+export interface Patient {
   id: number;
-  user_id: string;
+  userId: string;
 }

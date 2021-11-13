@@ -6,6 +6,7 @@ import {
 } from 'typeorm';
 import { GetDoctorsAppointmentsQueryDto } from './dto/get-doctors-appointments-query.dto';
 import { Appointment } from './entities/appointment.entity';
+import { snakeToCamel } from '@macc4-clinic/common';
 
 @EntityRepository(Appointment)
 export class DoctorsAppointmentsRepository extends Repository<Appointment> {
@@ -41,7 +42,9 @@ export class DoctorsAppointmentsRepository extends Repository<Appointment> {
       }
     }
 
-    const appointments = await this.pool.query(query);
+    const appointments = (await this.pool.query(query)).map((appointment) =>
+      snakeToCamel(appointment),
+    );
 
     return appointments;
   }

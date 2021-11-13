@@ -3,7 +3,10 @@ import { Controller, Inject, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientGrpc } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
-import ProfileGRPCService from './interfaces/profile.service.interface';
+import {
+  ProfileGRPCService,
+  Profile,
+} from './interfaces/profile.service.interface';
 
 @Controller('profile')
 export class ProfileService implements OnModuleInit {
@@ -19,7 +22,7 @@ export class ProfileService implements OnModuleInit {
       this.client.getService<ProfileGRPCService>('ProfileGRPCService');
   }
 
-  async getProfileByUserId(userId: string): Promise<any> {
+  async getProfileByUserId(userId: string): Promise<Profile> {
     const metadata = new Metadata();
 
     metadata.set('token', this.configService.get('JWT_SECRET'));
@@ -31,7 +34,7 @@ export class ProfileService implements OnModuleInit {
     return profile;
   }
 
-  async getBatchProfiles(userIds: string[]): Promise<any> {
+  async getBatchProfiles(userIds: string[]): Promise<Profile[]> {
     const metadata = new Metadata();
 
     metadata.set('token', this.configService.get('JWT_SECRET'));

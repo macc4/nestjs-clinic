@@ -92,19 +92,17 @@ export class AppointmentsService {
       user.id,
     );
 
+    console.log(appointments);
+
     const patientUserIds: string[] = [
       ...new Set(
-        appointments.map((appointment) =>
-          appointment.patient_user_id.toString(),
-        ),
+        appointments.map((appointment) => appointment.patientUserId.toString()),
       ),
     ];
 
     const doctorUserIds: string[] = [
       ...new Set(
-        appointments.map((appointment) =>
-          appointment.doctor_user_id.toString(),
-        ),
+        appointments.map((appointment) => appointment.doctorUserId.toString()),
       ),
     ];
 
@@ -116,16 +114,16 @@ export class AppointmentsService {
 
     appointments.forEach((appointment) => {
       const doctor = profiles.find(
-        (profile) => profile.userId === appointment.doctor_user_id,
+        (profile) => profile.userId === appointment.doctorUserId,
       );
 
-      appointment.doctor_name = doctor.name;
+      appointment.doctorName = doctor.name;
 
       const patient = profiles.find(
-        (profile) => profile.userId === appointment.patient_user_id,
+        (profile) => profile.userId === appointment.patientUserId,
       );
 
-      appointment.patient_name = patient.name;
+      appointment.patientName = patient.name;
 
       appointmentsAndProfiles.push(appointment);
     });

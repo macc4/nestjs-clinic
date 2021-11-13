@@ -31,12 +31,12 @@ export class Appointment {
   })
   note: string;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ name: 'visit_date', type: 'timestamptz' })
   @ApiProperty({
     example: '2021-12-05 15:00',
     description: 'Preferred visit date',
   })
-  visit_date: Date;
+  visitDate: Date;
 
   @OneToOne(() => Resolution, (resolution) => resolution.appointment, {
     eager: true,

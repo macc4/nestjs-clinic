@@ -12,5 +12,5 @@ message CreatePatientDto {
 
 message Patient {
   int32 id = 1;
-  string user_id = 2;
+  string userId = 2;
 }

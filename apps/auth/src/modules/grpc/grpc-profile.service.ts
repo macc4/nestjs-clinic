@@ -4,7 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { ClientGrpc } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { CreateProfileDto } from './dto/create-profile.dto';
-import ProfileGRPCService from './interfaces/profile.service.interface';
+import {
+  Profile,
+  ProfileGRPCService,
+} from './interfaces/profile.service.interface';
 
 @Controller('profile')
 export class ProfileService implements OnModuleInit {
@@ -20,7 +23,7 @@ export class ProfileService implements OnModuleInit {
 
   private profileService: ProfileGRPCService;
 
-  async createProfile(createProfileDto: CreateProfileDto): Promise<any> {
+  async createProfile(createProfileDto: CreateProfileDto): Promise<Profile> {
     const metadata = new Metadata();
 
     metadata.set('token', this.configService.get('JWT_SECRET'));
@@ -32,7 +35,7 @@ export class ProfileService implements OnModuleInit {
     return profile;
   }
 
-  async getProfileByUserId(userId: string): Promise<any> {
+  async getProfileByUserId(userId: string): Promise<Profile> {
     const metadata = new Metadata();
 
     metadata.set('token', this.configService.get('JWT_SECRET'));
@@ -44,12 +47,12 @@ export class ProfileService implements OnModuleInit {
     return profile;
   }
 
-  async getBatchProfiles(userIds: string[]): Promise<any> {
+  async getBatchProfiles(userIds: string[]): Promise<Profile[]> {
     const metadata = new Metadata();
 
     metadata.set('token', this.configService.get('JWT_SECRET'));
 
-    const profiles = await lastValueFrom(
+    const { profiles } = await lastValueFrom(
       this.profileService.getBatchProfiles({ userIds }, metadata),
     );
 

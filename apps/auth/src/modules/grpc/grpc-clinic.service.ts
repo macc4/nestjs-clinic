@@ -4,7 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { ClientGrpc } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { CreatePatientDto } from './dto/create-patient.dto';
-import { PatientsGRPCService } from './interfaces/clinic.service.interface';
+import {
+  Patient,
+  PatientsGRPCService,
+} from './interfaces/clinic.service.interface';
 
 @Controller('clinic')
 export class ClinicService implements OnModuleInit {
@@ -21,7 +24,7 @@ export class ClinicService implements OnModuleInit {
 
   private patientsService: PatientsGRPCService;
 
-  async createPatient(createPatientDto: CreatePatientDto): Promise<any> {
+  async createPatient(createPatientDto: CreatePatientDto): Promise<Patient> {
     const metadata = new Metadata();
 
     metadata.set('token', this.configService.get('JWT_SECRET'));

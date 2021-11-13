@@ -8,6 +8,7 @@ import {
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
+import { snakeToCamel } from '@macc4-clinic/common';
 
 @EntityRepository(Profile)
 export class ProfileRepository extends Repository<Profile> {
@@ -24,12 +25,12 @@ export class ProfileRepository extends Repository<Profile> {
     const profile = this.create({
       name,
       gender,
-      user_id: userId,
+      userId: userId,
     });
 
     await this.save(profile);
 
-    return profile;
+    return snakeToCamel(profile);
   }
 
   //
@@ -43,7 +44,7 @@ export class ProfileRepository extends Repository<Profile> {
 
     const [profile] = await this.pool.query(query);
 
-    return profile;
+    return snakeToCamel(profile);
   }
 
   //
@@ -56,7 +57,9 @@ export class ProfileRepository extends Repository<Profile> {
     WHERE profiles.user_id = ANY($1::uuid[]);
     `;
 
-    const profiles = await this.pool.query(query, [userIds]);
+    const profiles = (await this.pool.query(query, [userIds])).map((profile) =>
+      snakeToCamel(profile),
+    );
 
     return profiles;
   }
@@ -67,10 +70,11 @@ export class ProfileRepository extends Repository<Profile> {
   ): Promise<Profile> {
     const { name } = patchProfileDto;
 
-    const profile = await this.findOne({ user_id: user.id });
-
+    const profile = await this.findOne({ userId: user.id });
     profile.name = name;
 
-    return this.save(profile);
+    this.save(profile);
+
+    return snakeToCamel(profile);
   }
 }

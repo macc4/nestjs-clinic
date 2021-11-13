@@ -12,12 +12,12 @@ export class Patient {
   })
   id: number;
 
-  @Column({ unique: true })
+  @Column({ name: 'user_id', unique: true })
   @ApiProperty({
     example: 'abd9a3f6-acd5-450a-9961-3ffba92f20e6',
     description: 'UUID of the related user',
   })
-  user_id: string;
+  userId: string;
 
   @OneToMany(() => Appointment, (appointment) => appointment.patient, {
     eager: false,

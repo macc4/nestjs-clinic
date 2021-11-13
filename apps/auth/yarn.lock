@@ -599,10 +599,10 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@macc4-clinic/common@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@macc4-clinic/common/-/common-1.0.8.tgz#a8c39076cd5c6ed9f2f1c418e95a4ad2d73da20b"
-  integrity sha512-Izvo31T50eiGI0+x74MF83y0sa5Yio0H+HDSxuVAYTWrwcwEboiUzDMy4CqjkO/LkfwtF5r3y0uEudDKdmqr2w==
+"@macc4-clinic/common@^1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@macc4-clinic/common/-/common-1.0.11.tgz#2503e4d4bbc7bf0fcd16ff392a83e5a99df025a9"
+  integrity sha512-adadeWQ+sOeDf+cWa5JUKEcZSLFuWpoG0HaPApJEJNXm7ghQf9WFEh0DEw69mR6e9WBq2co2tRHbLmDSbwEzXg==
   dependencies:
     "@nestjs/common" "^8.0.0"
     "@nestjs/config" "^1.0.3"
@@ -611,6 +611,7 @@
     "@nestjs/platform-express" "^8.0.0"
     "@types/jsonwebtoken" "^8.5.5"
     class-validator "^0.13.1"
+    lodash "^4.17.21"
     passport-jwt "^4.0.0"
     reflect-metadata "^0.1.13"
     rimraf "^3.0.2"
