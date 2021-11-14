@@ -19,8 +19,10 @@ export interface ProfileGRPCService {
 
 export interface Profile {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   gender: string;
+  birthDate: string;
   userId: string;
 }
 

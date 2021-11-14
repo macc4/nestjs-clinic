@@ -38,15 +38,17 @@ export class DoctorsAppointmentsService {
 
   async getFreeAppointmentsByDoctorId(
     id: number,
-    date: string,
+    date: Date,
   ): Promise<number[]> {
     await this.doctorsService.getDoctorById(id);
+
+    const appointmentDay = date.toISOString().split('T')[0];
 
     const freeSlots = [];
 
     const appointments =
       await this.doctorsAppointmentsRepository.getAppointmentsByDoctorId(id, {
-        date,
+        date: appointmentDay,
       });
 
     const occupiedSlots = appointments.map((appointment) =>

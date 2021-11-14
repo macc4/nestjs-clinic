@@ -92,8 +92,6 @@ export class AppointmentsService {
       user.id,
     );
 
-    console.log(appointments);
-
     const patientUserIds: string[] = [
       ...new Set(
         appointments.map((appointment) => appointment.patientUserId.toString()),
@@ -117,13 +115,15 @@ export class AppointmentsService {
         (profile) => profile.userId === appointment.doctorUserId,
       );
 
-      appointment.doctorName = doctor.name;
+      appointment.doctorFirstName = doctor.firstName;
+      appointment.doctorLastName = doctor.lastName;
 
       const patient = profiles.find(
         (profile) => profile.userId === appointment.patientUserId,
       );
 
-      appointment.patientName = patient.name;
+      appointment.patientFirstName = patient.firstName;
+      appointment.patientLastName = patient.lastName;
 
       appointmentsAndProfiles.push(appointment);
     });

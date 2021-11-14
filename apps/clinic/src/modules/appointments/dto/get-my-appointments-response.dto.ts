@@ -21,8 +21,14 @@ export class GetMyAppointmentsResponseDto {
   doctorUserId: UUIDVersion;
 
   @ApiProperty()
-  patientName?: string;
+  patientFirstName?: string;
 
   @ApiProperty()
-  doctorName?: string;
+  doctorFirstName?: string;
+
+  @ApiProperty()
+  patientLastName?: string;
+
+  @ApiProperty()
+  doctorLastName?: string;
 }

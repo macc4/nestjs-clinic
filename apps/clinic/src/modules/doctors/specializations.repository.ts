@@ -1,4 +1,3 @@
-import { snakeToCamel } from '@macc4-clinic/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { Specialization } from './entities/specialization.entity';
 
@@ -9,9 +8,7 @@ export class SpecializationsRepository extends Repository<Specialization> {
   //
 
   async getSpecializations(): Promise<Specialization[]> {
-    const specializations = (await this.find()).map((specialization) =>
-      snakeToCamel(specialization),
-    );
+    const specializations = await this.find();
 
     return specializations;
   }
@@ -23,6 +20,6 @@ export class SpecializationsRepository extends Repository<Specialization> {
   async getSpecializationByTitle(title: string): Promise<Specialization> {
     const specialization = await this.findOne({ title });
 
-    return snakeToCamel(specialization);
+    return specialization;
   }
 }

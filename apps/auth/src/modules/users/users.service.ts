@@ -24,7 +24,7 @@ export class UsersService {
   //
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { name, gender, roles } = createUserDto;
+    const { firstName, lastName, gender, birthDate, roles } = createUserDto;
 
     const roleEntitiesArray = await Promise.all(
       roles.map(async (roleTitle) => {
@@ -41,7 +41,13 @@ export class UsersService {
       this.clinicService.createPatient({ userId: user.id });
     }
 
-    this.profileService.createProfile({ userId: user.id, name, gender });
+    this.profileService.createProfile({
+      userId: user.id,
+      firstName,
+      lastName,
+      gender,
+      birthDate,
+    });
 
     return user;
   }

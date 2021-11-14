@@ -34,7 +34,7 @@ export class AppointmentsRepository extends Repository<Appointment> {
 
     await this.save(appointment);
 
-    return snakeToCamel(appointment);
+    return appointment;
   }
 
   //
@@ -67,7 +67,7 @@ export class AppointmentsRepository extends Repository<Appointment> {
   async getAppointmentById(id: number): Promise<Appointment> {
     const appointment = await this.findOne(id);
 
-    return snakeToCamel(appointment);
+    return appointment;
   }
 
   //

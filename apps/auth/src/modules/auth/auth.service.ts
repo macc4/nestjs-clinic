@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { GetUserDto, UserRole } from '@macc4-clinic/common';
@@ -58,7 +62,18 @@ export class AuthService {
   async signIn(signInDto: SignInDto): Promise<{ token: string }> {
     const { email, password } = signInDto;
 
-    const user = await this.usersService.getUserByEmail(email);
+    let user: User;
+
+    try {
+      user = await this.usersService.getUserByEmail(email);
+    } catch (error) {
+      console.log(error);
+      if (error.status === 404) {
+        throw new IncorrectEmailOrPassException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const roles = user.roles.map((role) => role.title);

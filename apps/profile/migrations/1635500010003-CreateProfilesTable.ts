@@ -8,8 +8,10 @@ export class CreateProfilesTable1635500010003 implements MigrationInterface {
     CREATE TABLE profile.profiles
     (
       id SERIAL NOT NULL, 
-      name character varying NOT NULL, 
+      first_name character varying NOT NULL, 
+      last_name character varying NOT NULL, 
       gender character varying NOT NULL, 
+      birth_date timestamp with time zone NOT NULL,
       user_id uuid NOT NULL, 
       CONSTRAINT UQ_profile_user_id UNIQUE (user_id), 
       CONSTRAINT PK_profile_id PRIMARY KEY (id)

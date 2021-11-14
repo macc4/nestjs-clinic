@@ -37,7 +37,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
 
     await this.save(resolution);
 
-    return snakeToCamel(resolution);
+    return resolution;
   }
 
   //
@@ -92,7 +92,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
   async getResolutionById(id: number): Promise<Resolution> {
     const resolution = await this.findOne(id);
 
-    return snakeToCamel(resolution);
+    return resolution;
   }
 
   //
@@ -111,7 +111,7 @@ export class ResolutionsRepository extends Repository<Resolution> {
 
     this.save(resolution);
 
-    return snakeToCamel(resolution);
+    return resolution;
   }
 
   //
