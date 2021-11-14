@@ -58,7 +58,7 @@ describe('UsersService', () => {
   });
 
   describe('calls createUser', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(4);
 
       usersRepository.createUser.mockResolvedValue(mockUser);
@@ -69,17 +69,21 @@ describe('UsersService', () => {
       expect(rolesService.getRoleByTitle).toBeCalledWith(
         mockCreateUserDto.roles[0],
       );
-      expect(clinicService.createPatient).toBeCalledWith(mockUser.id);
+      expect(clinicService.createPatient).toBeCalledWith({
+        userId: mockUser.id,
+      });
       expect(profileService.createProfile).toBeCalledWith({
         userId: mockUser.id,
-        name: mockCreateUserDto.name,
+        firstName: mockCreateUserDto.firstName,
+        lastName: mockCreateUserDto.lastName,
         gender: mockCreateUserDto.gender,
+        birthDate: mockCreateUserDto.birthDate,
       });
     });
   });
 
   describe('calls setPassword', () => {
-    it('and returns nothing if successful', async () => {
+    it('returns nothing if successful', async () => {
       expect.assertions(1);
 
       usersRepository.setPassword.mockResolvedValue(undefined);
@@ -94,7 +98,7 @@ describe('UsersService', () => {
   });
 
   describe('calls getUserByEmail', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       usersRepository.getUserByEmail.mockResolvedValue(mockUser);
@@ -104,7 +108,7 @@ describe('UsersService', () => {
       expect(result).toEqual(mockUser);
     });
 
-    it('and handles an error if no data found', async () => {
+    it('handles an error if no data found', async () => {
       expect.assertions(1);
 
       usersRepository.getUserByEmail.mockResolvedValue(null);
@@ -116,7 +120,7 @@ describe('UsersService', () => {
   });
 
   describe('calls getUserById', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       usersRepository.getUserById.mockResolvedValue(mockUser);
@@ -126,7 +130,7 @@ describe('UsersService', () => {
       ).toEqual(mockUser);
     });
 
-    it('and handles an error if no data found', async () => {
+    it('handles an error if no data found', async () => {
       expect.assertions(1);
 
       usersRepository.getUserById.mockResolvedValue(null);

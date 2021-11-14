@@ -4,14 +4,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorsRepository } from './doctors.repository';
 import { GetDoctorsQueryDto } from './dto/get-doctors-query.dto';
 import { Doctor } from './entities/doctor.entity';
-import { SpecializationsService } from './specializations.service';
 
 @Injectable()
 export class DoctorsService {
   constructor(
     @InjectRepository(DoctorsRepository)
     private readonly doctorsRepository: DoctorsRepository,
-    private readonly specializationsService: SpecializationsService,
   ) {}
 
   //
@@ -19,13 +17,9 @@ export class DoctorsService {
   //
 
   async getDoctors(filters?: GetDoctorsQueryDto): Promise<Doctor[]> {
-    const doctor = await this.doctorsRepository.getDoctors(filters);
+    const doctors = await this.doctorsRepository.getDoctors(filters);
 
-    if (!doctor) {
-      throw new NotFoundException(`No doctors found`);
-    }
-
-    return doctor;
+    return doctors;
   }
 
   //
@@ -52,16 +46,6 @@ export class DoctorsService {
     if (!doctor) {
       throw new NotFoundException(`No doctor found with user ID: ${userId}`);
     }
-
-    return doctor;
-  }
-
-  //
-  // Get the personal Doctor profile
-  //
-
-  async getMyDoctorProfile(user: GetUserDto): Promise<Doctor> {
-    const doctor = await this.getDoctorByUserId(user.id);
 
     return doctor;
   }

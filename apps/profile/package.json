@@ -34,6 +34,7 @@
     "@nestjs/platform-express": "^8.0.11",
     "@nestjs/swagger": "^5.1.0",
     "@nestjs/typeorm": "^8.0.2",
+    "@types/faker": "^5.5.9",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "faker": "^5.5.3",

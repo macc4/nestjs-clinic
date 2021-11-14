@@ -4,13 +4,10 @@ import { DoctorsService } from './doctors.service';
 import { DoctorsRepository } from './doctors.repository';
 import { SpecializationsService } from './specializations.service';
 import { Doctor } from './entities/doctor.entity';
-
-const mockDoctorsRepository = () => ({
-  getDoctorById: jest.fn(),
-  getDoctorByUserId: jest.fn(),
-});
+import { GetDoctorsQueryDto } from './dto/get-doctors-query.dto';
 
 const mockDoctor = new Doctor();
+const mockGetDoctorsQueryDto = new GetDoctorsQueryDto();
 
 describe('DoctorsService', () => {
   let doctorsService: DoctorsService;
@@ -22,7 +19,11 @@ describe('DoctorsService', () => {
         DoctorsService,
         {
           provide: DoctorsRepository,
-          useFactory: mockDoctorsRepository,
+          useValue: {
+            getDoctors: jest.fn(),
+            getDoctorById: jest.fn(),
+            getDoctorByUserId: jest.fn(),
+          },
         },
         {
           provide: SpecializationsService,
@@ -35,8 +36,20 @@ describe('DoctorsService', () => {
     doctorsRepository = module.get(DoctorsRepository);
   });
 
+  describe('calls getDoctors', () => {
+    it('returns the [data]', async () => {
+      expect.assertions(1);
+
+      doctorsRepository.getDoctors.mockResolvedValue([mockDoctor]);
+
+      const result = await doctorsService.getDoctors(mockGetDoctorsQueryDto);
+
+      expect(result).toEqual([mockDoctor]);
+    });
+  });
+
   describe('calls getDoctorById', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       doctorsRepository.getDoctorById.mockResolvedValue(mockDoctor);
@@ -46,7 +59,7 @@ describe('DoctorsService', () => {
       expect(result).toEqual(mockDoctor);
     });
 
-    it('and handles an error if no data found', async () => {
+    it('handles an error if no data found', async () => {
       expect.assertions(1);
 
       doctorsRepository.getDoctorById.mockResolvedValue(null);
@@ -58,7 +71,7 @@ describe('DoctorsService', () => {
   });
 
   describe('calls getDoctorByUserId', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       doctorsRepository.getDoctorByUserId.mockResolvedValue(mockDoctor);
@@ -70,7 +83,7 @@ describe('DoctorsService', () => {
       expect(result).toEqual(mockDoctor);
     });
 
-    it('and handles an error if no data found', async () => {
+    it('handles an error if no data found', async () => {
       expect.assertions(1);
 
       doctorsRepository.getDoctorByUserId.mockResolvedValue(null);

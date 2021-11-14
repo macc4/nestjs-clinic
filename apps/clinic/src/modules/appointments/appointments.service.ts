@@ -111,24 +111,30 @@ export class AppointmentsService {
     const appointmentsAndProfiles: GetMyAppointmentsResponseDto[] = [];
 
     appointments.forEach((appointment) => {
+      const newAppointment = { ...appointment };
+
       const doctor = profiles.find(
         (profile) => profile.userId === appointment.doctorUserId,
       );
 
-      appointment.doctorFirstName = doctor.firstName;
-      appointment.doctorLastName = doctor.lastName;
+      if (doctor) {
+        newAppointment.doctorFirstName = doctor.firstName;
+        newAppointment.doctorLastName = doctor.lastName;
+      }
 
       const patient = profiles.find(
         (profile) => profile.userId === appointment.patientUserId,
       );
 
-      appointment.patientFirstName = patient.firstName;
-      appointment.patientLastName = patient.lastName;
+      if (patient) {
+        newAppointment.patientFirstName = patient.firstName;
+        newAppointment.patientLastName = patient.lastName;
+      }
 
-      appointmentsAndProfiles.push(appointment);
+      appointmentsAndProfiles.push(newAppointment);
     });
 
-    return appointments;
+    return appointmentsAndProfiles;
   }
 
   //

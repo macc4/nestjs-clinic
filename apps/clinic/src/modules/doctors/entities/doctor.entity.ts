@@ -1,15 +1,14 @@
-import { Resolution } from '../../resolutions/entities/resolution.entity';
 import {
   Column,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Resolution } from '../../resolutions/entities/resolution.entity';
 import { Specialization } from './specialization.entity';
-import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
+import { Appointment } from '../../appointments/entities/appointment.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('doctors', { schema: 'clinic' })

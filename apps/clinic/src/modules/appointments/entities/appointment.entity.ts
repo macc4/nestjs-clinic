@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Patient } from '../../patients/entities/patient.entity';
 import { Doctor } from '../../doctors/entities/doctor.entity';
-import { Resolution } from 'src/modules/resolutions/entities/resolution.entity';
+import { Resolution } from '../../resolutions/entities/resolution.entity';
 
 @Entity('appointments', { schema: 'clinic' })
 export class Appointment {

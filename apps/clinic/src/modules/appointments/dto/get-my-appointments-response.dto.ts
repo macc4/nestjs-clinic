@@ -15,10 +15,10 @@ export class GetMyAppointmentsResponseDto {
   visitDate: string;
 
   @ApiProperty()
-  patientUserId: UUIDVersion;
+  patientUserId: UUIDVersion = '4';
 
   @ApiProperty()
-  doctorUserId: UUIDVersion;
+  doctorUserId: UUIDVersion = '4';
 
   @ApiProperty()
   patientFirstName?: string;

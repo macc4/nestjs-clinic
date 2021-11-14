@@ -4,11 +4,15 @@ import { ProfileService } from './profile.service';
 import { ProfileRepository } from './profile.repository';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { Profile } from './entities/profile.entity';
+import { GetUserDto } from '@macc4-clinic/common';
+import { PatchProfileDto } from './dto/patch-profile.dto';
 
 const mockProfile = new Profile();
 const mockCreateProfileDto = new CreateProfileDto();
+const mockGetUserDto = new GetUserDto();
+const mockPatchProfileDto = new PatchProfileDto();
 
-describe('profileService', () => {
+describe('ProfileService', () => {
   let profileService: ProfileService;
   let profileRepository: any;
 
@@ -20,8 +24,9 @@ describe('profileService', () => {
           provide: ProfileRepository,
           useValue: {
             createProfile: jest.fn(),
-            getProfileById: jest.fn(),
             getProfileByUserId: jest.fn(),
+            getBatchProfiles: jest.fn(),
+            patchPersonalProfile: jest.fn(),
           },
         },
       ],
@@ -32,7 +37,7 @@ describe('profileService', () => {
   });
 
   describe('calls createProfile', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       profileRepository.createProfile.mockResolvedValue(mockProfile);
@@ -44,28 +49,57 @@ describe('profileService', () => {
   });
 
   describe('calls getProfileByUserId', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       profileRepository.getProfileByUserId.mockResolvedValue(mockProfile);
 
-      const result = await profileService.getProfileByUserId(
-        '3a3aaf37-8efa-4f62-a62f-07adf8d5c421',
-      );
-
-      expect(result).toEqual(mockProfile);
-    });
-
-    it('and handles an error if no data found', async () => {
-      expect.assertions(1);
-
-      profileRepository.getProfileByUserId.mockResolvedValue(null);
-
       expect(
-        profileService.getProfileByUserId(
+        await profileService.getProfileByUserId(
           '3a3aaf37-8efa-4f62-a62f-07adf8d5c421',
         ),
-      ).rejects.toThrow(NotFoundException);
+      ).toEqual(mockProfile);
+    });
+  });
+
+  describe('calls getBatchProfiles', () => {
+    it('returns the [data]', async () => {
+      expect.assertions(1);
+
+      profileRepository.getBatchProfiles.mockResolvedValue([mockProfile]);
+
+      expect(
+        await profileService.getBatchProfiles([
+          '3a3aaf37-8efa-4f62-a62f-07adf8d5c421',
+        ]),
+      ).toEqual([mockProfile]);
+    });
+  });
+
+  describe('calls getPersonalProfile', () => {
+    it('returns the data', async () => {
+      expect.assertions(1);
+
+      profileRepository.getProfileByUserId.mockResolvedValue(mockProfile);
+
+      expect(await profileService.getPersonalProfile(mockGetUserDto)).toEqual(
+        mockProfile,
+      );
+    });
+  });
+
+  describe('calls patchPersonalProfile', () => {
+    it('returns the data', async () => {
+      expect.assertions(1);
+
+      profileRepository.patchPersonalProfile.mockResolvedValue(mockProfile);
+
+      expect(
+        await profileService.patchPersonalProfile(
+          mockGetUserDto,
+          mockPatchProfileDto,
+        ),
+      ).toEqual(mockProfile);
     });
   });
 });

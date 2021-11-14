@@ -36,7 +36,7 @@ describe('PatientsService', () => {
   });
 
   describe('calls createPatient', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       patientsRepository.createPatient.mockResolvedValue(mockPatient);
@@ -50,7 +50,7 @@ describe('PatientsService', () => {
   });
 
   describe('calls getPatientById', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       patientsRepository.getPatientById.mockResolvedValue(mockPatient);
@@ -60,7 +60,7 @@ describe('PatientsService', () => {
       expect(result).toEqual(mockPatient);
     });
 
-    it('and handles an error if no data found', async () => {
+    it('handles an error if no data found', async () => {
       expect.assertions(1);
 
       patientsRepository.getPatientById.mockResolvedValue(null);
@@ -72,7 +72,7 @@ describe('PatientsService', () => {
   });
 
   describe('calls getPatientByUserId', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       patientsRepository.getPatientByUserId.mockResolvedValue(mockPatient);
@@ -84,7 +84,7 @@ describe('PatientsService', () => {
       expect(result).toEqual(mockPatient);
     });
 
-    it('and handles an error if no data found', async () => {
+    it('handles an error if no data found', async () => {
       expect.assertions(1);
 
       patientsRepository.getPatientByUserId.mockResolvedValue(null);

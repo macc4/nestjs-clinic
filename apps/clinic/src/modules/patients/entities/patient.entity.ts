@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
+import { Appointment } from '../../appointments/entities/appointment.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Resolution } from '../../resolutions/entities/resolution.entity';
 

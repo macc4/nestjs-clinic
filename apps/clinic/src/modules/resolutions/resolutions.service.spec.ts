@@ -10,29 +10,17 @@ import { Patient } from '../patients/entities/patient.entity';
 import { Resolution } from './entities/resolution.entity';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { GetUserDto } from '@macc4-clinic/common';
-
-const mockResolutionsRepository = () => ({
-  createResolution: jest.fn(),
-  getResolutions: jest.fn(),
-  getMyResolutions: jest.fn(),
-  getResolutionById: jest.fn(),
-  deleteResolutionById: jest.fn(),
-});
-
-const mockPatientsService = () => ({
-  getPatientById: jest.fn(),
-});
-
-const mockDoctorsService = () => ({
-  getDoctorById: jest.fn(),
-  getDoctorByUserId: jest.fn(),
-});
+import { Appointment } from '../appointments/entities/appointment.entity';
+import { AppointmentsService } from '../appointments/appointments.service';
+import { PatchResolutionDto } from './dto/patch-resolution.dto';
 
 const mockPatient = new Patient();
 const mockDoctor = new Doctor();
 const mockResolution = new Resolution();
+const mockAppointment = new Appointment();
 
 const mockCreateResolutionDto = new CreateResolutionDto();
+const mockPatchResolutionDto = new PatchResolutionDto();
 const mockGetUserDto = new GetUserDto();
 
 describe('ResolutionsService', () => {
@@ -40,6 +28,7 @@ describe('ResolutionsService', () => {
   let patientsService: any;
   let doctorsService: any;
   let resolutionsRepository: any;
+  let appointmentsService: any;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -47,15 +36,26 @@ describe('ResolutionsService', () => {
         ResolutionsService,
         {
           provide: ResolutionsRepository,
-          useFactory: mockResolutionsRepository,
+          useValue: {
+            createResolution: jest.fn(),
+            getResolutions: jest.fn(),
+            getMyResolutions: jest.fn(),
+            getResolutionById: jest.fn(),
+            patchResolutionById: jest.fn(),
+            deleteResolutionById: jest.fn(),
+          },
         },
         {
           provide: PatientsService,
-          useFactory: mockPatientsService,
+          useValue: { getPatientById: jest.fn() },
         },
         {
           provide: DoctorsService,
-          useFactory: mockDoctorsService,
+          useValue: { getDoctorById: jest.fn(), getDoctorByUserId: jest.fn() },
+        },
+        {
+          provide: AppointmentsService,
+          useValue: { getAppointmentById: jest.fn() },
         },
       ],
     }).compile();
@@ -64,21 +64,24 @@ describe('ResolutionsService', () => {
     patientsService = module.get(PatientsService);
     doctorsService = module.get(DoctorsService);
     resolutionsRepository = module.get(ResolutionsRepository);
+    appointmentsService = module.get(AppointmentsService);
   });
 
   describe('calls createResolution', () => {
-    it('and returns the data', async () => {
-      expect.assertions(4);
+    it('returns the data', async () => {
+      expect.assertions(5);
 
       resolutionsRepository.createResolution.mockResolvedValue(mockResolution);
       patientsService.getPatientById.mockResolvedValue(mockPatient);
       doctorsService.getDoctorByUserId.mockResolvedValue(mockDoctor);
+      appointmentsService.getAppointmentById.mockResolvedValue(mockAppointment);
 
-      const result = await resolutionsService.createResolution(
-        mockCreateResolutionDto,
-        mockGetUserDto,
-      );
-
+      expect(
+        await resolutionsService.createResolution(
+          mockGetUserDto,
+          mockCreateResolutionDto,
+        ),
+      ).toEqual(mockResolution);
       expect(patientsService.getPatientById).toBeCalledWith(
         mockCreateResolutionDto.patientId,
       );
@@ -89,90 +92,114 @@ describe('ResolutionsService', () => {
         mockCreateResolutionDto,
         mockPatient,
         mockDoctor,
+        mockAppointment,
       );
-
-      expect(result).toEqual(mockResolution);
+      expect(appointmentsService.getAppointmentById).toBeCalledWith(
+        mockCreateResolutionDto.appointmentId,
+      );
     });
   });
 
   describe('calls getResolutions', () => {
-    it('and returns the [data] without filters', async () => {
+    it('returns the [data] without filters', async () => {
       expect.assertions(1);
 
       resolutionsRepository.getResolutions.mockResolvedValue([mockResolution]);
 
-      const result = await resolutionsService.getResolutions(null);
-
-      expect(result).toEqual([mockResolution]);
+      expect(await resolutionsService.getResolutions(null)).toEqual([
+        mockResolution,
+      ]);
     });
-    it('and returns the [data] with filters', async () => {
+    it('returns the [data] with filters', async () => {
       expect.assertions(1);
 
       resolutionsRepository.getResolutions.mockResolvedValue([mockResolution]);
 
-      const result = await resolutionsService.getResolutions(
-        new GetResolutionsFilterDto(),
-      );
-
-      expect(result).toEqual([mockResolution]);
+      expect(
+        await resolutionsService.getResolutions(new GetResolutionsFilterDto()),
+      ).toEqual([mockResolution]);
     });
   });
 
   describe('calls getMyResolutions', () => {
-    it('and returns the [data]', async () => {
+    it('returns the [data]', async () => {
       expect.assertions(1);
 
       resolutionsRepository.getMyResolutions.mockResolvedValue([
         mockResolution,
       ]);
 
-      const result = await resolutionsService.getMyResolutions(mockGetUserDto);
-
-      expect(result).toEqual([mockResolution]);
+      expect(await resolutionsService.getMyResolutions(mockGetUserDto)).toEqual(
+        [mockResolution],
+      );
     });
   });
 
   describe('calls getResolutionById', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       resolutionsRepository.getResolutionById.mockResolvedValue(mockResolution);
 
-      const result = await resolutionsService.getResolutionById(1);
-
-      expect(result).toEqual(mockResolution);
+      expect(await resolutionsService.getResolutionById(1)).toEqual(
+        mockResolution,
+      );
     });
 
-    it('and handles an error if no data found', async () => {
+    it('handles an error if no data found', async () => {
       expect.assertions(1);
 
       resolutionsRepository.getResolutionById.mockResolvedValue(null);
 
-      expect(resolutionsService.getResolutionById(1)).rejects.toThrow(
+      await expect(resolutionsService.getResolutionById(1)).rejects.toThrow(
         NotFoundException,
       );
     });
   });
 
+  describe('calls patchResolutionById', () => {
+    it('returns the data', async () => {
+      expect.assertions(1);
+
+      resolutionsRepository.patchResolutionById.mockResolvedValue(
+        mockResolution,
+      );
+
+      expect(
+        await resolutionsService.patchResolutionById(1, mockPatchResolutionDto),
+      ).toEqual(mockResolution);
+    });
+
+    it('handles an error if no data found', async () => {
+      expect.assertions(1);
+
+      resolutionsRepository.patchResolutionById.mockResolvedValue(undefined);
+
+      await expect(
+        resolutionsService.patchResolutionById(1, mockPatchResolutionDto),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
   describe('calls deleteResolutionById', () => {
-    it('and returns nothing', async () => {
+    it('returns nothing', async () => {
       expect.assertions(1);
 
       resolutionsRepository.deleteResolutionById.mockResolvedValue(
         mockResolution,
       );
 
-      const result = await resolutionsService.deleteResolutionById(1);
-
-      expect(result).toEqual(undefined);
+      expect(await resolutionsService.deleteResolutionById(1)).toEqual(
+        undefined,
+      );
     });
 
-    it('and handles an error if no data found', async () => {
+    it('handles an error if no data found', async () => {
       expect.assertions(1);
 
       resolutionsRepository.deleteResolutionById.mockResolvedValue(null);
 
-      expect(resolutionsService.deleteResolutionById(1)).rejects.toThrow(
+      await expect(resolutionsService.deleteResolutionById(1)).rejects.toThrow(
         NotFoundException,
       );
     });

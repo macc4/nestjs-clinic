@@ -68,22 +68,6 @@ export class DoctorsController {
   }
 
   //
-  // Get the personal Doctor profile
-  //
-
-  @Get('me')
-  @UseGuards(RolesGuard)
-  @Roles(UserRole.DOCTOR)
-  @ApiOperation({ summary: 'Get the personal Doctors profile' })
-  @ApiOkResponse({
-    description: 'Returns the Doctor data',
-    type: Doctor,
-  })
-  getMyDoctorProfile(@GetUser() user: GetUserDto): Promise<Doctor> {
-    return this.doctorsService.getMyDoctorProfile(user);
-  }
-
-  //
   // Get Doctor by id
   //
 

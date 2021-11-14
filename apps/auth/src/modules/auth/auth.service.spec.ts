@@ -54,7 +54,7 @@ describe('AuthService', () => {
   });
 
   describe('calls signUp', () => {
-    it('and returns the token', async () => {
+    it('returns the token', async () => {
       expect.assertions(3);
 
       usersService.getUserByEmail.mockResolvedValue(undefined);
@@ -89,7 +89,7 @@ describe('AuthService', () => {
   });
 
   describe('calls signIn', () => {
-    it('and returns the token', async () => {
+    it('returns the token', async () => {
       expect.assertions(2);
 
       usersService.getUserByEmail.mockResolvedValue(mockUser);
@@ -121,7 +121,7 @@ describe('AuthService', () => {
   });
 
   describe('calls changePassword', () => {
-    it('and returns nothing if successful', async () => {
+    it('returns nothing if successful', async () => {
       expect.assertions(4);
 
       usersService.getUserById.mockResolvedValue(mockUser);
