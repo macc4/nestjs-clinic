@@ -3,46 +3,76 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class SeedSpecializations1635500010500 implements MigrationInterface {
   name = 'SeedSpecializations1635500010500';
 
-  public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+  private specializations = [
+    'allergist',
+    'anesthesiologist',
+    'cardiologist',
+    'dermatologist',
+    'endocrinologist',
+    'gastroenterologist',
+    'hematologist',
+    'nephrologist',
+    'obstetrician',
+    'gynecologist',
+    'oncologist',
+    'ophtalmologist',
+    'ostheopath',
+    'otolaryngologist',
+    'pediatrician',
+    'podiatrist',
+    'psychiatrist',
+    'radiologist',
+    'surgeon',
+    'urologist',
+  ];
+
+  private wrapTransactionQuery(query: string): string {
+    const returnQuery = `
     BEGIN;
+    ${query}
+    COMMIT;`;
 
-    INSERT INTO clinic.specializations (id, title) 
-    VALUES 
-      ('1', 'dermatoligst');
+    return returnQuery;
+  }
 
-    INSERT INTO clinic.specializations (id, title) 
+  private createOneUpQuery(number: number): string {
+    const query = `
+    INSERT INTO clinic.specializations (title) 
     VALUES 
-      ('2', 'psychiatrist');
-      
-    INSERT INTO clinic.specializations (id, title) 
-    VALUES 
-      ('3', 'traumatologist');
-        
-    COMMIT;
-    `);
+      ('${this.specializations[number]}');
+    `;
+
+    return query;
+  }
+
+  private createOneDownQuery(number: number): string {
+    const query = `
+    DELETE FROM
+      clinic.specializations
+    WHERE
+      title = '${this.specializations[number]}';
+    `;
+
+    return query;
+  }
+
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    let query = '';
+
+    for (let i = 0; i < this.specializations.length; i++) {
+      query += this.createOneUpQuery(i);
+    }
+
+    await queryRunner.query(this.wrapTransactionQuery(query));
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
-    BEGIN; 
+    let query = '';
 
-    DELETE FROM
-      clinic.specializations
-    WHERE
-      id = 3;
+    for (let i = 0; i < this.specializations.length; i++) {
+      query += this.createOneDownQuery(i);
+    }
 
-    DELETE FROM
-      clinic.specializations
-    WHERE
-      id = 2;
-
-    DELETE FROM
-      clinic.specializations
-    WHERE
-      id = 1;
-
-    COMMIT;
-    `);
+    await queryRunner.query(this.wrapTransactionQuery(query));
   }
 }

@@ -15,7 +15,7 @@ export class DoctorsAppointmentsService {
   ) {}
 
   //
-  // Get apopintments by doctorId
+  // Get Appointments by doctorId (and optional date)
   //
 
   async getAppointmentsByDoctorId(
@@ -31,7 +31,7 @@ export class DoctorsAppointmentsService {
   }
 
   //
-  // Get apopintments by doctorId
+  // Get free Appointment slots by doctorId and date
   //
 
   async getFreeAppointmentsByDoctorId(

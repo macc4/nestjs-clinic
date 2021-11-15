@@ -1,17 +1,8 @@
 import { doctorUUIDs } from '@macc4-clinic/common';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class SeedDoctorUsers1635500010500 implements MigrationInterface {
-  name = 'SeedDoctorUsers1635500010500';
-
-  private wrapTransactionQuery(query: string): string {
-    const returnQuery = `
-    BEGIN;
-    ${query}
-    COMMIT;`;
-
-    return returnQuery;
-  }
+export class SeedDoctorUsers1635500010501 implements MigrationInterface {
+  name = 'SeedDoctorUsers1635500010501';
 
   private createOneUpQuery(number: number): string {
     const query = `
@@ -48,20 +39,20 @@ export class SeedDoctorUsers1635500010500 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     let query = '';
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < doctorUUIDs.length; i++) {
       query += this.createOneUpQuery(i);
     }
 
-    await queryRunner.query(this.wrapTransactionQuery(query));
+    await queryRunner.query(query);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     let query = '';
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < doctorUUIDs.length; i++) {
       query += this.createOneDownQuery(i);
     }
 
-    await queryRunner.query(this.wrapTransactionQuery(query));
+    await queryRunner.query(query);
   }
 }

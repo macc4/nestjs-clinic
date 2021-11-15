@@ -20,11 +20,19 @@ export class PatientsRepository extends Repository<Patient> {
   async createPatient(createPatientDto: CreatePatientDto): Promise<Patient> {
     const { userId } = createPatientDto;
 
-    const patient = this.create({
-      userId: userId,
-    });
+    const query = `
+    INSERT INTO clinic.patients (user_id)
+    VALUES ('${userId}')
+    RETURNING id, user_id;
+    `;
 
-    await this.save(patient);
+    const [patient] = await this.pool.query(query);
+
+    // const patient = this.create({
+    //   userId: userId,
+    // });
+
+    // await this.save(patient);
 
     return patient;
   }

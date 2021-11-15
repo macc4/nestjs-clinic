@@ -50,7 +50,7 @@ export class SeedDoctorProfiles1635500010500 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     let query = '';
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < doctorUUIDs.length; i++) {
       query += this.createOneUpQuery(i);
     }
 
@@ -60,7 +60,7 @@ export class SeedDoctorProfiles1635500010500 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     let query = '';
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < doctorUUIDs.length; i++) {
       query += this.createOneDownQuery(i);
     }
 

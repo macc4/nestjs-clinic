@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { GetUserDto, UserRole } from '@macc4-clinic/common';
+import { GetUserDto, patientUUIDs, UserRole } from '@macc4-clinic/common';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { UsersService } from '../users/users.service';
@@ -67,7 +67,6 @@ export class AuthService {
     try {
       user = await this.usersService.getUserByEmail(email);
     } catch (error) {
-      console.log(error);
       if (error.status === 404) {
         throw new IncorrectEmailOrPassException();
       } else {

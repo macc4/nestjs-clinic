@@ -599,10 +599,10 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@macc4-clinic/common@^1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@macc4-clinic/common/-/common-1.0.12.tgz#e64b6e3975a04e85bb02d27937fa5db631877a01"
-  integrity sha512-93nQk+usdD936v1Y3cFwzWxl78hoz52L6c537Nf5Skv7WXS34uzzWfYN8cmzW62t5wROh3vvUXNMkVq22W7EAQ==
+"@macc4-clinic/common@^1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@macc4-clinic/common/-/common-1.0.13.tgz#dc6f9d5cbd8ae679648e82046456d9f8c44b049a"
+  integrity sha512-AeI1I/Kck5FaEepVqlnkAEtR+3/I3sz6YpeWwpa+zRY/FB/wHkZNGlEgtxN9EBoWTrnE+lwj3IaSdBK+Jlrlgg==
   dependencies:
     "@nestjs/common" "^8.0.0"
     "@nestjs/config" "^1.0.3"

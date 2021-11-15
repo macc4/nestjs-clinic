@@ -25,7 +25,7 @@ export class SeedDoctors1635500010501 implements MigrationInterface {
 
     INSERT INTO clinic.doctor_specializations (doctor_id, specialization_id) 
     VALUES 
-      ('${number + 1}', '${this.getRandomInt(3) + 1}');
+      ('${number + 1}', '${this.getRandomInt(20) + 1}');
     `;
 
     return query;
@@ -50,7 +50,7 @@ export class SeedDoctors1635500010501 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     let query = '';
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < doctorUUIDs.length; i++) {
       query += this.createOneUpQuery(i);
     }
 
@@ -60,7 +60,7 @@ export class SeedDoctors1635500010501 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     let query = '';
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < doctorUUIDs.length; i++) {
       query += this.createOneDownQuery(i);
     }
 

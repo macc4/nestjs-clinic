@@ -90,7 +90,7 @@ export class AppointmentsRepository extends Repository<Appointment> {
     `;
 
     const [appointments] = (await this.pool.query(query)).map((appointment) =>
-      snakeToCamel(appointments),
+      snakeToCamel(appointment),
     );
 
     return appointments;
