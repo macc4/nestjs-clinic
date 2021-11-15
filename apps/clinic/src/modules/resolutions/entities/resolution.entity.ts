@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Doctor } from '../../doctors/entities/doctor.entity';
 import {
   Column,
   Entity,
@@ -8,8 +7,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Doctor } from '../../doctors/entities/doctor.entity';
 import { Patient } from '../../patients/entities/patient.entity';
-import { Appointment } from 'src/modules/appointments/entities/appointment.entity';
+import { Appointment } from '../../appointments/entities/appointment.entity';
 
 @Entity('resolutions', { schema: 'clinic' })
 export class Resolution {

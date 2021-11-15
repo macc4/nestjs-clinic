@@ -1,4 +1,5 @@
 import {
+  IsDateString,
   IsEmail,
   IsEnum,
   IsString,
@@ -25,13 +26,19 @@ export class SignUpDto {
   @IsString()
   @MinLength(2)
   @MaxLength(24)
-  readonly name: string;
+  readonly firstName: string;
+
+  @ApiProperty()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(24)
+  readonly lastName: string;
 
   @ApiProperty()
   @IsEnum(UserGender)
   readonly gender: UserGender;
 
-  // @ApiProperty()
-  // @IsDateString()
-  // birthDate: string;
+  @ApiProperty()
+  @IsDateString()
+  birthDate: Date;
 }

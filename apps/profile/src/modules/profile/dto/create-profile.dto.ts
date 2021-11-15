@@ -1,6 +1,6 @@
 import { UserGender } from '@macc4-clinic/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateProfileDto {
   @ApiProperty()
@@ -11,10 +11,20 @@ export class CreateProfileDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  name: string;
+  firstName: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  lastName: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsEnum(UserGender)
   gender: UserGender;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsDateString()
+  birthDate: Date;
 }

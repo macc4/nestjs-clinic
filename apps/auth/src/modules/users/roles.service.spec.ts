@@ -29,7 +29,7 @@ describe('RolesService', () => {
   });
 
   describe('calls getRoleByTitle', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       rolesRepository.getRoleByTitle.mockResolvedValue(mockRole);

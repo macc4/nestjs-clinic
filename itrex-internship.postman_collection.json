@@ -18,7 +18,11 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.environment.set(\"jwt\", pm.response.json().token);"
+											"pm.environment.set(\"jwt\", pm.response.json().token);",
+											"",
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(409 || 201)",
+											"})"
 										],
 										"type": "text/javascript"
 									}
@@ -41,13 +45,23 @@
 											"type": "text"
 										},
 										{
-											"key": "name",
-											"value": "test",
+											"key": "firstName",
+											"value": "Aleksei",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Leonenko",
 											"type": "text"
 										},
 										{
 											"key": "gender",
 											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1998-02-10T02:15:00.000Z",
 											"type": "text"
 										}
 									]
@@ -73,7 +87,11 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.environment.set(\"jwt\", pm.response.json().token);"
+											"pm.environment.set(\"jwt\", pm.response.json().token);",
+											"",
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(201)",
+											"})"
 										],
 										"type": "text/javascript"
 									}
@@ -118,7 +136,11 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.environment.set(\"jwt\", pm.response.json().token);"
+											"pm.environment.set(\"jwt\", pm.response.json().token);",
+											"",
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(201)",
+											"})"
 										],
 										"type": "text/javascript"
 									}
@@ -158,6 +180,19 @@
 						},
 						{
 							"name": "Change Password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(201)",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -209,6 +244,35 @@
 						{
 							"name": "Doctors",
 							"item": [
+								{
+									"name": "Specializations",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/doctors/specializations",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"doctors",
+												"specializations"
+											]
+										}
+									},
+									"response": []
+								},
 								{
 									"name": "Doctors",
 									"request": {
@@ -273,35 +337,6 @@
 									"response": []
 								},
 								{
-									"name": "Specializations",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{jwt}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{URL}}:{{clinic_port}}/doctors/specializations",
-											"host": [
-												"{{URL}}"
-											],
-											"port": "{{clinic_port}}",
-											"path": [
-												"doctors",
-												"specializations"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Doctor By Id",
 									"request": {
 										"auth": {
@@ -335,79 +370,12 @@
 										}
 									},
 									"response": []
-								},
-								{
-									"name": "Personal Doctor Profile",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{jwt}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{URL}}:{{clinic_port}}/doctors/me",
-											"host": [
-												"{{URL}}"
-											],
-											"port": "{{clinic_port}}",
-											"path": [
-												"doctors",
-												"me"
-											]
-										}
-									},
-									"response": []
 								}
 							]
 						},
 						{
 							"name": "Patients",
 							"item": [
-								{
-									"name": "Patient",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{jwt}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": [
-												{
-													"key": "userId",
-													"value": "testssssd",
-													"type": "text"
-												}
-											]
-										},
-										"url": {
-											"raw": "{{URL}}:{{clinic_port}}/patients",
-											"host": [
-												"{{URL}}"
-											],
-											"port": "{{clinic_port}}",
-											"path": [
-												"patients"
-											]
-										}
-									},
-									"response": []
-								},
 								{
 									"name": "Patient by Id",
 									"request": {
@@ -479,12 +447,12 @@
 												},
 												{
 													"key": "visitDate",
-													"value": "2021-11-06 12:00",
+													"value": "2021-11-15 15:00",
 													"type": "text"
 												},
 												{
 													"key": "doctorId",
-													"value": "3",
+													"value": "1",
 													"type": "text"
 												}
 											]
@@ -677,115 +645,6 @@
 									"response": []
 								},
 								{
-									"name": "Resolution by Id",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{jwt}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "PATCH",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": [
-												{
-													"key": "text",
-													"value": "Updated Resolution",
-													"type": "text"
-												}
-											]
-										},
-										"url": {
-											"raw": "{{URL}}:{{clinic_port}}/resolutions/:id",
-											"host": [
-												"{{URL}}"
-											],
-											"port": "{{clinic_port}}",
-											"path": [
-												"resolutions",
-												":id"
-											],
-											"variable": [
-												{
-													"key": "id",
-													"value": "1"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Resolution by Id",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{jwt}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{URL}}:{{clinic_port}}/resolutions/:id",
-											"host": [
-												"{{URL}}"
-											],
-											"port": "{{clinic_port}}",
-											"path": [
-												"resolutions",
-												":id"
-											],
-											"variable": [
-												{
-													"key": "id",
-													"value": "1"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "My Resolutions",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{jwt}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{URL}}:{{clinic_port}}/resolutions/me",
-											"host": [
-												"{{URL}}"
-											],
-											"port": "{{clinic_port}}",
-											"path": [
-												"resolutions",
-												"me"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Resolutions",
 									"request": {
 										"auth": {
@@ -864,6 +723,70 @@
 												}
 											]
 										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions/:id",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "My Resolutions",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions/me",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions",
+												"me"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Resolution by Id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -880,6 +803,51 @@
 												{
 													"key": "id",
 													"value": "3"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Resolution by Id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "text",
+													"value": "Updated Resolution",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions/:id",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
 												}
 											]
 										}
@@ -1109,7 +1077,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{URL}}:{{clinic_port}}/doctors/:id/appointments?date=2021-11-15 10:00",
+											"raw": "{{URL}}:{{clinic_port}}/doctors/:id/appointments?date=2021-11-15 12:00",
 											"host": [
 												"{{URL}}"
 											],
@@ -1122,7 +1090,7 @@
 											"query": [
 												{
 													"key": "date",
-													"value": "2021-11-15 10:00"
+													"value": "2021-11-15 12:00"
 												}
 											],
 											"variable": [
@@ -1186,35 +1154,20 @@
 					"name": "Profiles",
 					"item": [
 						{
-							"name": "Batch Profiles",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{profile_port}}/profiles/batch?userIds=[\"21ed452e-b3da-47d6-bd0c-8abea993cf0b\",\"abd9a3f6-acd5-450a-9961-3ffba92f20e6\"]\n",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{profile_port}}",
-									"path": [
-										"profiles",
-										"batch"
-									],
-									"query": [
-										{
-											"key": "userIds",
-											"value": "[\"21ed452e-b3da-47d6-bd0c-8abea993cf0b\",\"abd9a3f6-acd5-450a-9961-3ffba92f20e6\"]\n"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Personal Profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(200)",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -1242,13 +1195,13 @@
 									]
 								},
 								"url": {
-									"raw": "{{URL}}:{{profile_port}}/profiles/me",
+									"raw": "{{URL}}:{{profile_port}}/profile/me",
 									"host": [
 										"{{URL}}"
 									],
 									"port": "{{profile_port}}",
 									"path": [
-										"profiles",
+										"profile",
 										"me"
 									]
 								}
@@ -1257,7 +1210,30 @@
 						},
 						{
 							"name": "Personal Profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(200)",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "PATCH",
 								"header": [],
 								"body": {
@@ -1265,19 +1241,19 @@
 									"urlencoded": [
 										{
 											"key": "name",
-											"value": "Test 5",
+											"value": "Aleksei Leonenko",
 											"type": "text"
 										}
 									]
 								},
 								"url": {
-									"raw": "{{URL}}:{{profile_port}}/profiles/me",
+									"raw": "{{URL}}:{{profile_port}}/profile/me",
 									"host": [
 										"{{URL}}"
 									],
 									"port": "{{profile_port}}",
 									"path": [
-										"profiles",
+										"profile",
 										"me"
 									]
 								}

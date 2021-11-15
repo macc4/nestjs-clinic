@@ -10,8 +10,10 @@ service ProfileGRPCService{
 
 message CreateProfileDto {
   string userId = 1;
-  string name = 2;
-  string gender = 3;
+  string firstName = 2;
+  string lastName = 3;
+  string gender = 4;
+  string birthDate = 5;
 }
 
 message UserId {
@@ -24,9 +26,11 @@ message UserIds {
 
 message Profile {
   int32 id = 1;
-  string name = 2;
-  string gender = 3;
-  string userId = 4;
+  string userId = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string gender = 5;
+  string birthDate = 6;
 }
 
 message ProfilesArray {

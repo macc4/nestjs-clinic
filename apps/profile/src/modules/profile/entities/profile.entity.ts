@@ -11,12 +11,19 @@ export class Profile {
   })
   id: number;
 
-  @Column()
+  @Column({ name: 'first_name' })
   @ApiProperty({
-    example: 'Natasha Yelin Chang',
-    description: 'Name of the user',
+    example: 'Natasha',
+    description: 'First name of the user',
   })
-  name: string;
+  firstName: string;
+
+  @Column({ name: 'last_name' })
+  @ApiProperty({
+    example: 'Yelin Chang',
+    description: 'Last name of the user',
+  })
+  lastName: string;
 
   @Column()
   @ApiProperty({
@@ -25,6 +32,13 @@ export class Profile {
     enum: UserGender,
   })
   gender: UserGender;
+
+  @Column({ name: 'birth_date' })
+  @ApiProperty({
+    example: '2000-01-09T00:00:00.000Z',
+    description: 'Birth date of the user',
+  })
+  birthDate: Date;
 
   @Column({ name: 'user_id', unique: true })
   @ApiProperty({

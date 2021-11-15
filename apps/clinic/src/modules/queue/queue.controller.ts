@@ -46,7 +46,7 @@ export class QueueController {
   })
   @ApiCreatedResponse({
     description:
-      'Adds personal patient ID in the redis queue and returns the current position',
+      'Adds personal patient ID in the redis queue returns the current position',
   })
   enqueueAsPatient(
     @Param('id', ParseIntPipe) id: number,

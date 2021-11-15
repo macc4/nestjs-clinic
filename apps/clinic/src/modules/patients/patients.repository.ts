@@ -26,7 +26,7 @@ export class PatientsRepository extends Repository<Patient> {
 
     await this.save(patient);
 
-    return snakeToCamel(patient);
+    return patient;
   }
 
   //
@@ -36,7 +36,7 @@ export class PatientsRepository extends Repository<Patient> {
   async getPatientById(id: number): Promise<Patient> {
     const patient = await this.findOne(id);
 
-    return snakeToCamel(patient);
+    return patient;
   }
 
   //

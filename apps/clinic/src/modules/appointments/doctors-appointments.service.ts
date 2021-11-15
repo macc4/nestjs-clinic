@@ -1,7 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorsService } from '../doctors/doctors.service';
-import { PatientsService } from '../patients/patients.service';
 import { DoctorsAppointmentsRepository } from './doctors-appointments.repository';
 import { GetDoctorsAppointmentsQueryDto } from './dto/get-doctors-appointments-query.dto';
 import { Appointment } from './entities/appointment.entity';
@@ -12,7 +11,6 @@ export class DoctorsAppointmentsService {
   constructor(
     @InjectRepository(DoctorsAppointmentsRepository)
     private doctorsAppointmentsRepository: DoctorsAppointmentsRepository,
-    private patientsService: PatientsService,
     private doctorsService: DoctorsService,
   ) {}
 
@@ -38,15 +36,17 @@ export class DoctorsAppointmentsService {
 
   async getFreeAppointmentsByDoctorId(
     id: number,
-    date: string,
+    date: Date,
   ): Promise<number[]> {
     await this.doctorsService.getDoctorById(id);
+
+    const appointmentDay = date.toISOString().split('T')[0];
 
     const freeSlots = [];
 
     const appointments =
       await this.doctorsAppointmentsRepository.getAppointmentsByDoctorId(id, {
-        date,
+        date: appointmentDay,
       });
 
     const occupiedSlots = appointments.map((appointment) =>
@@ -59,7 +59,9 @@ export class DoctorsAppointmentsService {
       hour += WORKING_HOURS.step
     ) {
       if (!occupiedSlots.includes(hour)) {
-        freeSlots.push(hour);
+        freeSlots.push(
+          new Date(appointments[0].visitDate.setHours(hour)).toISOString(),
+        );
       }
     }
 

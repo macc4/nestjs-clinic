@@ -20,12 +20,14 @@ export class ProfileRepository extends Repository<Profile> {
   //
 
   async createProfile(createProfileDto: CreateProfileDto): Promise<Profile> {
-    const { name, gender, userId } = createProfileDto;
+    const { firstName, lastName, gender, birthDate, userId } = createProfileDto;
 
     const profile = this.create({
-      name,
+      firstName,
+      lastName,
       gender,
-      userId: userId,
+      birthDate,
+      userId,
     });
 
     await this.save(profile);
@@ -68,10 +70,11 @@ export class ProfileRepository extends Repository<Profile> {
     user: GetUserDto,
     patchProfileDto: PatchProfileDto,
   ): Promise<Profile> {
-    const { name } = patchProfileDto;
+    const { firstName, lastName } = patchProfileDto;
 
     const profile = await this.findOne({ userId: user.id });
-    profile.name = name;
+    profile.firstName = firstName;
+    profile.lastName = lastName;
 
     this.save(profile);
 

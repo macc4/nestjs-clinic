@@ -599,10 +599,10 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@macc4-clinic/common@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@macc4-clinic/common/-/common-1.0.11.tgz#2503e4d4bbc7bf0fcd16ff392a83e5a99df025a9"
-  integrity sha512-adadeWQ+sOeDf+cWa5JUKEcZSLFuWpoG0HaPApJEJNXm7ghQf9WFEh0DEw69mR6e9WBq2co2tRHbLmDSbwEzXg==
+"@macc4-clinic/common@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@macc4-clinic/common/-/common-1.0.12.tgz#e64b6e3975a04e85bb02d27937fa5db631877a01"
+  integrity sha512-93nQk+usdD936v1Y3cFwzWxl78hoz52L6c537Nf5Skv7WXS34uzzWfYN8cmzW62t5wROh3vvUXNMkVq22W7EAQ==
   dependencies:
     "@nestjs/common" "^8.0.0"
     "@nestjs/config" "^1.0.3"
@@ -1004,6 +1004,11 @@
     "@types/express-serve-static-core" "^4.17.18"
     "@types/qs" "*"
     "@types/serve-static" "*"
+
+"@types/faker@^5.5.9":
+  version "5.5.9"
+  resolved "https://registry.yarnpkg.com/@types/faker/-/faker-5.5.9.tgz#588ede92186dc557bff8341d294335d50d255f0c"
+  integrity sha512-uCx6mP3UY5SIO14XlspxsGjgaemrxpssJI0Ol+GfhxtcKpv9pgRZYsS4eeKeHVLje6Qtc8lGszuBI461+gVZBA==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
@@ -2644,6 +2649,11 @@ external-editor@^3.0.3:
     chardet "^0.7.0"
     iconv-lite "^0.4.24"
     tmp "^0.0.33"
+
+faker@^5.5.3:
+  version "5.5.3"
+  resolved "https://registry.yarnpkg.com/faker/-/faker-5.5.3.tgz#c57974ee484431b25205c2c8dc09fda861e51e0e"
+  integrity sha512-wLTv2a28wjUyWkbnX7u/ABZBkUkIF2fCd73V6P2oFqEGEktDfzWx4UxrSqtPRw0xPRAcjeAOIiJWqZm3pP4u3g==
 
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"

@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -17,7 +16,7 @@ import {
 import { DoctorsAppointmentsService } from './doctors-appointments.service';
 import { GetDoctorsAppointmentsQueryDto } from './dto/get-doctors-appointments-query.dto';
 import { Appointment } from './entities/appointment.entity';
-import { FreeAppointmentsDateValidationPipe } from './utils/free-appointments-date-validation.pipe';
+import { ParseDatePipe } from './utils/parse-date.pipe';
 
 @Controller()
 @ApiTags('appointments')
@@ -62,7 +61,7 @@ export class DoctorsAppointmentsController {
   })
   getFreeAppointmentsByDoctorId(
     @Param('doctorId', ParseIntPipe) doctorId: number,
-    @Query('date', FreeAppointmentsDateValidationPipe) date: string,
+    @Query('date', ParseDatePipe) date: Date,
   ): Promise<number[]> {
     return this.doctorsAppointmentsService.getFreeAppointmentsByDoctorId(
       doctorId,
