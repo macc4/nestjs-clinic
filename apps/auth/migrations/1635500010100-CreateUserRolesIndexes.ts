@@ -7,8 +7,8 @@ export class CreateUserRolesIndexes1635500010100 implements MigrationInterface {
     await queryRunner.query(`
     BEGIN;
 
-    CREATE INDEX IDX_user_roles_user_id_idx ON auth.user_roles (user_id);
-    CREATE INDEX IDX_user_roles_role_id_idx ON auth.user_roles (role_id);
+    CREATE INDEX IDX_user_roles_user_id ON auth.user_roles (user_id);
+    CREATE INDEX IDX_user_roles_role_id ON auth.user_roles (role_id);
 
     COMMIT;
     `);
@@ -18,8 +18,8 @@ export class CreateUserRolesIndexes1635500010100 implements MigrationInterface {
     await queryRunner.query(`
     BEGIN;
 
-    DROP INDEX auth.IDX_user_roles_role_id_idx;
-    DROP INDEX auth.IDX_user_roles_user_id_idx;
+    DROP INDEX auth.IDX_user_roles_role_id;
+    DROP INDEX auth.IDX_user_roles_user_id;
 
     COMMIT;
     `);

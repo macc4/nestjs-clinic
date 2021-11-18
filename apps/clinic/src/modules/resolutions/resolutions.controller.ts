@@ -84,7 +84,7 @@ export class ResolutionsController {
   //
 
   @Get('me')
-  @Roles(UserRole.PATIENT)
+  // @Roles(UserRole.PATIENT)
   @ApiOperation({ summary: 'Get personal Resolutions' })
   @ApiBearerAuth()
   @ApiOkResponse({

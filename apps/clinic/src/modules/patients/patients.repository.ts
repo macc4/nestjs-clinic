@@ -13,6 +13,7 @@ export class PatientsRepository extends Repository<Patient> {
   constructor(private readonly pool: EntityManager = getManager()) {
     super();
   }
+
   //
   // Create a new patient
   //
@@ -27,12 +28,6 @@ export class PatientsRepository extends Repository<Patient> {
     `;
 
     const [patient] = await this.pool.query(query);
-
-    // const patient = this.create({
-    //   userId: userId,
-    // });
-
-    // await this.save(patient);
 
     return patient;
   }
