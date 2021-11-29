@@ -37,7 +37,7 @@
     "@nestjs/typeorm": "^8.0.2",
     "@types/faker": "^5.5.9",
     "bcrypt": "^5.0.1",
-    "class-transformer": "^0.4.0",
+    "class-transformer": "<=0.4.0",
     "class-validator": "^0.13.1",
     "faker": "^5.5.3",
     "joi": "^17.4.2",
