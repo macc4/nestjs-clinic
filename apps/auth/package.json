@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "yarn prebuild && nest build",
+    "build": "nest build",
     "start": "nest start",
     "start:dev": "yarn prebuild && nest start --watch",
     "start:debug": "yarn prebuild && nest start --debug --watch",

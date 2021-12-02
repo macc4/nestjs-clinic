@@ -5,6 +5,7 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
 import { ProfileRepository } from './profile.repository';
+import { sendFile } from './utils/send-file.s3';
 
 Injectable();
 export class ProfileService {
@@ -61,8 +62,13 @@ export class ProfileService {
 
   async patchPersonalProfile(
     user: GetUserDto,
+    image: Express.Multer.File,
     patchProfileDto: PatchProfileDto,
   ): Promise<Profile> {
+    const returnedImage = await sendFile(image, user.id);
+
+    patchProfileDto.avatarUrl = returnedImage.Location;
+
     const profile = await this.profileRepository.patchPersonalProfile(
       user,
       patchProfileDto,

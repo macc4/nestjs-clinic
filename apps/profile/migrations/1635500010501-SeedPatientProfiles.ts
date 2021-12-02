@@ -15,13 +15,15 @@ export class SeedPatientProfiles1635500010501 implements MigrationInterface {
 
   private createOneUpQuery(number: number, array: string[]): string {
     const query = `
-    INSERT INTO profile.profiles (first_name, last_name, gender, birth_date, user_id) 
+    INSERT INTO profile.profiles (first_name, last_name, gender, birth_date, avatar_url, user_id) 
     VALUES 
       ('${faker.name.firstName().replace("'", '"')}', '${faker.name
       .lastName()
       .replace("'", '"')}', '${this.getRandomGender()}', '${new Date(
       faker.date.past(),
-    ).toISOString()}', '${array[number]}');
+    ).toISOString()}', 'https://itrex-clinic-aleksei.s3.eu-north-1.amazonaws.com/avatars/default.jpg', '${
+      array[number]
+    }');
     `;
 
     return query;

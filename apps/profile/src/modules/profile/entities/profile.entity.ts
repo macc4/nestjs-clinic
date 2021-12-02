@@ -40,6 +40,14 @@ export class Profile {
   })
   birthDate: Date;
 
+  @Column({ name: 'avatar_url', nullable: true })
+  @ApiProperty({
+    example:
+      'https://itrex-clinic-aleksei.s3.eu-north-1.amazonaws.com/avatars/default.jpg',
+    description: 'Link to the S3 image',
+  })
+  avatarUrl: string;
+
   @Column({ name: 'user_id', unique: true })
   @ApiProperty({
     example: '21ed452e-b3da-47d6-bd0c-8abea993cf0b',

@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configValidationSchema } from '../../config/config.schema';
 import { JwtStrategy } from '@macc4-clinic/common';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [

@@ -3,6 +3,12 @@ dist
 node_modules
 ./node_modules
 
+# /apps
+apps/auth/.env
+apps/clinic/.env
+apps/profile/.env
+apps/profile/uploads
+
 # Logs
 logs
 *.log
