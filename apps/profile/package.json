@@ -23,6 +23,8 @@
     "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.43.0",
+    "@aws-sdk/credential-provider-ini": "^3.41.0",
     "@grpc/grpc-js": "^1.4.4",
     "@grpc/proto-loader": "^0.6.6",
     "@macc4-clinic/common": "^1.0.13",

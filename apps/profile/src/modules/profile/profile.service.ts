@@ -1,17 +1,18 @@
 import { GetUserDto } from '@macc4-clinic/common';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BucketStorageService } from '../shared/bucket-storage/bucket-storage.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
 import { ProfileRepository } from './profile.repository';
-import { sendFile } from './utils/send-file.s3';
 
 Injectable();
 export class ProfileService {
   constructor(
     @InjectRepository(ProfileRepository)
     private readonly profileRepository: ProfileRepository,
+    private readonly bucketStorageService: BucketStorageService,
   ) {}
 
   //
@@ -65,7 +66,14 @@ export class ProfileService {
     image: Express.Multer.File,
     patchProfileDto: PatchProfileDto,
   ): Promise<Profile> {
-    const returnedImage = await sendFile(image, user.id);
+    console.log(process.env.AWS_ACCESS_KEY_ID);
+
+    const returnedImage = await this.bucketStorageService.uploadImage(
+      image,
+      user.id,
+    );
+
+    console.log(returnedImage);
 
     patchProfileDto.avatarUrl = returnedImage.Location;
 

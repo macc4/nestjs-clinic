@@ -1,15 +1,17 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { join } from 'path';
+import { Logger } from './modules/shared/logger.service';
 
 async function bootstrap() {
-  const logger = new Logger('ProfileService');
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
-  const app = await NestFactory.create(AppModule);
+  const logger = app.get(Logger);
+  app.useLogger(logger);
 
   const configService = app.get(ConfigService);
 
@@ -42,11 +44,14 @@ async function bootstrap() {
     },
   });
 
-  app.startAllMicroservices();
+  await app.startAllMicroservices();
 
   const port = configService.get('PORT');
 
   await app.listen(port);
   logger.log(`Application is running on: ${await app.getUrl()}`);
+  logger.error('testtest231232');
+  logger.error('testtest323232');
+  logger.error('testtest232323');
 }
 bootstrap();
