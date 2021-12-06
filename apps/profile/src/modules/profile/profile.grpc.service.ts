@@ -6,7 +6,7 @@ import { Profile } from './entities/profile.entity';
 import { GRPCGuard } from '@macc4-clinic/common';
 
 @Controller('profiles')
-@UseGuards(GRPCGuard)
+// @UseGuards(GRPCGuard)
 export class ProfileGRPCService {
   constructor(private readonly profileService: ProfileService) {}
 

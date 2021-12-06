@@ -66,16 +66,12 @@ export class ProfileService {
     image: Express.Multer.File,
     patchProfileDto: PatchProfileDto,
   ): Promise<Profile> {
-    console.log(process.env.AWS_ACCESS_KEY_ID);
-
     const returnedImage = await this.bucketStorageService.uploadImage(
       image,
       user.id,
     );
 
-    console.log(returnedImage);
-
-    patchProfileDto.avatarUrl = returnedImage.Location;
+    patchProfileDto.avatarUrl = returnedImage;
 
     const profile = await this.profileRepository.patchPersonalProfile(
       user,

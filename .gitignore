@@ -2,6 +2,7 @@
 dist
 node_modules
 ./node_modules
+config.local.yaml
 
 # /apps
 apps/auth/.env

@@ -1,6 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@macc4-clinic/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -50,8 +50,5 @@ async function bootstrap() {
 
   await app.listen(port);
   logger.log(`Application is running on: ${await app.getUrl()}`);
-  logger.error('testtest231232');
-  logger.error('testtest323232');
-  logger.error('testtest232323');
 }
 bootstrap();

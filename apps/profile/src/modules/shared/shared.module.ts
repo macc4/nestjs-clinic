@@ -1,17 +1,25 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { configValidationSchema } from '../../config/config.schema';
 import { JwtStrategy } from '@macc4-clinic/common';
 import { Logger } from './logger.service';
 import { BucketStorageModule } from './bucket-storage/bucket-storage.module';
+import { ConfigModule, ConfigService } from '@macc4-clinic/common';
+import { configLocalValidationSchema } from 'src/config/schemas/config.local.schema';
+import { configGlobalValidationSchema } from 'src/config/schemas/config.global.schema';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    ConfigModule.register({
       isGlobal: true,
-      envFilePath: [`.env`],
-      validationSchema: configValidationSchema,
+      overrideValuesWithEnv: true,
+      globalValidationSchema: configGlobalValidationSchema,
+      yamlValidationSchema: configLocalValidationSchema,
+      ssm: {
+        paths: ['/itrex/clinic/profile/dev/'],
+        regionReference: 'ssm.region',
+        accessKeyIdReference: 'ssm.accessKeyId',
+        secretAccessKeyReference: 'ssm.secretAccessKey',
+      },
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
@@ -31,10 +39,10 @@ import { BucketStorageModule } from './bucket-storage/bucket-storage.module';
     }),
     BucketStorageModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
-        region: 'eu-north-1',
-        accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
-        bucket: 'itrex-clinic-aleksei/avatars',
+        region: configService.get('s3.region'),
+        accessKeyId: configService.get('s3.accessKeyId'),
+        secretAccessKey: configService.get('s3.secretAccessKey'),
+        bucket: configService.get('s3.bucket'),
       }),
       inject: [ConfigService],
     }),

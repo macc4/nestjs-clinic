@@ -24,7 +24,10 @@ export class BucketStorageService {
     });
   }
 
-  async uploadImage(file: Express.Multer.File, fileName: string): Promise<any> {
+  async uploadImage(
+    file: Express.Multer.File,
+    fileName: string,
+  ): Promise<string> {
     const fileStream = createReadStream(file.path);
 
     const imageName = fileName + '.jpg';
@@ -35,6 +38,8 @@ export class BucketStorageService {
       Key: imageName,
     };
 
-    return this.client.upload(uploadParams).promise();
+    const uploadedImage = await this.client.upload(uploadParams).promise();
+
+    return uploadedImage.Location;
   }
 }
