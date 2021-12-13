@@ -17,7 +17,5 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  },
-  "exclude": ["uploads"],
-  "include": ["src", "migrations", "node_modules"]
+  }
 }

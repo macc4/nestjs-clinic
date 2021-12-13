@@ -1,25 +1,30 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from '@macc4-clinic/common';
 import { Logger } from './logger.service';
 import { BucketStorageModule } from './bucket-storage/bucket-storage.module';
-import { ConfigModule, ConfigService } from '@macc4-clinic/common';
-import { configLocalValidationSchema } from 'src/config/schemas/config.local.schema';
-import { configGlobalValidationSchema } from 'src/config/schemas/config.global.schema';
-
+import { configLocalValidationSchema } from '../../config/schemas/config.local.schema';
+import { configGlobalValidationSchema } from '../../config/schemas/config.global.schema';
+import { loadConfig } from '@macc4-clinic/common';
 @Module({
   imports: [
-    ConfigModule.register({
+    ConfigModule.forRoot({
       isGlobal: true,
-      overrideValuesWithEnv: true,
-      globalValidationSchema: configGlobalValidationSchema,
-      yamlValidationSchema: configLocalValidationSchema,
-      ssm: {
-        paths: ['/itrex/clinic/profile/dev/'],
-        regionReference: 'ssm.region',
-        accessKeyIdReference: 'ssm.accessKeyId',
-        secretAccessKeyReference: 'ssm.secretAccessKey',
-      },
+      load: [
+        async () =>
+          loadConfig({
+            overrideValuesWithSsm: true,
+            localValidationSchema: configLocalValidationSchema,
+            globalValidationSchema: configGlobalValidationSchema,
+            ssm: {
+              paths: ['/itrex/clinic/profile/dev/'],
+              regionReference: 'ssm.region',
+              accessKeyIdReference: 'ssm.accessKeyId',
+              secretAccessKeyReference: 'ssm.secretAccessKey',
+            },
+          }),
+      ],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({

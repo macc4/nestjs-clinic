@@ -28,13 +28,13 @@ export class BucketStorageService {
     file: Express.Multer.File,
     fileName: string,
   ): Promise<string> {
-    const fileStream = createReadStream(file.path);
+    const imageFormat = file.originalname.split('.').slice(-1)[0];
 
-    const imageName = fileName + '.jpg';
+    const imageName = fileName + '.' + imageFormat;
 
     const uploadParams = {
       Bucket: this.bucket,
-      Body: fileStream,
+      Body: file.buffer,
       Key: imageName,
     };
 

@@ -1,14 +1,11 @@
 import Joi from 'joi';
 
-export type Config = Record<string, unknown>;
+export type Config = Record<string, any>;
 
 export interface ConfigModuleOptions {
-  overrideValuesWithEnv?: boolean;
   overrideValuesWithSsm?: boolean;
-  ignoreEnvFile?: boolean;
-  isGlobal?: boolean;
+  localValidationSchema?: Joi.Schema;
   globalValidationSchema?: Joi.Schema;
-  yamlValidationSchema?: Joi.Schema;
   ssm?: {
     paths: string[];
     regionReference: string;

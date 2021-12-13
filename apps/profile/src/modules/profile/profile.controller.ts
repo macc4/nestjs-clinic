@@ -40,7 +40,7 @@ export class ProfileController {
 
   @Patch('me')
   @UseGuards(JwtGuard)
-  @UseInterceptors(FileInterceptor('image', { dest: './uploads' }))
+  @UseInterceptors(FileInterceptor('image'))
   @ApiOperation({ summary: 'Patch a personal profile' })
   @ApiOkResponse({
     description: 'Returns the patched Profile',
