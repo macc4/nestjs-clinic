@@ -70,11 +70,12 @@ export class ProfileRepository extends Repository<Profile> {
     user: GetUserDto,
     patchProfileDto: PatchProfileDto,
   ): Promise<Profile> {
-    const { firstName, lastName } = patchProfileDto;
+    const { firstName, lastName, avatarUrl } = patchProfileDto;
 
     const profile = await this.findOne({ userId: user.id });
     profile.firstName = firstName;
     profile.lastName = lastName;
+    profile.avatarUrl = avatarUrl;
 
     this.save(profile);
 

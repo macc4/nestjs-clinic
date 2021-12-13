@@ -24,13 +24,15 @@ export class SeedDoctorProfiles1635500010500 implements MigrationInterface {
 
   private createOneUpQuery(number: number): string {
     const query = `
-    INSERT INTO profile.profiles (first_name, last_name, gender, birth_date, user_id) 
+    INSERT INTO profile.profiles (first_name, last_name, gender, birth_date, avatar_url, user_id) 
     VALUES 
       ('${faker.name.firstName()}', '${faker.name
       .lastName()
       .replace("'", '"')}', '${this.getRandomGender()}', '${new Date(
       faker.date.past(),
-    ).toISOString()}', '${doctorUUIDs[number]}');
+    ).toISOString()}', 'https://itrex-clinic-aleksei.s3.eu-north-1.amazonaws.com/avatars/default.jpg', '${
+      doctorUUIDs[number]
+    }');
     `;
 
     return query;
@@ -50,7 +52,7 @@ export class SeedDoctorProfiles1635500010500 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     let query = '';
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < doctorUUIDs.length; i++) {
       query += this.createOneUpQuery(i);
     }
 
@@ -60,7 +62,7 @@ export class SeedDoctorProfiles1635500010500 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     let query = '';
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < doctorUUIDs.length; i++) {
       query += this.createOneDownQuery(i);
     }
 

@@ -1,6 +1,7 @@
 import { GetUserDto } from '@macc4-clinic/common';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BucketStorageService } from '../shared/bucket-storage/bucket-storage.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
@@ -11,6 +12,7 @@ export class ProfileService {
   constructor(
     @InjectRepository(ProfileRepository)
     private readonly profileRepository: ProfileRepository,
+    private readonly bucketStorageService: BucketStorageService,
   ) {}
 
   //
@@ -61,8 +63,16 @@ export class ProfileService {
 
   async patchPersonalProfile(
     user: GetUserDto,
+    image: Express.Multer.File,
     patchProfileDto: PatchProfileDto,
   ): Promise<Profile> {
+    const returnedImage = await this.bucketStorageService.uploadImage(
+      image,
+      user.id,
+    );
+
+    patchProfileDto.avatarUrl = returnedImage;
+
     const profile = await this.profileRepository.patchPersonalProfile(
       user,
       patchProfileDto,

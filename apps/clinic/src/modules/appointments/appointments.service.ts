@@ -168,7 +168,6 @@ export class AppointmentsService {
         id,
         date,
       );
-
     if (!appointment) {
       throw new NotFoundException(
         `No appointment found for date: ${date} and doctor (id ${id})`,

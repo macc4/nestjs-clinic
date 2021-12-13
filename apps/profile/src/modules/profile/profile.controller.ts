@@ -1,5 +1,14 @@
 import { GetUser, GetUserDto, JwtGuard } from '@macc4-clinic/common';
-import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PatchProfileDto } from './dto/patch-profile.dto';
 import { Profile } from './entities/profile.entity';
@@ -31,6 +40,7 @@ export class ProfileController {
 
   @Patch('me')
   @UseGuards(JwtGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @ApiOperation({ summary: 'Patch a personal profile' })
   @ApiOkResponse({
     description: 'Returns the patched Profile',
@@ -38,8 +48,13 @@ export class ProfileController {
   })
   patchPersonalProfile(
     @GetUser() user: GetUserDto,
+    @UploadedFile() image: Express.Multer.File,
     @Body() patchProfileDto: PatchProfileDto,
   ): Promise<Profile> {
-    return this.profileService.patchPersonalProfile(user, patchProfileDto);
+    return this.profileService.patchPersonalProfile(
+      user,
+      image,
+      patchProfileDto,
+    );
   }
 }

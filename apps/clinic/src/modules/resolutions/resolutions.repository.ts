@@ -48,17 +48,41 @@ export class ResolutionsRepository extends Repository<Resolution> {
     filterDto: GetResolutionsFilterDto,
   ): Promise<Resolution[]> {
     const { patientId, doctorId } = filterDto;
-    const query = this.createQueryBuilder('resolution');
 
-    if (patientId) {
-      query.andWhere('resolution.patient_id = :patientId', { patientId });
+    let query = `
+    SELECT r.*
+    FROM clinic.resolutions r
+    `;
+
+    if (patientId || doctorId) {
+      let conditions = 0;
+      query += `
+      WHERE
+      `;
+
+      if (patientId) {
+        query += `
+        r.patient_id = ${patientId}
+        `;
+
+        conditions++;
+      }
+
+      if (doctorId) {
+        if (conditions != 0) {
+          query += `
+          AND
+          `;
+        }
+        query += `
+        r.doctor_id = ${doctorId}
+        `;
+
+        conditions++;
+      }
     }
 
-    if (doctorId) {
-      query.andWhere('resolution.doctor_id = :doctorId', { doctorId });
-    }
-
-    const resolutions = (await query.getMany()).map((resolution) =>
+    const resolutions = (await this.pool.query(query)).map((resolution) =>
       snakeToCamel(resolution),
     );
 
@@ -71,11 +95,14 @@ export class ResolutionsRepository extends Repository<Resolution> {
 
   async getMyResolutions(id: string): Promise<Resolution[]> {
     const query = `
-    SELECT resolutions.*
-    FROM clinic.resolutions
-    INNER JOIN clinic.patients
-      ON patients.id = resolutions.patient_id
-    WHERE patients.user_id='${id}';
+    SELECT r.* 
+    FROM clinic.resolutions r
+    INNER JOIN clinic.patients p
+      ON p.id = r.patient_id
+    INNER JOIN clinic.doctors d
+      ON d.id = r.doctor_id
+    WHERE p.user_id = '${id}'
+    OR d.user_id = '${id}';
     `;
 
     const resolutions = (await this.pool.query(query)).map((resolution) =>
