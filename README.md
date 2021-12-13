@@ -15,7 +15,7 @@ https://drawsql.app/personal-261/diagrams/clinic#
 Collection with all of the requests that were used is attached and can be imported into Postman.
 For it to properly work, create a new postman environment, and add variables:
 
-- URL: http://127.0.0.1:8080
+- URL: http://127.0.0.1
 - jwt: null
 - auth_port: 4040
 - clinic_port: 4041

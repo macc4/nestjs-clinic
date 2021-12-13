@@ -1,19 +1,29 @@
+import { GetUserDto } from '@macc4-clinic/common';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorsRepository } from './doctors.repository';
+import { GetDoctorsQueryDto } from './dto/get-doctors-query.dto';
 import { Doctor } from './entities/doctor.entity';
-import { SpecializationsService } from './specializations.service';
 
 @Injectable()
 export class DoctorsService {
   constructor(
     @InjectRepository(DoctorsRepository)
-    private doctorsRepository: DoctorsRepository,
-    private specializationsService: SpecializationsService,
+    private readonly doctorsRepository: DoctorsRepository,
   ) {}
 
   //
-  // Get doctor by ID
+  // Get Doctors (with optional filters)
+  //
+
+  async getDoctors(filters?: GetDoctorsQueryDto): Promise<Doctor[]> {
+    const doctors = await this.doctorsRepository.getDoctors(filters);
+
+    return doctors;
+  }
+
+  //
+  // Get Doctor by id
   //
 
   async getDoctorById(id: number): Promise<Doctor> {
@@ -27,7 +37,7 @@ export class DoctorsService {
   }
 
   //
-  // Get doctor by user ID
+  // Get Doctor by User id
   //
 
   async getDoctorByUserId(userId: string): Promise<Doctor> {

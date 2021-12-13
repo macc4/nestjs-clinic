@@ -16,6 +16,8 @@ export class RolesRepository extends Repository<Role> {
   //
 
   async getRoleByTitle(title: string): Promise<Role> {
-    return await this.findOne({ title });
+    const role = await this.findOne({ title });
+
+    return role;
   }
 }

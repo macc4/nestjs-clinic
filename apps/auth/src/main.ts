@@ -14,8 +14,9 @@ async function bootstrap() {
   // Swagger
 
   const options = new DocumentBuilder()
-    .setTitle('Auth-Service for the API')
-    .setVersion('0.0.1')
+    .setTitle('Auth-Service')
+    .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

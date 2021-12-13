@@ -1,30 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Doctor } from '../../doctors/entities/doctor.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Doctor } from '../../doctors/entities/doctor.entity';
 import { Patient } from '../../patients/entities/patient.entity';
+import { Appointment } from '../../appointments/entities/appointment.entity';
 
-@Entity('resolution', { schema: 'clinic' })
+@Entity('resolutions', { schema: 'clinic' })
 export class Resolution {
-  @ApiProperty({ example: 1, description: 'ID of the resolution' })
   @PrimaryGeneratedColumn()
+  @ApiProperty({ example: 1, description: 'ID of the resolution' })
   id: number;
 
-  @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
   @Column()
+  @ApiProperty({ example: 'He is healthy!', description: 'Resolution text' })
   text: string;
 
-  @ApiProperty({
-    example: '1901-09-11T11:30:00.732Z',
-    description: 'Expiry date of the resolution',
+  @OneToOne(() => Appointment, (appointment) => appointment.resolution, {
+    eager: false,
   })
-  @Column({ nullable: true })
-  expiry: Date;
+  @JoinColumn({ name: 'appointment_id' })
+  appointment: Appointment;
 
   @ManyToOne(() => Doctor, (doctor) => doctor.resolutions, { eager: true })
   @JoinColumn({ name: 'doctor_id' })

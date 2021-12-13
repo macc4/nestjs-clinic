@@ -2,6 +2,13 @@
 dist
 node_modules
 ./node_modules
+config.local.yaml
+
+# /apps
+apps/auth/.env
+apps/clinic/.env
+apps/profile/.env
+apps/profile/uploads
 
 # Logs
 logs

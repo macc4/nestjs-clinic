@@ -6,8 +6,8 @@ import { User } from './entities/user.entity';
 import { UsersRepository } from './users.repository';
 import { RolesService } from './roles.service';
 import { UserRole } from '@macc4-clinic/common';
-import { HttpClinicService } from '../http/http-clinic.service';
-import { HttpProfileService } from '../http/http-profile.service';
+import { ClinicService } from '../grpc/grpc-clinic.service';
+import { ProfileService } from '../grpc/grpc-profile.service';
 
 Injectable();
 export class UsersService {
@@ -15,8 +15,8 @@ export class UsersService {
     @InjectRepository(UsersRepository)
     private readonly usersRepository: UsersRepository,
     private readonly rolesService: RolesService,
-    private readonly httpClinicService: HttpClinicService,
-    private readonly httpProfileService: HttpProfileService,
+    private readonly clinicService: ClinicService,
+    private readonly profileService: ProfileService,
   ) {}
 
   //
@@ -24,7 +24,7 @@ export class UsersService {
   //
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { name, gender, roles } = createUserDto;
+    const { firstName, lastName, gender, birthDate, roles } = createUserDto;
 
     const roleEntitiesArray = await Promise.all(
       roles.map(async (roleTitle) => {
@@ -38,12 +38,26 @@ export class UsersService {
     );
 
     if (roles.includes(UserRole.PATIENT)) {
-      this.httpClinicService.createPatient(user.id);
+      this.clinicService.createPatient({ userId: user.id });
     }
 
-    this.httpProfileService.createProfile({ userId: user.id, name, gender });
+    this.profileService.createProfile({
+      userId: user.id,
+      firstName,
+      lastName,
+      gender,
+      birthDate,
+    });
 
     return user;
+  }
+
+  //
+  // Set new User Password (move to the auth-service/auth-repository?)
+  //
+
+  async setPassword(userId: string, hashedPassword: string): Promise<void> {
+    await this.usersRepository.setPassword(userId, hashedPassword);
   }
 
   //
@@ -55,6 +69,16 @@ export class UsersService {
 
     if (!user) {
       throw new UserNotFoundByEmailException();
+    }
+
+    return user;
+  }
+
+  async getUserById(id: string): Promise<User> {
+    const user = await this.usersRepository.getUserById(id);
+
+    if (!user) {
+      throw new NotFoundException(`User not found`);
     }
 
     return user;

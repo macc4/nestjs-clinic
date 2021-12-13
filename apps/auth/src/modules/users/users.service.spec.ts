@@ -6,8 +6,9 @@ import { UserNotFoundByEmailException } from './errors/UserNotFoundByEmailExcept
 import { RolesService } from './roles.service';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
-import { HttpClinicService } from '../http/http-clinic.service';
-import { HttpProfileService } from '../http/http-profile.service';
+import { ClinicService } from '../grpc/grpc-clinic.service';
+import { ProfileService } from '../grpc/grpc-profile.service';
+import { NotFoundException } from '@nestjs/common';
 
 const mockUser = new User();
 
@@ -16,8 +17,8 @@ mockCreateUserDto.roles = [UserRole.PATIENT];
 
 describe('UsersService', () => {
   let usersService: UsersService;
-  let httpClinicService: any;
-  let httpProfileService: any;
+  let clinicService: any;
+  let profileService: any;
   let rolesService: any;
   let usersRepository: any;
 
@@ -31,6 +32,7 @@ describe('UsersService', () => {
             createUser: jest.fn(),
             getUserByEmail: jest.fn(),
             getUserById: jest.fn(),
+            setPassword: jest.fn(),
           },
         },
         {
@@ -38,11 +40,11 @@ describe('UsersService', () => {
           useValue: { getRoleByTitle: jest.fn() },
         },
         {
-          provide: HttpClinicService,
+          provide: ClinicService,
           useValue: { createPatient: jest.fn() },
         },
         {
-          provide: HttpProfileService,
+          provide: ProfileService,
           useValue: { createProfile: jest.fn() },
         },
       ],
@@ -51,34 +53,52 @@ describe('UsersService', () => {
     usersService = module.get(UsersService);
     usersRepository = module.get(UsersRepository);
     rolesService = module.get(RolesService);
-    httpClinicService = module.get(HttpClinicService);
-    httpProfileService = module.get(HttpProfileService);
+    clinicService = module.get(ClinicService);
+    profileService = module.get(ProfileService);
   });
 
   describe('calls createUser', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(4);
 
       usersRepository.createUser.mockResolvedValue(mockUser);
 
-      const result = await usersService.createUser(mockCreateUserDto);
-
+      expect(await usersService.createUser(mockCreateUserDto)).toEqual(
+        mockUser,
+      );
       expect(rolesService.getRoleByTitle).toBeCalledWith(
         mockCreateUserDto.roles[0],
       );
-      expect(httpClinicService.createPatient).toBeCalledWith(mockUser.id);
-      expect(httpProfileService.createProfile).toBeCalledWith({
+      expect(clinicService.createPatient).toBeCalledWith({
         userId: mockUser.id,
-        name: mockCreateUserDto.name,
-        gender: mockCreateUserDto.gender,
       });
+      expect(profileService.createProfile).toBeCalledWith({
+        userId: mockUser.id,
+        firstName: mockCreateUserDto.firstName,
+        lastName: mockCreateUserDto.lastName,
+        gender: mockCreateUserDto.gender,
+        birthDate: mockCreateUserDto.birthDate,
+      });
+    });
+  });
 
-      expect(result).toEqual(mockUser);
+  describe('calls setPassword', () => {
+    it('returns nothing if successful', async () => {
+      expect.assertions(1);
+
+      usersRepository.setPassword.mockResolvedValue(undefined);
+
+      expect(
+        await usersService.setPassword(
+          '65c7bf31-c24d-42c8-bd4f-1ceee57496b2',
+          'hashedpassword',
+        ),
+      ).toEqual(undefined);
     });
   });
 
   describe('calls getUserByEmail', () => {
-    it('and returns the data', async () => {
+    it('returns the data', async () => {
       expect.assertions(1);
 
       usersRepository.getUserByEmail.mockResolvedValue(mockUser);
@@ -88,14 +108,36 @@ describe('UsersService', () => {
       expect(result).toEqual(mockUser);
     });
 
-    it('and handles an error if no data found', async () => {
+    it('handles an error if no data found', async () => {
       expect.assertions(1);
 
       usersRepository.getUserByEmail.mockResolvedValue(null);
 
-      expect(usersService.getUserByEmail('test@email.com')).rejects.toThrow(
-        UserNotFoundByEmailException,
-      );
+      await expect(
+        usersService.getUserByEmail('test@email.com'),
+      ).rejects.toThrow(UserNotFoundByEmailException);
+    });
+  });
+
+  describe('calls getUserById', () => {
+    it('returns the data', async () => {
+      expect.assertions(1);
+
+      usersRepository.getUserById.mockResolvedValue(mockUser);
+
+      expect(
+        await usersService.getUserById('65c7bf31-c24d-42c8-bd4f-1ceee57496b2'),
+      ).toEqual(mockUser);
+    });
+
+    it('handles an error if no data found', async () => {
+      expect.assertions(1);
+
+      usersRepository.getUserById.mockResolvedValue(null);
+
+      await expect(
+        usersService.getUserById('65c7bf31-c24d-42c8-bd4f-1ceee57496b2'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

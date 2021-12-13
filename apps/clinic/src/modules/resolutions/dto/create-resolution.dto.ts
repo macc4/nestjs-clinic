@@ -1,33 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, Min } from 'class-validator';
-
-const defaultExpiry = +process.env.EXPIRY;
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateResolutionDto {
-  @IsNotEmpty()
   @ApiProperty()
+  @IsNotEmpty()
+  appointmentId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
   patientId: number;
 
+  @ApiProperty()
   @IsNotEmpty()
-  @ApiProperty()
   text: string;
-
-  @IsOptional()
-  @ApiProperty()
-  @Type(() => Number)
-  @Min(1)
-  expiry: number;
-
-  get expiryDate(): Date {
-    if (!this.expiry) {
-      if (defaultExpiry === -1) {
-        return null;
-      }
-
-      return new Date(Date.now() + defaultExpiry * 60 * 1000);
-    }
-
-    return new Date(Date.now() + this.expiry * 60 * 1000);
-  }
 }

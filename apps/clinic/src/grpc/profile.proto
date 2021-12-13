@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package profile;
+
+service ProfileGRPCService{
+  rpc CreateProfile(CreateProfileDto) returns (Profile) {}
+  rpc GetProfileByUserId(UserId) returns (Profile) {}
+  rpc GetBatchProfiles(UserIds) returns (ProfilesArray) {}
+}
+
+message CreateProfileDto {
+  string userId = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string gender = 4;
+  string birthDate = 5;
+}
+
+message UserId {
+  string userId = 1;
+}
+
+message UserIds {
+  repeated string userIds = 1;
+}
+
+message Profile {
+  int32 id = 1;
+  string userId = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string gender = 5;
+  string birthDate = 6;
+}
+
+message ProfilesArray {
+  repeated Profile profiles = 1;
+}

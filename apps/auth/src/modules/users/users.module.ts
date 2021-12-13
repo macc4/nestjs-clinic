@@ -4,11 +4,11 @@ import { RolesRepository } from './roles.repository';
 import { RolesService } from './roles.service';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
-import { HttpWrapperModule } from '../http/http.module';
+import { GRPCModule } from '../grpc/grpc.module';
 
 @Module({
   imports: [
-    HttpWrapperModule,
+    GRPCModule,
     TypeOrmModule.forFeature([UsersRepository, RolesRepository]),
   ],
   providers: [UsersService, RolesService],

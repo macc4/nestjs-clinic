@@ -8,7 +8,7 @@ import {
 
 import { Role } from './role.entity';
 
-@Entity('user', { schema: 'auth' })
+@Entity('users', { schema: 'auth' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;

@@ -52,7 +52,7 @@ describe('QueueService', () => {
   });
 
   describe('calls enqueueAsPatient', () => {
-    it('and returns your number in the queue', async () => {
+    it('returns your number in the queue', async () => {
       expect.assertions(3);
 
       const doctorId = 1;
@@ -62,33 +62,30 @@ describe('QueueService', () => {
 
       patientsService.getPatientByUserId.mockResolvedValue(mockPatient);
 
-      const result = await queueService.enqueueAsPatient(
-        doctorId,
-        mockGetUserDto,
-      );
-
+      expect(
+        await queueService.enqueueAsPatient(doctorId, mockGetUserDto),
+      ).toEqual({
+        message: `You are ${numberInQueue} in the queue`,
+      });
       expect(patientsService.getPatientByUserId).toBeCalledWith(
         mockGetUserDto.id,
       );
       expect(doctorsService.getDoctorById).toHaveBeenCalledTimes(1);
-      expect(result).toEqual({
-        message: `You are ${numberInQueue} in the queue`,
-      });
     });
   });
 
   describe('calls peekAsPatient', () => {
-    it('and returns the patientId of the current patient in the queue', async () => {
+    it('returns the patientId of the current patient in the queue', async () => {
       expect.assertions(2);
 
       const doctorId = 1;
       const currentPatientId = '1';
       lindex.mockResolvedValue(currentPatientId);
 
-      const result = await queueService.peekAsPatient(doctorId);
-
+      expect(await queueService.peekAsPatient(doctorId)).toEqual(
+        currentPatientId,
+      );
       expect(doctorsService.getDoctorById).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(currentPatientId);
     });
 
     it('and throws an error if the queue is empty', async () => {
@@ -97,14 +94,14 @@ describe('QueueService', () => {
       const doctorId = 1;
       lindex.mockResolvedValue(null);
 
-      expect(async () => {
-        await queueService.peekAsPatient(doctorId);
-      }).rejects.toThrow(EmptyQueueException);
+      expect(queueService.peekAsPatient(doctorId)).rejects.toThrow(
+        EmptyQueueException,
+      );
     });
   });
 
   describe('calls peekAsDoctor', () => {
-    it('and returns the patientId of the current patient in the queue', async () => {
+    it('returns the patientId of the current patient in the queue', async () => {
       expect.assertions(2);
 
       const currentPatientId = '1';
@@ -113,24 +110,24 @@ describe('QueueService', () => {
 
       lindex.mockResolvedValue(currentPatientId);
 
-      const result = await queueService.peekAsDoctor(mockGetUserDto);
-
+      expect(await queueService.peekAsDoctor(mockGetUserDto)).toEqual(
+        currentPatientId,
+      );
       expect(doctorsService.getDoctorByUserId).toBeCalledWith(
         mockGetUserDto.id,
       );
-      expect(result).toEqual(currentPatientId);
     });
 
     it('and throws an error if the queue is empty', async () => {
-      // expect.assertions(2);
+      expect.assertions(2);
 
       lindex.mockResolvedValue(null);
 
       doctorsService.getDoctorByUserId.mockResolvedValue(mockDoctor);
 
-      expect(async () => {
-        await queueService.peekAsDoctor(mockGetUserDto);
-      }).rejects.toThrow(EmptyQueueException);
+      await expect(queueService.peekAsDoctor(mockGetUserDto)).rejects.toThrow(
+        EmptyQueueException,
+      );
       expect(doctorsService.getDoctorByUserId).toBeCalledWith(
         mockGetUserDto.id,
       );
@@ -138,31 +135,31 @@ describe('QueueService', () => {
   });
 
   describe('calls dequeueAsDoctor', () => {
-    it('and returns nothing if patient was dequeued', async () => {
-      // expect.assertions(2);
+    it('returns nothing if patient was dequeued', async () => {
+      expect.assertions(2);
 
       lpop.mockResolvedValue('1');
 
       doctorsService.getDoctorByUserId.mockResolvedValue(mockDoctor);
 
-      const result = await queueService.dequeueAsDoctor(mockGetUserDto);
-
+      expect(await queueService.dequeueAsDoctor(mockGetUserDto)).toEqual(
+        undefined,
+      );
       expect(doctorsService.getDoctorByUserId).toBeCalledWith(
         mockGetUserDto.id,
       );
-      expect(result).toEqual(undefined);
     });
 
     it('and throws an error if the queue is empty', async () => {
-      // expect.assertions(2);
+      expect.assertions(2);
 
       lpop.mockResolvedValue(null);
 
       doctorsService.getDoctorByUserId.mockResolvedValue(mockDoctor);
 
-      expect(async () => {
-        await queueService.dequeueAsDoctor(mockGetUserDto);
-      }).rejects.toThrow(EmptyQueueException);
+      await expect(
+        queueService.dequeueAsDoctor(mockGetUserDto),
+      ).rejects.toThrow(EmptyQueueException);
       expect(doctorsService.getDoctorByUserId).toBeCalledWith(
         mockGetUserDto.id,
       );

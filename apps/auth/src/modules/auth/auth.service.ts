@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserRole } from '@macc4-clinic/common';
+import { GetUserDto, patientUUIDs, UserRole } from '@macc4-clinic/common';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { UsersService } from '../users/users.service';
 import { IncorrectEmailOrPassException } from './errors/IncorrectEmailOrPass.error';
 import { EmailConflictException } from './errors/EmailConflictException.error';
 import { User } from '../users/entities/user.entity';
+import { ChangePasswordDto } from './dto/changePassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -57,7 +62,17 @@ export class AuthService {
   async signIn(signInDto: SignInDto): Promise<{ token: string }> {
     const { email, password } = signInDto;
 
-    const user = await this.usersService.getUserByEmail(email);
+    let user: User;
+
+    try {
+      user = await this.usersService.getUserByEmail(email);
+    } catch (error) {
+      if (error.status === 404) {
+        throw new IncorrectEmailOrPassException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const roles = user.roles.map((role) => role.title);
@@ -68,5 +83,37 @@ export class AuthService {
     } else {
       throw new IncorrectEmailOrPassException();
     }
+  }
+
+  async changePassword(
+    userPayload: GetUserDto,
+    changePassword: ChangePasswordDto,
+  ) {
+    const { id } = userPayload;
+
+    const user = await this.usersService.getUserById(id);
+
+    const correctPassword = await bcrypt.compare(
+      changePassword.oldPassword,
+      user.password,
+    );
+
+    if (!correctPassword) {
+      throw new BadRequestException('Old password is wrong');
+    }
+
+    const passwordsMatch = await bcrypt.compare(
+      changePassword.newPassword,
+      user.password,
+    );
+
+    if (passwordsMatch) {
+      throw new BadRequestException('This password is in use right now');
+    }
+
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(changePassword.newPassword, salt);
+
+    await this.usersService.setPassword(id, hashedPassword);
   }
 }

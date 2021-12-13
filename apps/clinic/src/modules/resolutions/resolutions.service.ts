@@ -7,14 +7,17 @@ import { Resolution } from './entities/resolution.entity';
 import { ResolutionsRepository } from './resolutions.repository';
 import { DoctorsService } from '../doctors/doctors.service';
 import { GetUserDto } from '@macc4-clinic/common';
+import { PatchResolutionDto } from './dto/patch-resolution.dto';
+import { AppointmentsService } from '../appointments/appointments.service';
 
 @Injectable()
 export class ResolutionsService {
   constructor(
     @InjectRepository(ResolutionsRepository)
-    private resolutionsRepository: ResolutionsRepository,
-    private patientsService: PatientsService,
-    private doctorsService: DoctorsService,
+    private readonly resolutionsRepository: ResolutionsRepository,
+    private readonly patientsService: PatientsService,
+    private readonly doctorsService: DoctorsService,
+    private readonly appointmentsService: AppointmentsService,
   ) {}
 
   //
@@ -22,8 +25,8 @@ export class ResolutionsService {
   //
 
   async createResolution(
-    createResolutionDto: CreateResolutionDto,
     user: GetUserDto,
+    createResolutionDto: CreateResolutionDto,
   ): Promise<Resolution> {
     const patient = await this.patientsService.getPatientById(
       createResolutionDto.patientId,
@@ -31,10 +34,15 @@ export class ResolutionsService {
 
     const doctor = await this.doctorsService.getDoctorByUserId(user.id);
 
+    const appointment = await this.appointmentsService.getAppointmentById(
+      createResolutionDto.appointmentId,
+    );
+
     return this.resolutionsRepository.createResolution(
       createResolutionDto,
       patient,
       doctor,
+      appointment,
     );
   }
 
@@ -53,7 +61,9 @@ export class ResolutionsService {
   //
 
   async getMyResolutions(user: GetUserDto): Promise<Resolution[]> {
-    const resolution = await this.resolutionsRepository.getMyResolutions(user);
+    const resolution = await this.resolutionsRepository.getMyResolutions(
+      user.id,
+    );
 
     return resolution;
   }
@@ -64,6 +74,26 @@ export class ResolutionsService {
 
   async getResolutionById(id: number): Promise<Resolution> {
     const resolution = await this.resolutionsRepository.getResolutionById(id);
+
+    if (!resolution) {
+      throw new NotFoundException(`No resolution found with ID: ${id}`);
+    }
+
+    return resolution;
+  }
+
+  //
+  // Patch resolution by id
+  //
+
+  async patchResolutionById(
+    id: number,
+    patchResolutionDto: PatchResolutionDto,
+  ): Promise<Resolution> {
+    const resolution = await this.resolutionsRepository.patchResolutionById(
+      id,
+      patchResolutionDto,
+    );
 
     if (!resolution) {
       throw new NotFoundException(`No resolution found with ID: ${id}`);

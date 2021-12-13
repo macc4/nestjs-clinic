@@ -9,427 +9,6 @@
 			"name": "Nest.js Clinic App",
 			"item": [
 				{
-					"name": "Patients",
-					"item": [
-						{
-							"name": "Create Patient",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "userId",
-											"value": "testssssd",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/patients",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"patients"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Patient by Id",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/patients/:id",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"patients",
-										":id"
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "1"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Queue",
-					"item": [
-						{
-							"name": "Enqueue",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/queue/:doctorId",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"queue",
-										":doctorId"
-									],
-									"variable": [
-										{
-											"key": "doctorId",
-											"value": "1"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Peek as Patient",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/queue/:doctorId",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"queue",
-										":doctorId"
-									],
-									"variable": [
-										{
-											"key": "doctorId",
-											"value": "1"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Peek as Doctor",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/queue",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"queue"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Dequeue",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/queue",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"queue"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Resolutions",
-					"item": [
-						{
-							"name": "Get All Resolutions",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/resolutions",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"resolutions"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get All Resolutions with Filters",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/resolutions?patientId=1&doctorId=2",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"resolutions"
-									],
-									"query": [
-										{
-											"key": "patientId",
-											"value": "1"
-										},
-										{
-											"key": "doctorId",
-											"value": "2"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get My Resolutions",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/resolutions/me",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"resolutions",
-										"me"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create Resolution",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "patientId",
-											"value": "1",
-											"description": "\n",
-											"type": "text"
-										},
-										{
-											"key": "text",
-											"value": "He is healthy!",
-											"type": "text"
-										},
-										{
-											"key": "expiry",
-											"value": "5",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/resolutions",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"resolutions"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Resolution by Id",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/resolutions/:id",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"resolutions",
-										":id"
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "1"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete Resolution by Id",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{jwt}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "{{URL}}:{{clinic_port}}/resolutions/:id",
-									"host": [
-										"{{URL}}"
-									],
-									"port": "{{clinic_port}}",
-									"path": [
-										"resolutions",
-										":id"
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "3"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
 					"name": "Authorization",
 					"item": [
 						{
@@ -439,7 +18,11 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.environment.set(\"jwt\", pm.response.json().token);"
+											"pm.environment.set(\"jwt\", pm.response.json().token);",
+											"",
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(409 || 201)",
+											"})"
 										],
 										"type": "text/javascript"
 									}
@@ -462,13 +45,23 @@
 											"type": "text"
 										},
 										{
-											"key": "name",
-											"value": "test",
+											"key": "firstName",
+											"value": "Aleksei",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Leonenko",
 											"type": "text"
 										},
 										{
 											"key": "gender",
 											"value": "male",
+											"type": "text"
+										},
+										{
+											"key": "birthDate",
+											"value": "1998-02-10T02:15:00.000Z",
 											"type": "text"
 										}
 									]
@@ -494,7 +87,11 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.environment.set(\"jwt\", pm.response.json().token);"
+											"pm.environment.set(\"jwt\", pm.response.json().token);",
+											"",
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(201)",
+											"})"
 										],
 										"type": "text/javascript"
 									}
@@ -539,7 +136,11 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.environment.set(\"jwt\", pm.response.json().token);"
+											"pm.environment.set(\"jwt\", pm.response.json().token);",
+											"",
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(201)",
+											"})"
 										],
 										"type": "text/javascript"
 									}
@@ -572,6 +173,1088 @@
 									"path": [
 										"auth",
 										"signin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(201)",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "oldPassword",
+											"value": "tests",
+											"type": "text"
+										},
+										{
+											"key": "newPassword",
+											"value": "test",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}:{{auth_port}}/auth/password/change",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{auth_port}}",
+									"path": [
+										"auth",
+										"password",
+										"change"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Clinic",
+					"item": [
+						{
+							"name": "Doctors",
+							"item": [
+								{
+									"name": "Specializations",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/doctors/specializations",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"doctors",
+												"specializations"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Doctors",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/doctors",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"doctors"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Doctors with Filters",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/doctors/?specialization=psychiatrist",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"doctors",
+												""
+											],
+											"query": [
+												{
+													"key": "specialization",
+													"value": "psychiatrist"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Doctor By Id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/doctors/:id",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"doctors",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Patients",
+							"item": [
+								{
+									"name": "Patient by Id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/patients/:id",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"patients",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Appointments",
+							"item": [
+								{
+									"name": "Appointment",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "reason",
+													"value": "test",
+													"type": "text"
+												},
+												{
+													"key": "note",
+													"value": "test",
+													"description": "\n",
+													"type": "text"
+												},
+												{
+													"key": "visitDate",
+													"value": "2021-11-15 15:00",
+													"type": "text"
+												},
+												{
+													"key": "doctorId",
+													"value": "1",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/appointments",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"appointments"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Appointment by id",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "reason",
+													"value": "test",
+													"type": "text"
+												},
+												{
+													"key": "note",
+													"value": "test",
+													"type": "text"
+												},
+												{
+													"key": "visitDate",
+													"value": "2021-11-15 18:00:00",
+													"type": "text"
+												},
+												{
+													"key": "doctorId",
+													"value": "1",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/appointments/:id",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"appointments",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "My Appointments",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "reason",
+													"value": "test",
+													"type": "text"
+												},
+												{
+													"key": "note",
+													"value": "test",
+													"type": "text"
+												},
+												{
+													"key": "visitDate",
+													"value": "2021-11-15 18:00:00",
+													"type": "text"
+												},
+												{
+													"key": "doctorId",
+													"value": "1",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/appointments/me",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"appointments",
+												"me"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Resolutions",
+							"item": [
+								{
+									"name": "Resolution",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "appointmentId",
+													"value": "1",
+													"type": "text"
+												},
+												{
+													"key": "patientId",
+													"value": "1",
+													"description": "\n",
+													"type": "text"
+												},
+												{
+													"key": "text",
+													"value": "He is healthy!",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Resolutions",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Resolutions with Filters",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions?patientId=1&doctorId=2",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions"
+											],
+											"query": [
+												{
+													"key": "patientId",
+													"value": "1"
+												},
+												{
+													"key": "doctorId",
+													"value": "2"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Resolution by Id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions/:id",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "My Resolutions",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions/me",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions",
+												"me"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Resolution by Id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions/:id",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Resolution by Id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "text",
+													"value": "Updated Resolution",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/resolutions/:id",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"resolutions",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Queue",
+							"item": [
+								{
+									"name": "Enqueue",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/queue/:doctorId",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"queue",
+												":doctorId"
+											],
+											"variable": [
+												{
+													"key": "doctorId",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Peek as Patient",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/queue/:doctorId",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"queue",
+												":doctorId"
+											],
+											"variable": [
+												{
+													"key": "doctorId",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Peek as Doctor",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/queue",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"queue"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Dequeue",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/queue",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"queue"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Doctors/:id/Appointments",
+							"item": [
+								{
+									"name": "Appointments",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/doctors/:id/appointments",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"doctors",
+												":id",
+												"appointments"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Appointments with Date",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/doctors/:id/appointments?date=2021-11-15",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"doctors",
+												":id",
+												"appointments"
+											],
+											"query": [
+												{
+													"key": "date",
+													"value": "2021-11-15"
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Appointments with Datetime",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/doctors/:id/appointments?date=2021-11-15 12:00",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"doctors",
+												":id",
+												"appointments"
+											],
+											"query": [
+												{
+													"key": "date",
+													"value": "2021-11-15 12:00"
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Free Appointments",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwt}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}:{{clinic_port}}/doctors/:id/appointments/free?date=2021-11-15",
+											"host": [
+												"{{URL}}"
+											],
+											"port": "{{clinic_port}}",
+											"path": [
+												"doctors",
+												":id",
+												"appointments",
+												"free"
+											],
+											"query": [
+												{
+													"key": "date",
+													"value": "2021-11-15"
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Profiles",
+					"item": [
+						{
+							"name": "Personal Profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(200)",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Test 5",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}:{{profile_port}}/profile/me",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{profile_port}}",
+									"path": [
+										"profile",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Personal Profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", () => {",
+											"    pm.response.to.have.status(200)",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Aleksei Leonenko",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}:{{profile_port}}/profile/me",
+									"host": [
+										"{{URL}}"
+									],
+									"port": "{{profile_port}}",
+									"path": [
+										"profile",
+										"me"
 									]
 								}
 							},

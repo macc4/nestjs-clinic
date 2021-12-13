@@ -1,5 +1,4 @@
 import {
-  Brackets,
   EntityManager,
   EntityRepository,
   getManager,
@@ -10,7 +9,9 @@ import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { GetResolutionsFilterDto } from './dto/get-resolutions-filter.dto';
 import { Resolution } from './entities/resolution.entity';
 import { Doctor } from '../doctors/entities/doctor.entity';
-import { GetUserDto } from '@macc4-clinic/common';
+import { PatchResolutionDto } from './dto/patch-resolution.dto';
+import { Appointment } from '../appointments/entities/appointment.entity';
+import { snakeToCamel } from '@macc4-clinic/common';
 
 @EntityRepository(Resolution)
 export class ResolutionsRepository extends Repository<Resolution> {
@@ -25,12 +26,13 @@ export class ResolutionsRepository extends Repository<Resolution> {
     createResolutionDto: CreateResolutionDto,
     patient: Patient,
     doctor: Doctor,
+    appointment: Appointment,
   ): Promise<Resolution> {
     const resolution = this.create({
-      doctor,
-      text: createResolutionDto.text,
-      expiry: createResolutionDto.expiryDate,
       patient,
+      doctor,
+      appointment,
+      text: createResolutionDto.text,
     });
 
     await this.save(resolution);
@@ -46,25 +48,43 @@ export class ResolutionsRepository extends Repository<Resolution> {
     filterDto: GetResolutionsFilterDto,
   ): Promise<Resolution[]> {
     const { patientId, doctorId } = filterDto;
-    const query = this.createQueryBuilder('resolution');
 
-    if (patientId) {
-      query.andWhere('resolution.patient_id = :patientId', { patientId });
+    let query = `
+    SELECT r.*
+    FROM clinic.resolutions r
+    `;
+
+    if (patientId || doctorId) {
+      let conditions = 0;
+      query += `
+      WHERE
+      `;
+
+      if (patientId) {
+        query += `
+        r.patient_id = ${patientId}
+        `;
+
+        conditions++;
+      }
+
+      if (doctorId) {
+        if (conditions != 0) {
+          query += `
+          AND
+          `;
+        }
+        query += `
+        r.doctor_id = ${doctorId}
+        `;
+
+        conditions++;
+      }
     }
 
-    if (doctorId) {
-      query.andWhere('resolution.doctor_id = :doctorId', { doctorId });
-    }
-
-    query.andWhere(
-      new Brackets((qb) => {
-        qb.where('resolution.expiry IS NULL').orWhere(
-          'resolution.expiry > Now()',
-        );
-      }),
+    const resolutions = (await this.pool.query(query)).map((resolution) =>
+      snakeToCamel(resolution),
     );
-
-    const resolutions = await query.getMany();
 
     return resolutions;
   }
@@ -73,22 +93,23 @@ export class ResolutionsRepository extends Repository<Resolution> {
   // Get personal resolutions
   //
 
-  async getMyResolutions(user: GetUserDto): Promise<Resolution[]> {
+  async getMyResolutions(id: string): Promise<Resolution[]> {
     const query = `
-    SELECT resolution.*
-    FROM clinic.resolution
-    INNER JOIN clinic.patient
-      ON patient.id=resolution.patient_id
-    WHERE patient.user_id='${user.id}'
-    AND (
-      resolution.expiry IS NULL
-      OR resolution.expiry > Now() 
-    );
+    SELECT r.* 
+    FROM clinic.resolutions r
+    INNER JOIN clinic.patients p
+      ON p.id = r.patient_id
+    INNER JOIN clinic.doctors d
+      ON d.id = r.doctor_id
+    WHERE p.user_id = '${id}'
+    OR d.user_id = '${id}';
     `;
 
-    const resolution = await this.pool.query(query);
+    const resolutions = (await this.pool.query(query)).map((resolution) =>
+      snakeToCamel(resolution),
+    );
 
-    return resolution;
+    return resolutions;
   }
 
   //
@@ -97,6 +118,25 @@ export class ResolutionsRepository extends Repository<Resolution> {
 
   async getResolutionById(id: number): Promise<Resolution> {
     const resolution = await this.findOne(id);
+
+    return resolution;
+  }
+
+  //
+  // Get resolution by id
+  //
+
+  async patchResolutionById(
+    id: number,
+    patchResolutionDto: PatchResolutionDto,
+  ): Promise<Resolution> {
+    const { text } = patchResolutionDto;
+
+    const resolution = await this.findOne(id);
+
+    resolution.text = text;
+
+    this.save(resolution);
 
     return resolution;
   }
