@@ -11,6 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   const logger = app.get(Logger);
+
   app.useLogger(logger);
 
   const configService = app.get(ConfigService);
@@ -51,4 +52,5 @@ async function bootstrap() {
   await app.listen(port);
   logger.log(`Application is running on: ${await app.getUrl()}`);
 }
+
 bootstrap();

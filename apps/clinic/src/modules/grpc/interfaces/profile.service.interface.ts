@@ -24,6 +24,7 @@ export interface Profile {
   gender: string;
   birthDate: string;
   userId: string;
+  avatarUrl: string;
 }
 
 interface ProfilesArray {

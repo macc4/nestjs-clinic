@@ -8,6 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorsService } from '../doctors/doctors.service';
 import { ProfileService } from '../grpc/grpc-profile.service';
+import { NotificationsService } from '../kafka/kafka-notifications.service';
 import { PatientsService } from '../patients/patients.service';
 import { AppointmentsRepository } from './appointments.repository';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -23,6 +24,7 @@ export class AppointmentsService {
     private readonly patientsService: PatientsService,
     private readonly doctorsService: DoctorsService,
     private readonly profileService: ProfileService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   //
@@ -74,11 +76,24 @@ export class AppointmentsService {
       throw new ConflictException('You must choose a free timeslot');
     }
 
-    return this.appointmentsRepository.createAppointment(
+    const appointment = await this.appointmentsRepository.createAppointment(
       patient,
       doctor,
       createAppointmentDto,
     );
+
+    const patientProfile = await this.profileService.getProfileByUserId(
+      patient.userId,
+    );
+
+    this.notificationsService.sendAppointmentCreatedNotification({
+      recepientUserId: doctor.userId,
+      appointmentId: appointment.id,
+      patientUserId: patientProfile.userId,
+      patientAvatarUrl: patientProfile.avatarUrl,
+    });
+
+    return appointment;
   }
 
   //

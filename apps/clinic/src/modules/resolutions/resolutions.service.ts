@@ -9,6 +9,8 @@ import { DoctorsService } from '../doctors/doctors.service';
 import { GetUserDto } from '@macc4-clinic/common';
 import { PatchResolutionDto } from './dto/patch-resolution.dto';
 import { AppointmentsService } from '../appointments/appointments.service';
+import { NotificationsService } from '../kafka/kafka-notifications.service';
+import { ProfileService } from '../grpc/grpc-profile.service';
 
 @Injectable()
 export class ResolutionsService {
@@ -18,6 +20,8 @@ export class ResolutionsService {
     private readonly patientsService: PatientsService,
     private readonly doctorsService: DoctorsService,
     private readonly appointmentsService: AppointmentsService,
+    private readonly profileService: ProfileService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   //
@@ -38,12 +42,25 @@ export class ResolutionsService {
       createResolutionDto.appointmentId,
     );
 
-    return this.resolutionsRepository.createResolution(
+    const resolution = this.resolutionsRepository.createResolution(
       createResolutionDto,
       patient,
       doctor,
       appointment,
     );
+
+    const doctorProfile = await this.profileService.getProfileByUserId(
+      doctor.userId,
+    );
+
+    this.notificationsService.sendResolutionCreatedNotification({
+      recepientUserId: patient.userId,
+      resolutionId: appointment.id,
+      doctorUserId: doctorProfile.userId,
+      doctorAvatarUrl: doctorProfile.avatarUrl,
+    });
+
+    return resolution;
   }
 
   //

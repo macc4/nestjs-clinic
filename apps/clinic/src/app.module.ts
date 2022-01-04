@@ -9,12 +9,14 @@ import { RouterModule } from '@nestjs/core';
 import { routes } from './nested-routes';
 import { DoctorsAppointmentsModule } from './modules/appointments/doctors-appointments.module';
 import { GRPCModule } from './modules/grpc/grpc.module';
+import { KafkaModule } from './modules/kafka/kafka.module';
 
 @Module({
   imports: [
     RouterModule.register(routes),
     SharedModule,
     GRPCModule,
+    KafkaModule,
     PatientsModule,
     DoctorsModule,
     AppointmentsModule,

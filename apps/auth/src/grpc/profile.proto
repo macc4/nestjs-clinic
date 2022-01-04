@@ -31,6 +31,7 @@ message Profile {
   string lastName = 4;
   string gender = 5;
   string birthDate = 6;
+  string avatarUrl = 7;
 }
 
 message ProfilesArray {

@@ -66,6 +66,10 @@ export class ProfileService {
     image: Express.Multer.File,
     patchProfileDto: PatchProfileDto,
   ): Promise<Profile> {
+    if (!image) {
+      throw new NotFoundException(`The image must be uploaded.`);
+    }
+
     const returnedImage = await this.bucketStorageService.uploadImage(
       image,
       user.id,
