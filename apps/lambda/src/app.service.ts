@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as AWS from 'aws-sdk';
-
-const ssmClient = new AWS.SSM({ region: 'eu-north-1' });
 
 @Injectable()
 export class AppService {
