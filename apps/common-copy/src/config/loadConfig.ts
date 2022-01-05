@@ -86,13 +86,16 @@ const loadSsmConfig = async (
     options.ssm.secretAccessKeyReference,
   );
 
-  const ssmClient = new SSM({
-    region,
-    credentials: {
-      accessKeyId,
-      secretAccessKey,
-    },
-  });
+  const ssmOptions: {
+    region: string;
+    credentials?: { accessKeyId: string; secretAccessKey: string };
+  } = { region };
+
+  if (accessKeyId && secretAccessKey) {
+    ssmOptions.credentials = { accessKeyId, secretAccessKey };
+  }
+
+  const ssmClient = new SSM(ssmOptions);
 
   const { paths } = options.ssm;
 
