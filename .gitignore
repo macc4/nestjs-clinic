@@ -1,14 +1,13 @@
-# compiled output
+# custom rules
 dist
 node_modules
-./node_modules
 config.local.yaml
+.serverless
 
-# /apps
+# apps
 apps/auth/.env
 apps/clinic/.env
 apps/profile/.env
-apps/profile/uploads
 
 # Logs
 logs

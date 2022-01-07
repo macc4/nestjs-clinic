@@ -37,8 +37,6 @@ export class NotificationsRepository extends Repository<Notification> {
       snakeToCamel(notification),
     );
 
-    console.log(notifications);
-
     return notifications;
   }
 }
