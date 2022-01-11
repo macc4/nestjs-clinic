@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtStrategy, loadConfig } from '@macc4-clinic/common';
-import { configLocalValidationSchema } from '../../config/schemas/config.local.schema';
 import { configGlobalValidationSchema } from '../../config/schemas/config.global.schema';
 
 @Module({
