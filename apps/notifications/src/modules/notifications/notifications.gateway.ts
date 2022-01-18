@@ -1,6 +1,4 @@
 import {
-  ConnectedSocket,
-  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
   WsException,
@@ -10,7 +8,6 @@ import { Server, Socket } from 'socket.io';
 import { JwtPayloadDto } from '@macc4-clinic/common';
 import { Notification } from './entities/notification.entity';
 import { QueryBus } from '@nestjs/cqrs';
-import { GetNotificationsQuery } from './queries/get-notifications/get-notifications.query';
 
 @WebSocketGateway()
 export class NotificationsGateway {
@@ -46,19 +43,7 @@ export class NotificationsGateway {
     await client.join(userId);
   }
 
-  async handleNewNotification(notification: Notification): Promise<void> {
+  handleNewNotification(notification: Notification): void {
     this.server.in(notification.userId).emit('new_notification', notification);
-  }
-
-  // not used
-  @SubscribeMessage('request_all_notifications')
-  async requestAllNotifications(
-    @ConnectedSocket() client: Socket,
-  ): Promise<void> {
-    const notifications = await this.queryBus.execute(
-      new GetNotificationsQuery(client.data.user.id),
-    );
-
-    client.emit('send_notifications', notifications);
   }
 }
