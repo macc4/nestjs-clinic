@@ -1,14 +1,19 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { configValidationSchema } from '../../config/config.schema';
-import { JwtStrategy } from '@macc4-clinic/common';
+import { JwtStrategy, loadConfig } from '@macc4-clinic/common';
+import { configGlobalValidationSchema } from '../../config/schemas/config.global.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [`.env`],
-      validationSchema: configValidationSchema,
+      isGlobal: true,
+      load: [
+        async () =>
+          loadConfig({
+            localValidationSchema: configGlobalValidationSchema,
+          }),
+      ],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

@@ -1,93 +1,93 @@
-import { patientUUIDs } from '@macc4-clinic/common';
-import { MigrationInterface, QueryRunner } from 'typeorm';
+// import { patientUUIDs } from '@macc4-clinic/common';
+// import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class SeedPatientUsers1635500010502 implements MigrationInterface {
-  name = 'SeedPatientUsers1635500010502';
+// export class SeedPatientUsers1635500010502 implements MigrationInterface {
+//   name = 'SeedPatientUsers1635500010502';
 
-  private createOneUpQuery(
-    number: number,
-    totalQueriesIncrement: number,
-    array: string[],
-  ): string {
-    const query = `
-    INSERT INTO auth.users (id, email, password) 
-    VALUES 
-      ('${array[number]}', 'patient${
-      totalQueriesIncrement + 1
-    }@gmail.com', '$2b$10$yZKWc8wSfvts9NYt3YbAB.7/GDPqH9KBGcrcpqeNwFo9PDW0YfrGi');
+//   private createOneUpQuery(
+//     number: number,
+//     totalQueriesIncrement: number,
+//     array: string[],
+//   ): string {
+//     const query = `
+//     INSERT INTO auth.users (id, email, password)
+//     VALUES
+//       ('${array[number]}', 'patient${
+//       totalQueriesIncrement + 1
+//     }@gmail.com', '$2b$10$yZKWc8wSfvts9NYt3YbAB.7/GDPqH9KBGcrcpqeNwFo9PDW0YfrGi');
 
-    INSERT INTO auth.user_roles (user_id, role_id) 
-    VALUES 
-      ('${array[number]}', '3');
-    `;
+//     INSERT INTO auth.user_roles (user_id, role_id)
+//     VALUES
+//       ('${array[number]}', '3');
+//     `;
 
-    return query;
-  }
+//     return query;
+//   }
 
-  private createOneDownQuery(number: number, array: string[]): string {
-    const query = `
-    DELETE FROM
-      auth.user_roles
-    WHERE
-      user_id = '${array[number]}';
-      
-    DELETE FROM
-      auth.users
-    WHERE
-      id = '${array[number]}';
-    `;
+//   private createOneDownQuery(number: number, array: string[]): string {
+//     const query = `
+//     DELETE FROM
+//       auth.user_roles
+//     WHERE
+//       user_id = '${array[number]}';
 
-    return query;
-  }
+//     DELETE FROM
+//       auth.users
+//     WHERE
+//       id = '${array[number]}';
+//     `;
 
-  private createUpChunkQuery(chunkIncrement: number, array: string[]): string {
-    let query = '';
+//     return query;
+//   }
 
-    let singleQueryIncrement = chunkIncrement * array.length;
+//   private createUpChunkQuery(chunkIncrement: number, array: string[]): string {
+//     let query = '';
 
-    for (let i = 0; i < array.length; i++) {
-      singleQueryIncrement += 1;
-      query += this.createOneUpQuery(i, singleQueryIncrement, array);
-    }
+//     let singleQueryIncrement = chunkIncrement * array.length;
 
-    return query;
-  }
+//     for (let i = 0; i < array.length; i++) {
+//       singleQueryIncrement += 1;
+//       query += this.createOneUpQuery(i, singleQueryIncrement, array);
+//     }
 
-  private createDownChunkQuery(array: string[]): string {
-    let query = '';
+//     return query;
+//   }
 
-    for (let i = 0; i < array.length; i++) {
-      query += this.createOneDownQuery(i, array);
-    }
+//   private createDownChunkQuery(array: string[]): string {
+//     let query = '';
 
-    return query;
-  }
+//     for (let i = 0; i < array.length; i++) {
+//       query += this.createOneDownQuery(i, array);
+//     }
 
-  public async up(queryRunner: QueryRunner): Promise<void> {
-    const chunkSize = 5000;
+//     return query;
+//   }
 
-    let chunkIncrement = 0;
+//   public async up(queryRunner: QueryRunner): Promise<void> {
+//     const chunkSize = 5000;
 
-    for (let i = 0; i < patientUUIDs.length; i += chunkSize) {
-      const chunk = patientUUIDs.slice(i, i + chunkSize);
+//     let chunkIncrement = 0;
 
-      const query = this.createUpChunkQuery(chunkIncrement, chunk);
+//     for (let i = 0; i < patientUUIDs.length; i += chunkSize) {
+//       const chunk = patientUUIDs.slice(i, i + chunkSize);
 
-      chunkIncrement += 1;
+//       const query = this.createUpChunkQuery(chunkIncrement, chunk);
 
-      await queryRunner.query(query);
-    }
-  }
+//       chunkIncrement += 1;
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
-    const chunkSize = 5000;
+//       await queryRunner.query(query);
+//     }
+//   }
 
-    for (let i = 0; i < patientUUIDs.length; i += chunkSize) {
-      const chunk = patientUUIDs.slice(i, i + chunkSize);
+//   public async down(queryRunner: QueryRunner): Promise<void> {
+//     const chunkSize = 5000;
 
-      const query = this.createDownChunkQuery(chunk);
+//     for (let i = 0; i < patientUUIDs.length; i += chunkSize) {
+//       const chunk = patientUUIDs.slice(i, i + chunkSize);
 
-      await queryRunner.query(query);
-    }
-  }
-}
+//       const query = this.createDownChunkQuery(chunk);
+
+//       await queryRunner.query(query);
+//     }
+//   }
+// }

@@ -46,6 +46,7 @@ export class ProfileRepository extends Repository<Profile> {
 
     const [profile] = await this.pool.query(query);
 
+
     return snakeToCamel(profile);
   }
 

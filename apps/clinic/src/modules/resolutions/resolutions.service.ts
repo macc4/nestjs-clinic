@@ -1,4 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PatientsService } from '../patients/patients.service';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
@@ -9,6 +16,9 @@ import { DoctorsService } from '../doctors/doctors.service';
 import { GetUserDto } from '@macc4-clinic/common';
 import { PatchResolutionDto } from './dto/patch-resolution.dto';
 import { AppointmentsService } from '../appointments/appointments.service';
+import { NotificationsService } from '../kafka/kafka-notifications.service';
+import { ProfileService } from '../grpc/grpc-profile.service';
+import { QueryFailedError } from 'typeorm';
 
 @Injectable()
 export class ResolutionsService {
@@ -18,6 +28,8 @@ export class ResolutionsService {
     private readonly patientsService: PatientsService,
     private readonly doctorsService: DoctorsService,
     private readonly appointmentsService: AppointmentsService,
+    private readonly profileService: ProfileService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   //
@@ -28,22 +40,66 @@ export class ResolutionsService {
     user: GetUserDto,
     createResolutionDto: CreateResolutionDto,
   ): Promise<Resolution> {
-    const patient = await this.patientsService.getPatientById(
-      createResolutionDto.patientId,
-    );
-
-    const doctor = await this.doctorsService.getDoctorByUserId(user.id);
-
     const appointment = await this.appointmentsService.getAppointmentById(
       createResolutionDto.appointmentId,
     );
 
-    return this.resolutionsRepository.createResolution(
-      createResolutionDto,
-      patient,
-      doctor,
-      appointment,
+    const doctor = await this.doctorsService.getDoctorByUserId(user.id);
+
+    if (appointment.doctor.id !== doctor.id) {
+      throw new UnauthorizedException(
+        'You cannot create resolutions for this appointment.',
+      );
+    }
+
+    const patient = await this.patientsService.getPatientById(
+      createResolutionDto.patientId,
     );
+
+    if (appointment.patient.id !== patient.id) {
+      throw new BadRequestException(
+        'Specified appointment was created for another patient.',
+      );
+    }
+
+    let resolution: Resolution;
+
+    try {
+      resolution = await this.resolutionsRepository.createResolution(
+        createResolutionDto,
+        patient,
+        doctor,
+        appointment,
+      );
+    } catch (error) {
+      if (!(error instanceof QueryFailedError)) {
+        console.log(error);
+
+        throw new InternalServerErrorException();
+      }
+
+      const { code } = error.driverError;
+
+      // postgres duplicate constraint error code
+      if (code === '23505') {
+        throw new ConflictException(
+          'Resolution for this appointment already exists.',
+        );
+      }
+    }
+
+    const doctorProfile = await this.profileService.getProfileByUserId(
+      doctor.userId,
+    );
+
+    this.notificationsService.sendResolutionCreatedNotification({
+      recepientUserId: patient.userId,
+      resolutionId: appointment.id,
+      doctorUserId: doctorProfile.userId,
+      doctorAvatarUrl: doctorProfile.avatarUrl,
+    });
+
+    return resolution;
   }
 
   //

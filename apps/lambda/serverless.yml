@@ -1,0 +1,43 @@
+service: serverless-nestjs-test
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: eu-north-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - ssm:GetParametersByPath
+        - ssm:GetParameter
+      Resource: '*'
+
+plugins:
+  - serverless-offline
+
+package:
+  exclude:
+    - .git/**
+    - src/**
+    - test/**
+    - e2e/**
+    - nodemon.json
+    - README.md
+
+functions:
+  index:
+    handler: dist/index.handler
+    events:
+      - http:
+          cors: true
+          path: '/'
+          method: any
+      - http:
+          cors: true
+          path: '{proxy+}'
+          method: any
+      - schedule:
+          name: two-minute-cron-job
+          rate: rate(2 minutes)
+          enabled: true
+          input:
+            test: TEST_VALUE

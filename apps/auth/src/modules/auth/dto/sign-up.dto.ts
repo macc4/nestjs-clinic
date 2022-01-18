@@ -40,5 +40,5 @@ export class SignUpDto {
 
   @ApiProperty()
   @IsDateString()
-  birthDate: Date;
+  readonly birthDate: Date;
 }
