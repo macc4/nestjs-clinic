@@ -12,6 +12,7 @@
     "start:dev": "yarn prebuild && nest start --watch",
     "start:debug": "yarn prebuild && nest start --debug --watch",
     "start:prod": "node dist/main",
+    "lint": "eslint src --ext js,ts --fix",
     "test": "jest",
     "test:watch": "jest --watch --verbose",
     "test:cov": "jest --coverage",

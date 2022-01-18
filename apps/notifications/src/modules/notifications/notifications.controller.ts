@@ -1,19 +1,19 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { IAppointmentCreated } from './interfaces/IAppointmentCreated';
-import { IKafkaMessage } from './interfaces/IKafkaMessage';
-import { CreateAppointmentNotificationCommand } from './commands/create-appointment/create-appointment.command';
-import { GetUser, GetUserDto, JwtGuard } from '@macc4-clinic/common';
 import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetNotificationsQuery } from './queries/get-notifications.query';
+import { GetUser, GetUserDto, JwtGuard } from '@macc4-clinic/common';
+import { IKafkaMessage } from './interfaces/IKafkaMessage';
+import { IAppointmentCreated } from './interfaces/IAppointmentCreated';
 import { IResolutionCreated } from './interfaces/IResolutionCreated';
+import { CreateAppointmentNotificationCommand } from './commands/create-appointment/create-appointment.command';
 import { CreateResolutionNotificationCommand } from './commands/create-resolution/create-resolution.command';
+import { GetNotificationsQuery } from './queries/get-notifications/get-notifications.query';
 
 @Controller('notifications')
 @ApiTags('notifications')

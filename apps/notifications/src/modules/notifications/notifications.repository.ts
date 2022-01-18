@@ -16,8 +16,8 @@ export class NotificationsRepository extends Repository<Notification> {
   async addNotification(
     userId: string,
     payload: Record<string, any>,
-  ): Promise<void> {
-    const { type, date, ...otherData } = payload;
+  ): Promise<Notification> {
+    const { type, ...otherData } = payload;
 
     const notification = this.create({
       userId,
@@ -26,6 +26,8 @@ export class NotificationsRepository extends Repository<Notification> {
     });
 
     await this.save(notification);
+
+    return notification;
   }
 
   async getNotifications(userId: string): Promise<Notification[]> {
