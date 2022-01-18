@@ -7,17 +7,13 @@ import { JwtService } from '@nestjs/jwt';
 import { Server, Socket } from 'socket.io';
 import { JwtPayloadDto } from '@macc4-clinic/common';
 import { Notification } from './entities/notification.entity';
-import { QueryBus } from '@nestjs/cqrs';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class NotificationsGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(
-    private readonly jwtService: JwtService,
-    private readonly queryBus: QueryBus,
-  ) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   verifyUserAndGetId(client: Socket): string {
     let user: JwtPayloadDto;
@@ -36,9 +32,6 @@ export class NotificationsGateway {
 
   async handleConnection(client: Socket): Promise<void> {
     const userId = this.verifyUserAndGetId(client);
-
-    console.log('New user has connected. User ID:');
-    console.log(userId);
 
     await client.join(userId);
   }
