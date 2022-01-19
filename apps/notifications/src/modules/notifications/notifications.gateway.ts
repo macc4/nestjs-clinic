@@ -8,6 +8,7 @@ import { JwtPayloadDto } from '@macc4-clinic/common';
 import { WebsocketService } from '../websocket/websocket.service';
 import { CommandBus } from '@nestjs/cqrs';
 import { ReadNotificationCommand } from './commands/read-notification/read-notification.command';
+import { WsEventNames } from './websocket/constants';
 
 @WebSocketGateway({ cors: true })
 export class NotificationsGateway {
@@ -23,7 +24,7 @@ export class NotificationsGateway {
     await this.websocketService.joinRoom(client, user.id);
   }
 
-  @SubscribeMessage('read_notification')
+  @SubscribeMessage(WsEventNames.ReadNotification)
   handleReadNotification(@MessageBody() id: string): void {
     this.commandBus.execute(new ReadNotificationCommand(id));
   }

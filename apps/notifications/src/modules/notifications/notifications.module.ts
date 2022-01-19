@@ -6,7 +6,7 @@ import { CommandHandlers } from './commands/handlers';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsGateway } from './notifications.gateway';
 import { QueryHandlers } from './queries/handlers';
-import { WsEvents } from './ws-events/websocket-events';
+import { WsEvents } from './websocket/events';
 import { WebsocketModule } from '../websocket/websocket.module';
 
 @Module({
