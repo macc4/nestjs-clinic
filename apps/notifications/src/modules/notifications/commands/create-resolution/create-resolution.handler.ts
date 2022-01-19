@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotificationsGateway } from '../../notifications.gateway';
 import { NotificationsRepository } from '../../notifications.repository';
+import { NewNotificationEvent } from '../../ws-events/new-notification.event';
 import { CreateResolutionNotificationCommand } from './create-resolution.command';
 
 @CommandHandler(CreateResolutionNotificationCommand)
@@ -11,7 +11,7 @@ export class CreateResolutionNotificationHandler
   constructor(
     @InjectRepository(NotificationsRepository)
     private readonly repository: NotificationsRepository,
-    private readonly notificationsGateway: NotificationsGateway,
+    private readonly newNotificationEvent: NewNotificationEvent,
   ) {}
 
   async execute(command: CreateResolutionNotificationCommand): Promise<void> {
@@ -24,6 +24,6 @@ export class CreateResolutionNotificationHandler
       },
     );
 
-    this.notificationsGateway.handleNewNotification(notification);
+    this.newNotificationEvent.emit(notification);
   }
 }

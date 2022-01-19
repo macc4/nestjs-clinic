@@ -13,14 +13,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import {
-  GetUser,
-  GetUserDto,
-  JwtGuard,
-  Roles,
-  RolesGuard,
-  UserRole,
-} from '@macc4-clinic/common';
+import { JwtGuard } from '@macc4-clinic/common';
 import { DoctorsService } from './doctors.service';
 import { Doctor } from './entities/doctor.entity';
 import { Specialization } from './entities/specialization.entity';

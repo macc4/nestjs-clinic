@@ -41,4 +41,16 @@ export class NotificationsRepository extends Repository<Notification> {
 
     return notifications;
   }
+
+  async readNotification(id: string): Promise<Notification> {
+    const query = `
+    UPDATE notifications.notifications
+      SET read = 'true'
+    WHERE notifications.id = ${id}
+    `;
+
+    const notification = await this.pool.query(query);
+
+    return snakeToCamel(notification);
+  }
 }

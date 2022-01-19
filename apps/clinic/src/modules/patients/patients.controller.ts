@@ -1,23 +1,19 @@
 import { Roles, RolesGuard, UserRole, JwtGuard } from '@macc4-clinic/common';
 import {
-  Body,
   Controller,
   Get,
   Param,
   ParseIntPipe,
-  Post,
   UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 
-import { CreatePatientDto } from './dto/create-patient.dto';
 import { Patient } from './entities/patient.entity';
 import { PatientsService } from './patients.service';
 
