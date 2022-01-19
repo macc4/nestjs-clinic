@@ -42,11 +42,11 @@ export class NotificationsRepository extends Repository<Notification> {
     return notifications;
   }
 
-  async readNotification(id: string): Promise<Notification> {
+  async readNotifications(ids: string[]): Promise<Notification> {
     const query = `
     UPDATE notifications.notifications
       SET read = 'true'
-    WHERE notifications.id = ${id}
+    WHERE notifications.id IN (${ids.join(',')})
     `;
 
     const notification = await this.pool.query(query);
