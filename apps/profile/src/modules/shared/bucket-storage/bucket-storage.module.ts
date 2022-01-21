@@ -6,8 +6,6 @@ import { ModuleAsyncOptions } from './types';
 @Global()
 @Module({})
 export class BucketStorageModule {
-  constructor() {}
-
   public static registerAsync(options: ModuleAsyncOptions): DynamicModule {
     return {
       module: BucketStorageModule,

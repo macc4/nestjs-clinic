@@ -1,5 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Notification } from '../../entities/notification.entity';
 import { NotificationsRepository } from '../../notifications.repository';
 import { GetNotificationsQuery } from './get-notifications.query';
 
@@ -12,7 +13,7 @@ export class GetNotificationsHandler
     private readonly repository: NotificationsRepository,
   ) {}
 
-  async execute(command: GetNotificationsQuery) {
+  async execute(command: GetNotificationsQuery): Promise<Notification[]> {
     const { userId } = command;
 
     return this.repository.getNotifications(userId);

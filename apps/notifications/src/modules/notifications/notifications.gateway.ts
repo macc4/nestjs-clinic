@@ -1,3 +1,4 @@
+import { CommandBus } from '@nestjs/cqrs';
 import {
   MessageBody,
   SubscribeMessage,
@@ -6,9 +7,8 @@ import {
 import { Socket } from 'socket.io';
 import { JwtPayloadDto } from '@macc4-clinic/common';
 import { WebsocketService } from '../websocket/websocket.service';
-import { CommandBus } from '@nestjs/cqrs';
-import { ReadNotificationsCommand } from './commands/read-notification/read-notifications.command';
 import { WsEventNames } from './websocket/constants';
+import { ReadNotificationsCommand } from './commands/read-notification/read-notifications.command';
 
 @WebSocketGateway({ cors: true })
 export class NotificationsGateway {
@@ -24,8 +24,8 @@ export class NotificationsGateway {
     await this.websocketService.joinRoom(client, user.id);
   }
 
-  @SubscribeMessage(WsEventNames.ReadNotifications)
-  handleReadNotifications(@MessageBody() ids: string[]): void {
-    this.commandBus.execute(new ReadNotificationsCommand(ids));
+  @SubscribeMessage(WsEventNames.ReadNotifications) // maybe it should be an HTTP request too
+  async handleReadNotifications(@MessageBody() ids: string[]): Promise<void> {
+    await this.commandBus.execute(new ReadNotificationsCommand(ids));
   }
 }

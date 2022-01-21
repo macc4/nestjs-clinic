@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { WebsocketModule } from '../websocket/websocket.module';
 import { NotificationsController } from './notifications.controller';
 import { NotificationsRepository } from './notifications.repository';
-import { CommandHandlers } from './commands/handlers';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsGateway } from './notifications.gateway';
-import { QueryHandlers } from './queries/handlers';
-import { WsEvents } from './websocket/events';
-import { WebsocketModule } from '../websocket/websocket.module';
+import { CommandHandlers } from './commands';
+import { QueryHandlers } from './queries';
+import { WsEvents } from './websocket';
 
 @Module({
   imports: [

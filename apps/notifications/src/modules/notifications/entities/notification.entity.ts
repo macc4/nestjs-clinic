@@ -11,8 +11,8 @@ export class Notification {
   @Column()
   type: string;
 
-  @Column()
-  read: boolean;
+  @Column({ name: 'is_read' })
+  isRead: boolean;
 
   @Column({
     type: 'jsonb',

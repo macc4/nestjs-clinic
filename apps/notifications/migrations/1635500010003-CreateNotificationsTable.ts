@@ -12,7 +12,7 @@ export class CreateNotificationsTable1635500010003
       id SERIAL NOT NULL, 
       user_id character varying NOT NULL, 
       type character varying NOT NULL, 
-      read boolean DEFAULT false,
+      is_read boolean DEFAULT false,
       payload jsonb NOT NULL,
       CONSTRAINT PK_notification_id PRIMARY KEY (id)
     );

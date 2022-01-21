@@ -19,7 +19,7 @@ export class NotificationsRepository extends Repository<Notification> {
   ): Promise<Notification> {
     const { type, ...otherData } = payload;
 
-    const notification = this.create({
+    const notification: Notification = this.create({
       userId,
       type,
       payload: otherData,
@@ -33,25 +33,37 @@ export class NotificationsRepository extends Repository<Notification> {
   async getNotifications(userId: string): Promise<Notification[]> {
     const query = `SELECT *
     FROM notifications.notifications
-    WHERE notifications.user_id = '${userId}'`;
-
-    const notifications = (await this.pool.query(query)).map((notification) =>
-      snakeToCamel(notification),
+    WHERE notifications.user_id = '${userId}'
+    `;
+    const notifications: Notification[] = (await this.pool.query(query)).map(
+      (notification: Notification) => snakeToCamel(notification),
     );
 
     return notifications;
   }
 
-  async readNotifications(ids: string[]): Promise<Notification> {
+  async getMyUnreadNotificationsCount(userId: string): Promise<number> {
+    const query = `SELECT COUNT(*)
+    FROM notifications.notifications
+    WHERE notifications.user_id = '${userId}'
+    AND is_read = 'false'
+    `;
+
+    const [count] = await this.pool.query(query);
+
+    return count;
+  }
+
+  async readNotifications(ids: string[]): Promise<Notification[]> {
     const notificationIds = ids.length > 1 ? ids.join(',') : ids;
 
     const query = `
     UPDATE notifications.notifications
-      SET read = 'true'
+      SET is_read = 'true'
     WHERE notifications.id IN (${notificationIds})
     `;
 
-    const notification = await this.pool.query(query);
+    const notification: Notification[] = await this.pool.query(query);
 
     return snakeToCamel(notification);
   }
