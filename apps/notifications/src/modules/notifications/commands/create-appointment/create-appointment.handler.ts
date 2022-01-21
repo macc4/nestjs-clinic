@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationsRepository } from '../../notifications.repository';
-import { NewNotificationEvent } from '../../websocket/new-notification.event';
+import { NewNotificationEvent } from '../../websocket/events/new-notification.event';
 import { CreateAppointmentNotificationCommand } from './create-appointment.command';
 
 @CommandHandler(CreateAppointmentNotificationCommand)

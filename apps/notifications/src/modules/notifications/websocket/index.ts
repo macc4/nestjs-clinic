@@ -1,3 +1,3 @@
-import { NewNotificationEvent } from './new-notification.event';
+import { NewNotificationEvent } from './events/new-notification.event';
 
 export const WsEvents = [NewNotificationEvent];
