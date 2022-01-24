@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotificationsGateway } from '../../notifications.gateway';
 import { NotificationsRepository } from '../../notifications.repository';
+import { NewNotificationEvent } from '../../websocket/events/new-notification.event';
 import { CreateAppointmentNotificationCommand } from './create-appointment.command';
 
 @CommandHandler(CreateAppointmentNotificationCommand)
@@ -11,7 +11,7 @@ export class CreateAppointmentNotificationHandler
   constructor(
     @InjectRepository(NotificationsRepository)
     private readonly repository: NotificationsRepository,
-    private readonly notificationsGateway: NotificationsGateway,
+    private readonly newNotificationEvent: NewNotificationEvent,
   ) {}
 
   async execute(command: CreateAppointmentNotificationCommand): Promise<void> {
@@ -24,6 +24,6 @@ export class CreateAppointmentNotificationHandler
       },
     );
 
-    this.notificationsGateway.handleNewNotification(notification);
+    this.newNotificationEvent.emit(notification);
   }
 }

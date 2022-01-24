@@ -1,42 +1,31 @@
+import { CommandBus } from '@nestjs/cqrs';
 import {
+  MessageBody,
+  SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
-  WsException,
 } from '@nestjs/websockets';
-import { JwtService } from '@nestjs/jwt';
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 import { JwtPayloadDto } from '@macc4-clinic/common';
-import { Notification } from './entities/notification.entity';
+import { WebsocketService } from '../websocket/websocket.service';
+import { WsEventNames } from './websocket/constants';
+import { ReadNotificationsCommand } from './commands/read-notification/read-notifications.command';
 
 @WebSocketGateway({ cors: true })
 export class NotificationsGateway {
-  @WebSocketServer()
-  server: Server;
-
-  constructor(private readonly jwtService: JwtService) {}
-
-  verifyUserAndGetId(client: Socket): string {
-    let user: JwtPayloadDto;
-
-    try {
-      const bearerToken: string =
-        client.handshake.headers.authorization.split(' ')[1];
-
-      user = this.jwtService.verify(bearerToken);
-    } catch (error) {
-      throw new WsException('Unauthorized.');
-    }
-
-    return user.id;
-  }
+  constructor(
+    private readonly websocketService: WebsocketService,
+    private readonly commandBus: CommandBus,
+  ) {}
 
   async handleConnection(client: Socket): Promise<void> {
-    const userId = this.verifyUserAndGetId(client);
+    const user: JwtPayloadDto =
+      this.websocketService.verifyJwtAndGetPayload(client);
 
-    await client.join(userId);
+    await this.websocketService.joinRoom(client, user.id);
   }
 
-  handleNewNotification(notification: Notification): void {
-    this.server.in(notification.userId).emit('new_notification', notification);
+  @SubscribeMessage(WsEventNames.ReadNotifications) // maybe it should be an HTTP request too
+  async handleReadNotifications(@MessageBody() ids: string[]): Promise<void> {
+    await this.commandBus.execute(new ReadNotificationsCommand(ids));
   }
 }

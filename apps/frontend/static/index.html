@@ -46,8 +46,7 @@
 
         created() {
           this.jwt =
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0YjgwMjMwLTJhMmYtNGE5MC1hNWI0LWJiZjNlNWRkYjUyNCIsInJvbGVzIjpbImRvY3RvciJdLCJpYXQiOjE2NDI1MjU0MzMsImV4cCI6MTY0MjUyOTAzM30.0bN_feg7u_gG1JcvBYJT6JvOXumVN6Qc3cUiaXb2nZk';
-
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxZDZjNDU4LTI5MGItNDlmOC05MTBiLTY1ZDI1OGU1MjA1OSIsInJvbGVzIjpbInBhdGllbnQiXSwiaWF0IjoxNjQyNjE0MTQ1LCJleHAiOjE2NDI2MTc3NDV9.gTYnC4jQ4x9VVLm6mySQZwMG9rq7GpbZI2BlpFYdE2s';
           this.socket = io('http://localhost:4043', {
             extraHeaders: { authorization: `Bearer ${this.jwt}` },
           });

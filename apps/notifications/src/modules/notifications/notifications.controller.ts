@@ -14,6 +14,7 @@ import { IResolutionCreated } from './interfaces/IResolutionCreated';
 import { CreateAppointmentNotificationCommand } from './commands/create-appointment/create-appointment.command';
 import { CreateResolutionNotificationCommand } from './commands/create-resolution/create-resolution.command';
 import { GetNotificationsQuery } from './queries/get-notifications/get-notifications.query';
+import { GetUnreadNotificationsCountQuery } from './queries/get-unread-notifications-count/get-unread-notifications-count.query';
 
 @Controller('notifications')
 @ApiTags('notifications')
@@ -24,19 +25,19 @@ export class NotificationsController {
   ) {}
 
   @EventPattern('notification.create.appointment')
-  createAppointmentCreatedNotification(
+  async createAppointmentCreatedNotification(
     @Payload() message: IKafkaMessage<IAppointmentCreated>,
-  ): void {
-    this.commandBus.execute(
+  ): Promise<void> {
+    await this.commandBus.execute(
       new CreateAppointmentNotificationCommand(message.value),
     );
   }
 
   @EventPattern('notification.create.resolution')
-  createResolutionCreatedNotification(
+  async createResolutionCreatedNotification(
     @Payload() message: IKafkaMessage<IResolutionCreated>,
-  ): void {
-    this.commandBus.execute(
+  ): Promise<void> {
+    await this.commandBus.execute(
       new CreateResolutionNotificationCommand(message.value),
     );
   }
@@ -50,7 +51,24 @@ export class NotificationsController {
   @ApiOkResponse({
     description: 'Returns the list of notifications',
   })
-  getMyNotifications(@GetUser() user: GetUserDto): any {
+  async getMyNotifications(
+    @GetUser() user: GetUserDto,
+  ): Promise<Notification[]> {
     return this.queryBus.execute(new GetNotificationsQuery(user.id));
+  }
+
+  @Get('me/unread-count')
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get the number of unread notifications',
+  })
+  @ApiOkResponse({
+    description: 'Returns the number of unread notifications',
+  })
+  async getMyUnreadNotificationsCount(
+    @GetUser() user: GetUserDto,
+  ): Promise<number> {
+    return this.queryBus.execute(new GetUnreadNotificationsCountQuery(user.id));
   }
 }
